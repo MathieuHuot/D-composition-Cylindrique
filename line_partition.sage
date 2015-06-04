@@ -162,9 +162,9 @@ def LinePartition(PP2,l,T):
     
     for i in range(len(List)):
         Root=Output[i][2]
-          if Root!=[]: #On ne garde que les polynomes qui ont des racines
-                Normed=Normed+[Normed2[i]]
-                RootCodePi=RootCodePi+[Root]
+        if Root!=[]: #On ne garde que les polynomes qui ont des racines
+            Normed=Normed+[Normed2[i]]
+            RootCodePi=RootCodePi+[Root]
 
 
 
