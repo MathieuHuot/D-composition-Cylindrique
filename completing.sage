@@ -52,7 +52,7 @@ def PreCalculCompleting(l,T,PP,i,j):
     P,p=PP[i]
     Q,q=PP[j]
     pol=diff(P*Q,TdV[l-1])
-    pol=TdA[l](pol*(1/A(pol).content())) #On le rend primitif
+    pol=Primitif(l,pol) #On le rend primitif
     pol,p=Normalize(l,T,pol)
     SLL=RootCoding(l,T,pol,p,pol,p)
     shortL=Singleton(SLL,pol) 
@@ -70,7 +70,7 @@ def PreCalculCompleting2(l,T,PP,i):
     P,p=PP[i] #Le polynome Pi et son degré
     P=diff(P,TdV[l-1]) #Pi'
     p-=1 #Et son degré qui vaut le degré de Pi -1
-    P=TdA[l](P*(1/A(P).content())) #On le rend primitif
+    P=Primitif(l,P) #On le rend primitif
     SLL=RootCoding(l,T,P,p,P,p)
     shortL=Singleton(SLL,P) 
     for j in range(m-1,-1,-1):
@@ -85,7 +85,7 @@ def PreCalculCompleting2(l,T,PP,i):
 def CalculCompleting(l,T,PP,oldP,P):
     m=len(PP)
     pol=diff(P*oldP,TdV[l-1])
-    pol=TdA[l](pol*(1/A(pol).content())) #On le rend primitif
+    pol=Primitif(l,pol) #On le rend primitif
     pol,p=Normalize(l,T,pol)
     SLL=RootCoding(l,T,pol,p,pol,p)
     shortL=Singleton(SLL,pol) 
