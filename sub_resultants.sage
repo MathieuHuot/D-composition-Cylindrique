@@ -84,6 +84,6 @@ def SubResultants(l,P,p,Q,q):
         s[li]=0
     s[p]=P[p]
     for i in range(p+1):
-        s[i]=TdA[l-1](s[i]*(1/A(s[i]).content())) #On le rend primitif
+        s[i]=Primitif(l-1,s[i]) #On le rend primitif
     return s
 #COMPLEXITY : O(p*2^l*2^p)
