@@ -127,7 +127,7 @@ def SignRealization(l,T,P,p,Q,deg):
     TaQ=Zero(3)
     m=len(Q)#nombre de polynomes Q
     dP=diff(P+0*TdV[l-1],TdV[l-1])#Dérivée de P
-    dP=TdA[l](dP*(1/A(dP).content())) #On le rend primitif
+    dP=Primitif(l,dP)#On le rend primitif
 #5.2: Cas de Base   
     for e in [0,1,2]:
         Ro=dP*(Q[m-1])^e
