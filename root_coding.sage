@@ -87,3 +87,9 @@ def RootCoding(l,T,Pl,pl,P,p):
         else:
             return TriRapide(s)
 #COMPLEXITY: O(2EXP)
+
+
+@parallel
+def RootPar(l,T,Pl,pl,P,p):
+    return RootCoding(l,T,Pl,pl,P,p)
+    
