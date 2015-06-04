@@ -133,7 +133,7 @@ def SignRealization(l,T,P,p,Q,deg):
         Ro=dP*(Q[m-1])^e
         r=p-1+deg[m-1]*e
         R,r=IntRem(l,T,Ro,r,P,p)
-        R=TdA[l](R*(1/A(R).content())) #On le rend primitif
+        R=Primitif(l,R) #On le rend primitif
         TaQ[e]=PmVPol(l,T,P,p,R,r) #Calcul des premiers TaQ
     TaQM=Mcol(TaQ)
     nbM=invM1*TaQM
@@ -167,7 +167,7 @@ def SignRealization(l,T,P,p,Q,deg):
                 R=R*(Q[j])**(Uplet[j-i+1])
                 r=r+deg[j]*(Uplet[j-i+1])
             R,r=IntRem(l,T,R,r,P,p)
-            R=TdA[l](R*(1/A(R).content())) #On le rend primitif
+            R=Primitif(l,R) #On le rend primitif
             TaQi[ConvertUplet(Uplet,extA)]=PmVPol(l,T,P,p,R,r)
         TaQM=Mcoli(TaQi)
         nbM=((extM)^(-1))*TaQM
