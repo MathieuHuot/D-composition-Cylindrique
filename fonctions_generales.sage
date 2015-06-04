@@ -106,10 +106,10 @@ A=PolynomialRing(QQ,'X',7)
 def ListOfDerivate(l,P,p):
     Res=[P]
     deg=[p]
-    Q=TdA[l](P*(1/A(P).content()))
+    Q=Primitif(l,P)
     for i in range(p-1,-1,-1):
         Q=diff(Q,TdV[l-1])
-        Q=TdA[l](Q*(1/A(Q).content()))
+        Q=Primitif(l,Q)
         Res=Res+[Q]
         deg=deg+[i]
     return Res,deg
@@ -123,7 +123,7 @@ def InitPoly (l,R,q):
     Q=0
     for i in range(0,q+1):
         Q=Q+R[i]*TdV[l-1]**i
-    Q=TdA[l](Q*(1/A(Q).content())) #On le rend primitif
+    Q=Primitif(l,Q) #On le rend primitif
     return Q
 #COMPLEXITY : O(q*q)
 
@@ -136,6 +136,17 @@ def Decale(l,P,i):
     Res = P[p]
     for j in range(p-1,-1,-1): #On fait comme un Horner
         Res = Res*(TdV[l-1]+i) + P[j] #La variable principale de P est X_l
-    Res=TdA[l](Res*(1/A(Res).content())) #On le rend primitif
+    Res=Primitif(l,Res) #On le rend primitif
     return Res
 #Complexity : O(deg(P)**2)
+
+#INPUT : l integer
+#        P Q[X1,...,Xl]
+#OUTPUT: Q Q[X1,...,Xl] version primitive de P
+def Primitif(l,P):
+    if P==0:
+        return 0
+    else:
+        Q=A(P)
+        return TdA[l]((1/Q.content())*Q)
+ 
