@@ -37,7 +37,7 @@ def IntRem(l,T,Q,q,P,p):
     Res = 0
     for i in range(r+1):
         Res = Res + Aux[i]*TdV[l-1]**i
-    Res = TdA[l](Res*(1/A(Res).content())) #On le rend primitif
+    Res = Primitif(l,Res)#On le rend primitif
     return Res,r
 #COMPLEXITY : O(2EXP)
 
