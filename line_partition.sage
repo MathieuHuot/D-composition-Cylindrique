@@ -187,8 +187,6 @@ def LinePartition(PP2,l,T):
             SL[i]=EnlargeWithGauche(SL[i],SLL[i][j],Normed[j],SL[j],j) 
             #On a besoin de SL[j] et j pour savoir si la racine est une racine de Q
         for j in range(i-1,-1,-1):
-            print(SL[j])
-            print(SLL[j][i])
             SL[j]=EnlargeWithDroite(SL[j],SLL[j][i],Normed[i],SL[i],i)
     for i in range(lon):
         for j in range(len(SL[i])):
