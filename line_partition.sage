@@ -3,7 +3,7 @@
 #(*                                                                                     *)
 #(*                              HUOT Mathieu                                           *)
 #(*                              GARNIER Remy                                           *)
-#(*                    Licence 3 : stage de Mathématiques                               *)
+#(*                    Licence 3 : stage de MathÃ©matiques                               *)
 #(*                           Version Q[X1,...Xn]                                       *)
 #(*                              Line Partition                                         *)
 #(*                                                                                     *)
@@ -31,7 +31,7 @@ def PetitThom2(a,b):
 #        P   Q[X1,...Xl] 
 #OUTPUT: res ((int * (int list) * Q[X1,...Xl]) list) list
 #NOTE  : Transforme une liste d'objets en une liste de singletons contenant 
-#        ces objets et ajoute le numéro de la racine de P
+#        ces objets et ajoute le numÃ©ro de la racine de P
 def Singleton(L,P):
     res=[]
     l=len(L)
@@ -40,9 +40,9 @@ def Singleton(L,P):
     return res
 #COMPLEXITY : O(len(L))
 
-#Agrandit chaque élément Sli[j] de Sli par (r,SLL[j],Q) où r désigne le numéro de 
+#Agrandit chaque Ã©lÃ©ment Sli[j] de Sli par (r,SLL[j],Q) oÃ¹ r dÃ©signe le numÃ©ro de 
 #la racine si SLL[j] code une racine de Q et -1 sinon
-#Version où on concatène à gauche
+#Version oÃ¹ on concatÃ¨ne Ã  gauche
 def EnlargeWithGauche(SLi,SLL,NormedQ,SLj,J):
     res=[]
     lon=len(SLL)
@@ -50,7 +50,7 @@ def EnlargeWithGauche(SLi,SLL,NormedQ,SLj,J):
     lon3=len(SLi)
     Q,q=NormedQ
     for j in range(lon):
-        r=-1 #Par défaut ce n'est pas une racine de Q
+        r=-1 #Par dÃ©faut ce n'est pas une racine de Q
         for k in range(lon2): #On cherche si un Q-encoding est identique
             if SLL[j]==SLj[k][J][1]: #Dans ce cas c'est une racine de Q
                 r=k+1
@@ -59,7 +59,7 @@ def EnlargeWithGauche(SLi,SLL,NormedQ,SLj,J):
     for j in range(lon3,lon):
         res=res+[SLi[j]]
     return res
-#Version où on concatène à droite
+#Version oÃ¹ on concatÃ¨ne Ã  droite
 def EnlargeWithDroite(SLj,SLL,NormedQ,SLi,i):
     res=[]
     lon=len(SLL)
@@ -77,16 +77,16 @@ def EnlargeWithDroite(SLj,SLL,NormedQ,SLi,i):
 #((int * (int list) * Q[X1,...Xl]) list) list * int 
 # -> ((int * (int list) * Q[X1,...Xl]) list) list
 
-#La comparaison utilisée pour le tri nécessaire dans OrderedMerge . On fait appel à 
+#La comparaison utilisÃ©e pour le tri nÃ©cessaire dans OrderedMerge . On fait appel Ã  
 #PetitThom2 sur deux P-encoding dont l'un au moins est sur une racine de P, ce qui 
-#garantit la validité de la comparaison totale de la liste en ne comparant que deux 
-#éléments, et on trouve un tel P car on a sauvegardé son indice en début de liste
+#garantit la validitÃ© de la comparaison totale de la liste en ne comparant que deux 
+#Ã©lÃ©ments, et on trouve un tel P car on a sauvegardÃ© son indice en dÃ©but de liste
 def CompP(L1,L2):
     i=L1[0]
     return PetitThom2(L1[i][1],L2[i][1])
 #(int * int list * Q[X1,...,Xl]) list * (int * int list * Q[X1,...,Xl]) list -> {-1,0,1}
 
-#Effectue le tri optimisé  de deux listes triées pour la fonction OrderedMerge
+#Effectue le tri optimisÃ©  de deux listes triÃ©es pour la fonction OrderedMerge
 def TriP(L1,L2):
     n=len(L1)
     m=len(L2)
@@ -113,8 +113,8 @@ def TriP(L1,L2):
 #(int * int list * Q[X1,...,Xl]) list list * (int * int list * Q[X1,...,Xl]) list list ->
 #(int * int list * Q[X1,...,Xl]) list list
 
-#Effectue la fusion d'une liste de listes en une liste, qui est triée et dont
-#on a enlevé les doublons : c'est à dire trie les racines des différents polynomes à
+#Effectue la fusion d'une liste de listes en une liste, qui est triÃ©e et dont
+#on a enlevÃ© les doublons : c'est Ã  dire trie les racines des diffÃ©rents polynomes Ã 
 #l'aide de leur Thom-Encoding
 def OrderedMerge(SL): 
     n=len(SL)
@@ -135,22 +135,22 @@ def OrderedMerge(SL):
 #(int * int list * Q[X1,...,Xl]) list list list -> 
 #(int * int list * Q[X1,...,Xl]) list list
 
-#Renvoie le polynome sans ses coefficients nuls lorsque précisé en alpha_1,...,alpha_l
+#Renvoie le polynome sans ses coefficients nuls lorsque prÃ©cisÃ© en alpha_1,...,alpha_l
 def Normalize(l,T,P):
     p = Degree(l,T,P)
     Res = 0
     for j in range(0,p+1):
         Res = Res + P[j]*TdV[l-1]**j #La variable principale de P est X_l
-    Res = TdA[l](Res*(1/A(Res).content()))    #On rend le polynome primitif
+    Res = Primitif(l,Res)    #On rend le polynome primitif
     return Res,p
 #int * (int * Q[X1,...Xl] * int) list * Q[X1,...Xl] -> Q[X1,...Xl]
 
-#Effectue la partition de la ligne réelle selon les polynomes de PP à l variables
-#dans le système triangulaire T de niveau l-1
+#Effectue la partition de la ligne rÃ©elle selon les polynomes de PP Ã  l variables
+#dans le systÃ¨me triangulaire T de niveau l-1
 def LinePartition(PP2,l,T):
-    lon2=len(PP2) #PP2 a des polynomes à l variables
-    Normed2=[Normalize(l,T,PP2[i]) for i in range(lon2)] #Préparcours pour calculer
-    Normed=[] #les polynomes normalisés avec racines qui vont aller dans Normed
+    lon2=len(PP2) #PP2 a des polynomes Ã  l variables
+    Normed2=[Normalize(l,T,PP2[i]) for i in range(lon2)] #PrÃ©parcours pour calculer
+    Normed=[] #les polynomes normalisÃ©s avec racines qui vont aller dans Normed
     RootCodePi=[] #et leur Rootcoding dans RootCodePi
     List=[]
     for i in range(lon2):
@@ -158,21 +158,22 @@ def LinePartition(PP2,l,T):
         if pi>0:
             List=List+ [(l,T,Pi,pi,Pi,pi)]
     
-    Output=RootPar(List) # Parallelisation des rootcodings
+    Output=list(RootPar(List)) # Parallelisation des rootcodings
     
-    for i in range(len(List)):
+    for i in range(lon2):
         Root=Output[i][1]
+        print(Root)
         if Root!=[]: #On ne garde que les polynomes qui ont des racines
             Normed=Normed+[Normed2[i]]
             RootCodePi=RootCodePi+[Root]
+            
 
 
-
-    lon=len(Normed)#On place tous les RootCoding des polynomes normalisés dans une matrice
+    lon=len(Normed)#On place tous les RootCoding des polynomes normalisÃ©s dans une matrice
     SLL=[[0 for j in range(lon)] for i in range(lon)]
     for i in range(lon):
         for j in range(lon):
-            if i==j: #On a déjà calculé et stocké le RootCoding de Pi sur ses racines
+            if i==j: #On a dÃ©jÃ  calculÃ© et stockÃ© le RootCoding de Pi sur ses racines
                 SLL[i][i]=RootCodePi[i]
             else:
                 Pi,pi=Normed[i]
@@ -185,14 +186,16 @@ def LinePartition(PP2,l,T):
         for j in range(i-1,-1,-1):
             SL[i]=EnlargeWithGauche(SL[i],SLL[i][j],Normed[j],SL[j],j) 
             #On a besoin de SL[j] et j pour savoir si la racine est une racine de Q
-        for j in range(i-1,-1,-1):                                 
+        for j in range(i-1,-1,-1):
+            print(SL[j])
+            print(SLL[j][i])
             SL[j]=EnlargeWithDroite(SL[j],SLL[j][i],Normed[i],SL[i],i)
     for i in range(lon):
         for j in range(len(SL[i])):
             SL[i][j]=[i+1]+SL[i][j] 
-        #On précise devant chaque codage de racine le numéro du polynome qui l'engendre
+        #On prÃ©cise devant chaque codage de racine le numÃ©ro du polynome qui l'engendre
     SL=OrderedMerge(SL)
-    #for i in range(len(SL)): #On enlève l'information précédemment rajoutée
+    #for i in range(len(SL)): #On enlÃ¨ve l'information prÃ©cÃ©demment rajoutÃ©e
     #    SL[i]=[SL[i][j] for j in range(1,len(SL[i]))] 
     return SL,Normed
 #Q[X1,...,Xl] list * int * (int * Q[X1,...,Xl] * int)  list -> 
