@@ -194,10 +194,11 @@ def LinePartition(PP2,l,T):
     
     for i in range(lon):
         for j in range(lon):
-            for k in range(tal):
-                if Output[k][1][1]==i and Output[k][1][2]==j:
-                    SLL[i][j]=Output[k][1][0]
-                    break
+            if i !=j:    
+                for k in range(tal):
+                    if Output[k][1][1]==i and Output[k][1][2]==j:
+                        SLL[i][j]=Output[k][1][0]
+                        break
     
     
     SL=[[] for i in range(lon)] 
