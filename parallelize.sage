@@ -10,3 +10,10 @@
 #(*                                                                                     *)
 #(***************************************************************************************)
 
+@parallel
+def RootPar(l,T,Pl,pl,P,p,i):
+    return (RootCoding(l,T,Pl,pl,P,p),i)
+    
+@parallel
+def RootPar2(l,T,Pl,pl,p,i,j):
+    return (RootCoding(l,T,Pl,pl,P,p),i,j)
