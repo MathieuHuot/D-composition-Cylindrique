@@ -54,7 +54,7 @@ def Tru(l,P):
 def Elim(Q):
     n=len(Q)
     P=Zero(n)  #On va diviser chaque polyome par son contenu et vérifier qu'il est dans
-    P[n-1]=[TdA[n](Pol*(1/(A(Pol).content()))) for Pol in Q[n-1]] #le bon anneau
+    P[n-1]=[Primitif(n,Pol) for Pol in Q[n-1]] #le bon anneau
 
     for i in range(n-1,-1,-1): #Construction inductive des P_i
         lon=len(P[i])
@@ -91,7 +91,7 @@ def Elim(Q):
 
         if i==0:
             break
-        P[i-1]=[TdA[i](Pol*(1/(A(Pol).content()))) for Pol in Q[i-1]] # On initie P_i à Q_i
+        P[i-1]=[Primitif(i,Pol) for Pol in Q[i-1]] # On initie P_i à Q_i
             
         for Pol in P[i]: # On calcule Elim_(X_i+i)(P_i)
             TruPol=Tru(i+1,Pol)
