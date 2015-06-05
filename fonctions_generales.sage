@@ -149,4 +149,4 @@ def Primitif(l,P):
     else:
         Q=A(P)
         return TdA[l]((1/Q.content())*Q)
- 
+#COMPLEXITY : O(deg(P)*log(max(coef(P))))
