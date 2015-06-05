@@ -53,8 +53,8 @@ def Tru(l,P):
 #        Construit les ensembles (P_i)_{i<=n} de la phase d'élimination
 def Elim(Q):
     n=len(Q)
-    P=Zero(n)  #On va diviser chaque polyome par son contenu et vérifier qu'il est dans
-    P[n-1]=[Primitif(n,Pol) for Pol in Q[n-1]] #le bon anneau
+    P=[[] for i in range(n)]  #On va diviser chaque polyome par son contenu et vérifier qu'il est
+    P[n-1]=[Primitif(n,Pol) for Pol in Q[n-1]] #dans le bon anneau
 
     for i in range(n-1,-1,-1): #Construction inductive des P_i
         lon=len(P[i])
@@ -81,13 +81,48 @@ def Elim(Q):
             if not PasDansR(P[i][j]+0*TdV[i],i+1): #i.e le polynome est constant
                 on_veut_pas=true
             for k in range(j+1,lon): #On regarde si on retrouve notre polynome plus loin
-                if P[i][j]==P[i][k]:
+                if P[i][j]==P[i][k] or P[i][j]==-P[i][k]:
                     on_veut_pas=true
                 if on_veut_pas:
                     break
             if not on_veut_pas: #Alors on garde le polynome pour la suite
                 NewA=NewA+[B(P[i][j])]
-        P[i]=NewA #On met à jour après notre simplification
+        Na=len(NewA) 
+        NewB=[] #On va réduire le degré de polynômes en divisant P_j et P_(j+1) par leur pgcd et 
+        #en ajoutant ce dernier à la liste s'il est non constant
+        for j in range(Na-1):
+            P1=NewA[j]
+            P2=NewA[j+1]
+            P3=B(gcd(A(P1),A(P2)))
+            if PasDansR(P3,i+1): #On a un pgcd non trivial
+                P3=Primitif(i+1,P3) #On le rend primitif
+                NewA[j]=B(A(P1)//A(P3)) #On simplifie P_j et P_j+1
+                NewA[j+1]=B(A(P2)//A(P3))
+                if P3.degree()>0: #Si il est de degré non nul en X_i+1 on l'ajoute directement
+                    NewB+=[P3]
+                else: #Sinon on l'ajoute dans le bon niveau en regardant pour quel variable son degré 
+                    k=i   #est strictement positif
+                    while (TdA[k](P3)).degree()==0:
+                        k-=1
+                    P[k-1]+=[P3]
+            if NewA[j].degree()>0: #Si P_j est toujours de degré >=1, on le garde
+                NewB+=[NewA[j]]
+        if NewA[Na-1].degree()>0: #On rajoute le dernier polynome a la liste
+            NewB+=[NewA[Na-1]]
+        NewC=[] #On re-enlève les polynomes devenus constants ou identiques
+        lon2=len(NewB)
+        for j in range(lon2):
+            on_veut_pas=false
+            if not PasDansR(NewB[j],i+1): #i.e le polynome est constant
+                on_veut_pas=true
+            for k in range(j+1,lon2): #On regarde si on retrouve notre polynome plus loin
+                if NewB[j]==NewB[k] or NewB[j]==-NewB[k]:
+                    on_veut_pas=true
+                if on_veut_pas:
+                    break
+            if not on_veut_pas: #Alors on garde le polynome pour la suite
+                NewC=NewC+[NewB[j]]
+        P[i]=NewC #On met à jour après nos simplifications
 
         if i==0:
             break
