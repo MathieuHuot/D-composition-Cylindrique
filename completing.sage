@@ -10,19 +10,26 @@
 #(*                                                                                     *)
 #(***************************************************************************************)
 
-#Version plus basique qui est un EnlargeWithGauche sans recherche de racine
-def EnlargeWithCompleting(liste,code,Q):
-    n=len(liste)
+#INPUT : lis  ((int * (int list) * Q[X_1,...,X_l]) list) list 
+#        code (int list) list 
+#        Q    Q[X_1,...,X_l] 
+#OUTPUT: res  ((int * (int list) * Q[X_1,...,X_l]) list) list
+#NOTE : Version plus basique qui est un EnlargeWithGauche sans recherche de racine
+def EnlargeWithCompleting(lis,code,Q):
+    n=len(lis)
     res=[]
     for i in range(n):
-        res=res+[[[-1,code[i],Q]]+liste[i]]            
+        res=res+[[[-1,code[i],Q]]+lis[i]]            
     return res
-#((int * (int list) * Q[X1,...Xl]) list) list * (int list) list * Q[X1,...Xl] 
-# -> ((int * (int list) * Q[X1,...Xl]) list) list
+#COMPLEXITY : O(len(lis))
 
-#Trouve une racine F dans shortL qui est entre la racine dénotée par r1=(oldv,oldP) et  
-#celle dénotée par r2=(v,P) où oldP(r1)=0 et P(r2)=0, c'est à dire que F contient (vp,P)
-#et (voldP,oldP) avec vp<v et voldP>oldv pour la comparaison du Thom encoding
+#INPUT : shortL (int * int list * Q[X_1,...,X_l]) list : liste de codage de racine
+#        v      int list : Thom Encoding de P pour une racine \alpha_i
+#        oldv   int list : Thom Encoding de oldP pour une racine \alpha_j < \alpha_i
+#        P      Q[X_1,...,X_l]
+#        oldP   Q[X_1,...,X_l]
+#OUTPUT: F      int * (int * int list * Q[X_1,...,X_l]) list 
+#               : racine dans shortL (vp,P) tel que vp<v voldP>oldv pour le Thom Encoding
 def Find(shortL,v,oldv,P,oldP):
     n=len(shortL)
     r1=shortL[0]
@@ -44,9 +51,14 @@ def Find(shortL,v,oldv,P,oldP):
         if PetitThom(vP,v) and PetitThom(oldv,voldP):
             Ind=len(F) #On utilise la meme technique qu'avant : le 1er élément est 
             return [Ind]+F #l'indice de F où "r est défini"
-            
-#Etant donné un système triangulaire T de niveau l-1, PP une liste de polynomes de
-#Q[X1,...Xl], Calcule les R-rootcoding des racines de (PiPj)'
+#COMPLEXITY : O(len(shortL) + len(shortL[0])) 
+
+#INPUT : l  integer
+#        T  (int * Q[X1,...,Xl] * int) list 
+#        PP (Q[X1,...,Xl] * int) list 
+#        i  integer
+#        j  integer
+#OUTPUT: shortL (int * int list * Q[X1,...,Xl]) list list : R-rootcoding des racines de (PiPj)'
 def PreCalculCompleting(l,T,PP,i,j):
     m=len(PP)
     P,p=PP[i]
@@ -61,10 +73,13 @@ def PreCalculCompleting(l,T,PP,i,j):
         SLL=RootCoding(l,T,pol,p,R,r)
         shortL=EnlargeWithCompleting(shortL,SLL,R)
     return shortL
-#int * (int * Q[X1,...,Xl] * int) list * (Q[X1,...,Xl] * int) list * int * int ->
-#(int * int list * Q[X1,...,Xl]) list list
+#COMPLEXITY : O(2EXP)
 
-#Idem mais pour Pi', pour éviter des calculs (PiPi)' inutiles
+#INPUT : l  integer
+#        T  (int * Q[X1,...,Xl] * int) list 
+#        PP (Q[X1,...,Xl] * int) list 
+#        i  integer
+#OUTPUT: shortL (int * int list * Q[X1,...,Xl]) list list : R-rootcoding des racines de Pi'
 def PreCalculCompleting2(l,T,PP,i):
     m=len(PP)
     P,p=PP[i] #Le polynome Pi et son degré
@@ -78,10 +93,14 @@ def PreCalculCompleting2(l,T,PP,i):
         SLL=RootCoding(l,T,P,p,Q,q)
         shortL=EnlargeWithCompleting(shortL,SLL,Q)
     return shortL
-#int * (int * Q[X1,...,Xl] * int) list * (Q[X1,...,Xl] * int) list * int ->
-#(int * int list * Q[X1,...,Xl]) list list
+#COMPLEXITY : O(2EXP)
 
-#Idem mais pour le calcul dans le cas général, pas en pré-calcul
+#INPUT : l    integer
+#        T    (int * Q[X1,...,Xl] * int) list 
+#        PP   (Q[X1,...,Xl] * int) list 
+#        oldP Q[X1,...,Xl] 
+#        P    Q[X1,...,Xl] 
+#OUTPUT: shortL (int * int list * Q[X1,...,Xl]) list list : R-rootcoding des racines de (PoldP)'
 def CalculCompleting(l,T,PP,oldP,P):
     m=len(PP)
     pol=diff(P*oldP,TdV[l-1])
@@ -94,8 +113,7 @@ def CalculCompleting(l,T,PP,oldP,P):
         SLL=RootCoding(l,T,pol,p,Q,q)
         shortL=EnlargeWithCompleting(shortL,SLL,Q)
     return shortL
-#int * (int * Q[X1,...,Xl] * int) list * (Q[X1,...,Xl] * int) list * int ->
-#(int * int list * Q[X1,...,Xl]) list list
+#COMPLEXITY : O(2EXP)
 
 #Complète la ligne réelle de niveau l partitionnée par line partition en ajoutant une
 #racine pour représenter chaque cellule qui n'est pas un singleton (les singletons étant
