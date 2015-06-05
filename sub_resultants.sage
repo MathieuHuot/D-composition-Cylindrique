@@ -76,7 +76,7 @@ def SubResultants(l,P,p,Q,q):
             SresP[k]=Quotient(l,s[k]*SresP[j-1],t[j-1])
         Pol=IntRem2(l,t[j-1]*s[k]*SresP[i-1],j,SresP[j-1],k) #Pol est dans  Q[X_1,...X_l-1][X_l]
         if Pol==0:
-            q=0
+            q=-1
         else:
             q=Pol.degree()
         div=s[j]*t[i-1]+0*TdV[l-1] # valeurs dans  Q[X_1,...X_l-1][X_l]
