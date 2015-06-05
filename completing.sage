@@ -115,9 +115,17 @@ def CalculCompleting(l,T,PP,oldP,P):
     return shortL
 #COMPLEXITY : O(2EXP)
 
-#Complète la ligne réelle de niveau l partitionnée par line partition en ajoutant une
-#racine pour représenter chaque cellule qui n'est pas un singleton (les singletons étant
-#les racines des polynomes obtenus durant la phase d'élimination)
+#int * *  * 
+#-> 
+
+#INPUT : l    integer
+#        T    (int * Q[X1,...Xl] * int) list 
+#        L    (int * int list * Q[X1,...,Xl]) list list 
+#        PP   (Q[X1,...,Xl] * int) list 
+#OUTPUT: newL (int * int list * Q[X1,...,Xl]) list list
+#NOTE : Complète la ligne réelle de niveau l partitionnée par line partition en ajoutant 
+#une racine pour représenter chaque cellule qui n'est pas un singleton (les singletons 
+#étant les racines des polynomes obtenus durant la phase d'élimination)
 def Completing(l,T,L,PP):
     n=len(L) 
     m=len(PP)
@@ -190,5 +198,4 @@ def Completing(l,T,L,PP):
     newL[2*n]=newL[2*n][len(newL[2*n])-1]
     newL[2*n]=[len(newL[2*n])]+newL[2*n] #On rajoute encore le "i" initial indiquant où chercher le
     return newL                          # "r" défini
-#int * (int * Q[X1,...Xl] * int) list *  (int * int list * Q[X1,...,Xl]) list list * 
-#(Q[X1,...,Xl] * int) list -> (int * int list * Q[X1,...,Xl]) list list
+
