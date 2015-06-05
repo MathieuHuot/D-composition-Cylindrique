@@ -16,7 +16,9 @@ debug=False
 attach("elim.sage")
 attach("line_partition.sage")
 attach("completing.sage")
+attach("parallelize.sage")
 attach("print.sage")
+
 if test:
     attach("tests.sage")
 
