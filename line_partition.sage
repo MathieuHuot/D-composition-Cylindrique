@@ -156,13 +156,17 @@ def LinePartition(PP2,l,T):
     for i in range(lon2):
         Pi,pi=Normed2[i]
         if pi>0:
-            List=List+ [(l,T,Pi,pi,Pi,pi)]
+            List=List+ [(l,T,Pi,pi,Pi,pi,i)]
     
     Output=list(RootPar(List)) # Parallelisation des rootcodings
     
     for i in range(lon2):
-        Root=Output[i][1]
-        print(Root)
+        k=0
+        for j in range(lon2):
+            if Output[j][1][1]==i:
+                k=j
+                break
+        Root=Output[k][1][0]
         if Root!=[]: #On ne garde que les polynomes qui ont des racines
             Normed=Normed+[Normed2[i]]
             RootCodePi=RootCodePi+[Root]
@@ -191,9 +195,9 @@ def LinePartition(PP2,l,T):
     for i in range(lon):
         for j in range(len(SL[i])):
             SL[i][j]=[i+1]+SL[i][j] 
-        #On prÃ©cise devant chaque codage de racine le numÃ©ro du polynome qui l'engendre
+        #On précise devant chaque codage de racine le numÃ©ro du polynome qui l'engendre
     SL=OrderedMerge(SL)
-    #for i in range(len(SL)): #On enlÃ¨ve l'information prÃ©cÃ©demment rajoutÃ©e
+    #for i in range(len(SL)): #On enlève l'information précédemment rajoutée
     #    SL[i]=[SL[i][j] for j in range(1,len(SL[i]))] 
     return SL,Normed
 #Q[X1,...,Xl] list * int * (int * Q[X1,...,Xl] * int)  list -> 
