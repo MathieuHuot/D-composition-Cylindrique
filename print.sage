@@ -10,12 +10,15 @@
 #(*                                                                                     *)
 #(***************************************************************************************)
 
+#INPUT : l integer
+#OUTPUT: a string : un blanc de longueur l
 def Espace(l):
     a=" "
     for i in range(l):
         a=a+"  "
     return a
 
+#Renvoie une version indentée et numérotée de l'arbre construit par le Lifting
 def PrintArb(Arb):
     def Aux(Ar,l,s):
         if Ar==[]:
