@@ -64,7 +64,6 @@ I) Avancement du stage
 ~~~~~~~~~~~~~
 
 -dérécursivation de lifting et gain en mémoire
--
 
 II) Difficultés surmontées
 ==========================
