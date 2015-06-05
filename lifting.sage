@@ -73,7 +73,7 @@ def Lifting(PPtot,PPlist):
                     pos=RechP(Pol,L[i])
                     if pos==0:
                         deg=Pol.degree()
-                        sig=Sign(l-1,T,Pol[deg])
+                        sig=Sign(l,Tbis,Pol)
                         Teval=Teval+[(Pol,sig)]
                     else:
                         Teval=Teval+[(L[i][pos][2],L[i][pos][1][0])]
