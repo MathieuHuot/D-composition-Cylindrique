@@ -21,12 +21,14 @@ I) Avancement du stage
 -compréhension des preuves et des algorithmes
 -correction de coquilles et imprécisions dans l'article
 
+
 2) mars 
 ~~~~~~~
 
 -utilisation de Sagecloud et Overleaf
 -implémentation de la phase de Sign dans Q[X] (les 7 algorithmes récursifs)
 -correction de coquilles et imprécisions dans l'article
+
 
 3) avril
 ~~~~~~~~
@@ -35,6 +37,7 @@ I) Avancement du stage
 -implémentation de la décomposition cylindrique dans Q[X1,X2] (Elim, Lifting, LinePartition et Completing)
 -utilisation de beamer latek, géogebra, wolfram alpha
 -préparation de la soutenance de mi-stage
+
 
 4) mai
 ~~~~~~
