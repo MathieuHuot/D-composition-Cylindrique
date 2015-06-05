@@ -157,12 +157,13 @@ def LinePartition(PP2,l,T):
         Pi,pi=Normed2[i]
         if pi>0:
             List=List+ [(l,T,Pi,pi,Pi,pi,i)]
-    
+            
+    lon=len(List)
     Output=list(RootPar(List)) # Parallelisation des rootcodings
     
-    for i in range(lon2):
+    for i in range(lon):
         k=0
-        for j in range(lon2):
+        for j in range(lon):
             if Output[j][1][1]==i:
                 k=j
                 break
