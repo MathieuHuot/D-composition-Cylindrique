@@ -176,6 +176,9 @@ def LinePartition(PP2,l,T):
 
     lon=len(Normed)#On place tous les RootCoding des polynomes normalisÃ©s dans une matrice
     SLL=[[0 for j in range(lon)] for i in range(lon)]
+    ListArg=[] #Liste des arguments pour la parallélisation
+
+
     for i in range(lon):
         for j in range(lon):
             if i==j: #On a dÃ©jÃ  calculÃ© et stockÃ© le RootCoding de Pi sur ses racines
@@ -183,7 +186,20 @@ def LinePartition(PP2,l,T):
             else:
                 Pi,pi=Normed[i]
                 Pj,pj=Normed[j]
-                SLL[i][j]=RootCoding(l,T,Pi,pi,Pj,pj)
+                ListArg=ListArg+[(l,T,Pi,pi,Pj,pj,i,j)]
+
+    
+    Output=list(RootPar2(ListArg))
+    tal=len(Output)
+    
+    for i in range(lon):
+        for j in range(lon):
+            for k in range(tal):
+                if Output[k][1][1]==i and Output[k][1][2]==j:
+                    SLL[i][j]=Output[k][1][0]
+                    break
+    
+    
     SL=[[] for i in range(lon)] 
     for i in range(lon):
         Pi,pi=Normed[i]
