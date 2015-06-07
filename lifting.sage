@@ -46,11 +46,11 @@ def Lifting(PPtot,PPlist):
     k=len(PPtot)
     def Lift(l,T): #Construction récursive de chaque niveau
         L,PP=LinePartition(PPtot[l-1],l,T)
-        m=len(PPlist[l-1])
+        lon=len(PPlist[l-1])
         if L==[]: #Aucun polynome n'a de racine
             Tbis=T+[[1,TdV[l-1],1]] #X_l devient représentant de la ligne réelle
             Teval=[]
-            for j in range(m):
+            for j in range(lon):
                 P=PPlist[l-1][j]
                 p=P.degree()
                 s=Sign(l-1,T,P[p])  #Le signe d'un polynome sans racine réelle
@@ -70,15 +70,31 @@ def Lifting(PPtot,PPlist):
                 P=L[i][ind][2]
                 r=L[i][ind][0]
                 Tbis=T+[(r,P,Degree(l,T,P))] #Qu'on ajoute au système triangulaire
-                for j in range(m):
+                for j in range(lon):
                     Pol=PPlist[l-1][j]
                     pos=RechP(Pol,L[i])
-                    if pos==0:
-                        deg=Pol.degree()
-                        sig=Sign(l,Tbis,Pol)
-                        Teval=Teval+[(Pol,sig)]
-                    else:
+                    if pos>0:
                         Teval=Teval+[(L[i][pos][2],L[i][pos][1][0])]
+                    else:
+                        fini=False #tant qu'on peut simplifier
+                        trouve=True #si on a trouvé une simplification : on refait une boucle
+                        sP=1 #Sign de Pol
+                        while (not fini) and trouve: 
+                            for m in range(1,len(L[i])):
+                                trouve=False
+                                Pol2=L[i][m][2]
+                                A=IntRem2(l,Pol,Pol.degree(),Pol2,Pol2.degree())
+                                if A==0:
+                                    trouve=True
+                                    if L[i][m][1][0]==0: #i.e Pol2(\alpha)=0
+                                        sP=0
+                                        fini=True
+                                        break
+                                    else:
+                                        Pol=B(A(Pol)//A(Pol2)) #A remplacer par Quotient
+                                        sP=sP*L[i][m][1][0]
+                        sP=sP*Sign(l,Tbis,Pol)
+                        Teval=Teval+[(Pol,sP)]
                 if l<k: #On appelle récursivement sur chaque noeud la construction du 
                     foret=foret+[[Teval,Lift(l+1,Tbis)]] #niveau suivant
                 else: #Ou alors on est arrivé au plus bas niveau et on a des feuilles
