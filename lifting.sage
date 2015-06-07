@@ -44,10 +44,10 @@ def RechP (P,rac):
 #                                           leur valuation de signe
 def Lifting(PPtot,PPlist):
     k=len(PPtot)
-    return [[],Lift(1,[],k)] #Construction à partir de la racine
+    return [[],Lift(PPtot,PPlist,1,[],k)] #Construction à partir de la racine
 #COMPLEXITY : O(2EXP)
 
-def Lift(l,T,k): #Construction récursive de chaque niveau
+def Lift(PPtot,PPlist,l,T,k): #Construction récursive de chaque niveau
     L,PP=LinePartition(PPtot[l-1],l,T)
     lon=len(PPlist[l-1])
     if L==[]: #Aucun polynome n'a de racine
@@ -59,7 +59,7 @@ def Lift(l,T,k): #Construction récursive de chaque niveau
             s=Sign(l-1,T,P[p])  #Le signe d'un polynome sans racine réelle
             Teval=Teval+[(P,s)] #est celui de son coefficient dominant
         if l<k:   #Si il reste un niveau à construire, on appelle récursivement
-            arb=[Teval,Lift(l+1,Tbis,k)]
+            arb=[Teval,Lift(PPtot,PPlist,l+1,Tbis,k)]
         else:     #Sinon c'est qu'on est arrivé à une feuille
             arb=[Teval,[]] 
         return [arb]
@@ -99,7 +99,7 @@ def Lift(l,T,k): #Construction récursive de chaque niveau
                     sP=sP*Sign(l,Tbis,Pol)
                     Teval=Teval+[(Pol,sP)]
             if l<k: #On appelle récursivement sur chaque noeud la construction du 
-                foret=foret+[[Teval,Lift(l+1,Tbis,k)]] #niveau suivant
+                foret=foret+[[Teval,Lift(PPtot,PPlist,l+1,Tbis,k)]] #niveau suivant
             else: #Ou alors on est arrivé au plus bas niveau et on a des feuilles
                 foret=foret+[[Teval,[]]]
         return foret
