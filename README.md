@@ -60,7 +60,8 @@ I) Avancement du stage
 -ajout d'une simplification randomizée dans elim
 -mise en contact avec l'ingénieur du LSV pour la necessité de puissance de calcul
 -parallélization de elim et line partition
--stockage de root-coding pour limiter redondances de calculs
+-simplification dans Elim avec les pgcd
+-simplification de calcul de Sign dans Lifting
 
 
 6) juin 16-30
