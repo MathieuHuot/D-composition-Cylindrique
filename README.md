@@ -62,7 +62,7 @@ I) Avancement du stage
 -parallélization de elim et line partition
 -simplification dans Elim avec les pgcd
 -simplification de calcul de Sign dans Lifting
-
+-implémentation d'un dictionnaire pour l'algorithme "on the fly"
 
 6) juin 16-30
 ~~~~~~~~~~~~~
