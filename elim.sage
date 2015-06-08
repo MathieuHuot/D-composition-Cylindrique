@@ -60,6 +60,38 @@ def Separable(lis,i):
     return lis
 #COMPLEXITY : O(lon * 2**i * 2**(degmax(P_i)) )
 
+#INPUT : lis  Q[X1,...,Xi] list
+#        i    integer nombre de variable des polynomes de lis
+#OUTPUT: NewA Q[X1,...,Xi] list : la liste de départ éventuellement restreinte 
+def Simplify_1(lis,i):
+    lon=len(lis)
+    for j in range(lon): #Si P_i divise P_j on peut simplifier en gardant
+        for k in range(j):       #P_j/P_i et P_i
+            P1=lis[j]
+            P2=lis[k]
+            P3=TdA[i](gcd(A(P1),A(P2)))
+            p1=P1.degree()
+            p2=P2.degree()
+            p3=P3.degree()
+            if p3>=p1 and IntRem2(i,P3,p3,P1,p1)==0:
+                lis[k]=TdA[i](A(lis[k])//A(P3))
+            elif p3>=p2 and IntRem2(i,P3,p3,P2,p2)==0:
+                lis[j]=TdA[i](A(lis[j])//A(P3))
+    NewA=[] #On enlève les polynomes devenus constants ou identiques
+    for j in range(lon):
+        on_veut_pas=false
+        if not PasDansR(lis[j],i): #i.e le polynome est constant
+            on_veut_pas=true
+        for k in range(j+1,lon): #On regarde si on retrouve notre polynome plus loin
+            if lis[j]==lis[k] or lis[j]==-lis[k]:
+                on_veut_pas=true
+            if on_veut_pas:
+                break
+        if not on_veut_pas: #Alors on garde le polynome pour la suite
+            NewA=NewA+[TdA[i](lis[j])]
+    return NewA
+#COMPLEXITY : O(lon**2 * 2**i * degmax(P_i) )
+
 #INOUT : Q Q[X_1,...X_n-1][X_n] list
 #OUTPUT: P Q[X_1,...X_n-1][X_n] list list
 #        Construit les ensembles (P_i)_{i<=n} de la phase d'élimination
@@ -72,30 +104,7 @@ def Elim(Q):
         lon=len(P[i])
         B=TdA[i+1] #On se place dans l'anneau Q[X1][X2]...[X_i+1]
         P[i]=Separable(P[i],i+1) #On rend chaque polynome à racine simple
-        for j in range(lon): #Si P_i divise P_j on peut simplifier en gardant
-            for k in range(j):       #P_j/P_i et P_i
-                P1=P[i][j]
-                P2=P[i][k]
-                P3=B(gcd(A(P1),A(P2)))
-                p1=P1.degree()
-                p2=P2.degree()
-                p3=P3.degree()
-                if p3>=p1 and IntRem2(i+1,P3,p3,P1,p1)==0:
-                    P[i][k]=B(A(P[i][k])//A(P3))
-                elif p3>=p2 and IntRem2(i+1,P3,p3,P2,p2)==0:
-                    P[i][j]=B(A(P[i][j])//A(P3))
-        NewA=[] #On enlève les polynomes devenus constants ou identiques
-        for j in range(lon):
-            on_veut_pas=false
-            if not PasDansR(P[i][j]+0*TdV[i],i+1): #i.e le polynome est constant
-                on_veut_pas=true
-            for k in range(j+1,lon): #On regarde si on retrouve notre polynome plus loin
-                if P[i][j]==P[i][k] or P[i][j]==-P[i][k]:
-                    on_veut_pas=true
-                if on_veut_pas:
-                    break
-            if not on_veut_pas: #Alors on garde le polynome pour la suite
-                NewA=NewA+[B(P[i][j])]
+        P[i]=Simplify_1(P[i],i+1)
         Na=len(NewA) 
         NewB=[] #On va réduire le degré de polynômes en divisant P_j et P_(j+1) par leur pgcd et 
         #en ajoutant ce dernier à la liste s'il est non constant
