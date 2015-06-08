@@ -48,6 +48,18 @@ def Tru(l,P):
     return res
 #COMPLEXITY : O(deg(P)*(l+deg(P)))
 
+#INPUT : lis Q[X1,...,Xi] list
+#        i   integer nombre de variable des polynomes de lis
+#OUTPUT: lis Q[X1,...,Xi] list : chaque polynome est devenu séparable 
+def Separable(lis,i):
+    lon=len(lis)
+    for j in range(lon): 
+        P1=lis[j]
+        P2=diff(P1,TdV[i])
+        lis[j]=TdA[i](A(P1)//gcd(A(P1),A(P2)))
+    return lis
+#COMPLEXITY : O(lon * 2**i * 2**(degmax(P_i)) )
+
 #INOUT : Q Q[X_1,...X_n-1][X_n] list
 #OUTPUT: P Q[X_1,...X_n-1][X_n] list list
 #        Construit les ensembles (P_i)_{i<=n} de la phase d'élimination
@@ -59,10 +71,7 @@ def Elim(Q):
     for i in range(n-1,-1,-1): #Construction inductive des P_i
         lon=len(P[i])
         B=TdA[i+1] #On se place dans l'anneau Q[X1][X2]...[X_i+1]
-        for j in range(lon): #On rend P "séparable"
-            P1=P[i][j]
-            P2=diff(P1,TdV[i])
-            P1=B(A(P1)//gcd(A(P1),A(P2)))
+        P[i]=Separable(P[i],i+1) #On rend chaque polynome à racine simple
         for j in range(lon): #Si P_i divise P_j on peut simplifier en gardant
             for k in range(j):       #P_j/P_i et P_i
                 P1=P[i][j]
