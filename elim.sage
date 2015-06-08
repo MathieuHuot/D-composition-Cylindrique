@@ -55,7 +55,7 @@ def Separable(lis,i):
     lon=len(lis)
     for j in range(lon): 
         P1=lis[j]
-        P2=diff(P1,TdV[i])
+        P2=diff(P1,TdV[i-1])
         lis[j]=TdA[i](A(P1)//gcd(A(P1),A(P2)))
     return lis
 #COMPLEXITY : O(lon * 2**i * 2**(degmax(P_i)) )
@@ -96,7 +96,7 @@ def Simplify_1(lis,i):
 #        i integer
 #OUTPUT: P Q[X1,...,Xn] list list : P[i] est éventuellement simplifié 
 def Simplify_2(P,i):
-    lis=P[i]
+    lis=P[i-1]
     NewA=[] #On va réduire le degré de polynômes en divisant P_j et P_(j+1) par leur pgcd et 
     #en ajoutant ce dernier à la liste s'il est non constant
     lon=len(lis)
@@ -132,7 +132,7 @@ def Simplify_2(P,i):
                 break
         if not on_veut_pas: #Alors on garde le polynome pour la suite
             NewB=NewB+[NewA[j]]
-        P[i]=NewB #On met à jour après nos simplifications
+        P[i-1]=NewB #On met à jour après nos simplifications
     return P 
 #COMPLEXITY : O(lon * 2**i * 2**(degmax(P_i)) )
 
