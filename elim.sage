@@ -92,6 +92,50 @@ def Simplify_1(lis,i):
     return NewA
 #COMPLEXITY : O(lon**2 * 2**i * degmax(P_i) )
 
+#INPUT : P Q[X1,...,Xn] list list
+#        i integer
+#OUTPUT: P Q[X1,...,Xn] list list : P[i] est éventuellement simplifié 
+def Simplify2(P,i):
+    lis=P[i]
+    NewA=[] #On va réduire le degré de polynômes en divisant P_j et P_(j+1) par leur pgcd et 
+    #en ajoutant ce dernier à la liste s'il est non constant
+    lon=len(lis)
+    for j in range(lon-1):
+        P1=lis[j]
+        P2=lis[j+1]
+        P3=TdA[i](gcd(A(P1),A(P2)))
+        if PasDansR(P3,i): #On a un pgcd non trivial
+            P3=Primitif(i,P3) #On le rend primitif
+            lis[j]=TdA[i](A(P1)//A(P3)) #On simplifie P_j et P_j+1
+            lis[j+1]=TdA[i](A(P2)//A(P3))
+            if P3.degree()>0: #Si il est de degré non nul en X_i+1 on l'ajoute directement
+                NewA+=[P3]
+            else: #Sinon on l'ajoute dans le bon niveau en regardant pour quel variable son degré 
+                k=i   #est strictement positif
+                while (TdA[k](P3)).degree()==0:
+                    k-=1
+                P[k-1]+=[P3]
+        if lis[j].degree()>0: #Si P_j est toujours de degré >=1, on le garde
+            NewA+=[lis[j]]
+    if lis[lon-1].degree()>0: #On rajoute le dernier polynome a la liste
+        NewA+=[lis[lon-1]]
+    NewB=[] #On re-enlève les polynomes devenus constants ou identiques
+    lon2=len(NewA)
+    for j in range(lon2):
+        on_veut_pas=false
+        if not PasDansR(NewA[j],i): #i.e le polynome est constant
+            on_veut_pas=true
+        for k in range(j+1,lon2): #On regarde si on retrouve notre polynome plus loin
+            if NewA[j]==NewA[k] or NewA[j]==-NewA[k]:
+                on_veut_pas=true
+            if on_veut_pas:
+                break
+        if not on_veut_pas: #Alors on garde le polynome pour la suite
+            NewB=NewB+[NewA[j]]
+        P[i]=NewB #On met à jour après nos simplifications
+    return P 
+#COMPLEXITY : O(lon * 2**i * 2**(degmax(P_i)) )
+
 #INOUT : Q Q[X_1,...X_n-1][X_n] list
 #OUTPUT: P Q[X_1,...X_n-1][X_n] list list
 #        Construit les ensembles (P_i)_{i<=n} de la phase d'élimination
@@ -101,47 +145,10 @@ def Elim(Q):
     P[n-1]=[Primitif(n,Pol) for Pol in Q[n-1]] #dans le bon anneau
 
     for i in range(n-1,-1,-1): #Construction inductive des P_i
-        lon=len(P[i])
         B=TdA[i+1] #On se place dans l'anneau Q[X1][X2]...[X_i+1]
         P[i]=Separable(P[i],i+1) #On rend chaque polynome à racine simple
         P[i]=Simplify_1(P[i],i+1)
-        Na=len(NewA) 
-        NewB=[] #On va réduire le degré de polynômes en divisant P_j et P_(j+1) par leur pgcd et 
-        #en ajoutant ce dernier à la liste s'il est non constant
-        for j in range(Na-1):
-            P1=NewA[j]
-            P2=NewA[j+1]
-            P3=B(gcd(A(P1),A(P2)))
-            if PasDansR(P3,i+1): #On a un pgcd non trivial
-                P3=Primitif(i+1,P3) #On le rend primitif
-                NewA[j]=B(A(P1)//A(P3)) #On simplifie P_j et P_j+1
-                NewA[j+1]=B(A(P2)//A(P3))
-                if P3.degree()>0: #Si il est de degré non nul en X_i+1 on l'ajoute directement
-                    NewB+=[P3]
-                else: #Sinon on l'ajoute dans le bon niveau en regardant pour quel variable son degré 
-                    k=i   #est strictement positif
-                    while (TdA[k](P3)).degree()==0:
-                        k-=1
-                    P[k-1]+=[P3]
-            if NewA[j].degree()>0: #Si P_j est toujours de degré >=1, on le garde
-                NewB+=[NewA[j]]
-        if NewA[Na-1].degree()>0: #On rajoute le dernier polynome a la liste
-            NewB+=[NewA[Na-1]]
-        NewC=[] #On re-enlève les polynomes devenus constants ou identiques
-        lon2=len(NewB)
-        for j in range(lon2):
-            on_veut_pas=false
-            if not PasDansR(NewB[j],i+1): #i.e le polynome est constant
-                on_veut_pas=true
-            for k in range(j+1,lon2): #On regarde si on retrouve notre polynome plus loin
-                if NewB[j]==NewB[k] or NewB[j]==-NewB[k]:
-                    on_veut_pas=true
-                if on_veut_pas:
-                    break
-            if not on_veut_pas: #Alors on garde le polynome pour la suite
-                NewC=NewC+[NewB[j]]
-        P[i]=NewC #On met à jour après nos simplifications
-
+        P=Simplify_2(P,i+1)
         if i==0:
             break
         P[i-1]=[Primitif(i,Pol) for Pol in Q[i-1]] # On initie P_i à Q_i
