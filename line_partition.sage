@@ -172,7 +172,18 @@ def Normalize(l,T,P):
 #        échantillon de chaque intervalle de la partition
 def LinePartition(PP2,l,T):
     lon2=len(PP2) #PP2 a des polynomes Ã  l variables
-    Normed2=[Normalize(l,T,PP2[i]) for i in range(lon2)] #PrÃ©parcours pour calculer
+    Par=[] #liste à paralleliser
+    for i in range(lon2):
+        Par=Par+[(l,T,PP2[i],i)]
+    
+    Output=list(NormalizePar(Par))
+    Normed2=Zero(lon2)
+    
+    for i in range(lon1):
+        j=Output[i][1][1]
+        Normed2[j]=Output[i][1][0]
+    
+    
     Normed=[] #les polynomes normalisÃ©s avec racines qui vont aller dans Normed
     RootCodePi=[] #et leur Rootcoding dans RootCodePi
     List=[]
