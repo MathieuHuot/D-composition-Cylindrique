@@ -10,10 +10,6 @@
 #(*                                                                                     *)
 #(***************************************************************************************)
 
-#On tranforme tout un tas de fonctions en fonxion paralisé
-#Ui les fôtes d'orthographe c normal!!
-#JE COLLECTIONNE DES CANARD VIVANTS!!!
-
 @parallel
 def RootPar(l,T,Pl,pl,P,p,i):
     return (RootCoding(l,T,Pl,pl,P,p),i)
