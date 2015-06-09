@@ -189,4 +189,4 @@ def Elim(Q):
                                     d=A(Sres[j]).content() #On rend le polynome primitif
                                     P[i-1]=P[i-1]+[TdA[i](Sres[j]*(1/d))]
     return P
-#COMPLEXITY :
+#COMPLEXITY : O(2EXP)
