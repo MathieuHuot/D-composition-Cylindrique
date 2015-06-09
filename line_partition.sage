@@ -40,9 +40,15 @@ def Singleton(L,P):
     return res
 #COMPLEXITY : O(len(L))
 
-#Agrandit chaque Ã©lÃ©ment Sli[j] de Sli par (r,SLL[j],Q) oÃ¹ r dÃ©signe le numÃ©ro de 
-#la racine si SLL[j] code une racine de Q et -1 sinon
-#Version oÃ¹ on concatÃ¨ne Ã  gauche
+#INPUT : SLj     ((int * (int list) * Q[X1,...Xl]) list) list
+#        SLL     (int list) list
+#        NormedQ Q[X1,...Xl]
+#        SLi     ((int * (int list) * Q[X1,...Xl]) list) list
+#        i       integer
+#OUTPUT: res     ((int * (int list) * Q[X1,...Xl]) list) list
+#NOTE  : agrandit chaque élément Sli[j] de SLi par (r,SLL[j],Q) où r désigne le numéro de la racine
+#        si SLL[j] code une racine de Q et -1 sinon.
+#        version où on concatène à gauche
 def EnlargeWithGauche(SLi,SLL,NormedQ,SLj,J):
     res=[]
     lon=len(SLL)
@@ -50,7 +56,7 @@ def EnlargeWithGauche(SLi,SLL,NormedQ,SLj,J):
     lon3=len(SLi)
     Q,q=NormedQ
     for j in range(lon):
-        r=-1 #Par dÃ©faut ce n'est pas une racine de Q
+        r=-1 #Par défaut ce n'est pas une racine de Q
         for k in range(lon2): #On cherche si un Q-encoding est identique
             if SLL[j]==SLj[k][J][1]: #Dans ce cas c'est une racine de Q
                 r=k+1
@@ -59,7 +65,15 @@ def EnlargeWithGauche(SLi,SLL,NormedQ,SLj,J):
     for j in range(lon3,lon):
         res=res+[SLi[j]]
     return res
-#Version oÃ¹ on concatÃ¨ne Ã  droite
+#COMPLEXITY : O(lon * lon2)    
+    
+#INPUT : SLj     ((int * (int list) * Q[X1,...Xl]) list) list
+#        SLL     (int list) list
+#        NormedQ Q[X1,...Xl]
+#        SLi     ((int * (int list) * Q[X1,...Xl]) list) list
+#        i       integer
+#OUTPUT: res     ((int * (int list) * Q[X1,...Xl]) list) list
+#NOTE  :  version où on concatène à droite
 def EnlargeWithDroite(SLj,SLL,NormedQ,SLi,i):
     res=[]
     lon=len(SLL)
@@ -73,20 +87,22 @@ def EnlargeWithDroite(SLj,SLL,NormedQ,SLi,i):
                 break
         res=res + [SLj[k]+[[r,SLL[k],Q]]]
     return res
-#((int * (int list) * Q[X1,...Xl]) list) list * (int list) list * Q[X1,...Xl] *
-#((int * (int list) * Q[X1,...Xl]) list) list * int 
-# -> ((int * (int list) * Q[X1,...Xl]) list) list
+#COMPLEXITY : O(lon * lon2)   
 
-#La comparaison utilisÃ©e pour le tri nÃ©cessaire dans OrderedMerge . On fait appel Ã  
-#PetitThom2 sur deux P-encoding dont l'un au moins est sur une racine de P, ce qui 
-#garantit la validitÃ© de la comparaison totale de la liste en ne comparant que deux 
-#Ã©lÃ©ments, et on trouve un tel P car on a sauvegardÃ© son indice en dÃ©but de liste
+#INPUT : L1 (int * int list * Q[X1,...,Xl]) list 
+#        L2 (int * int list * Q[X1,...,Xl]) list 
+#OUTPUT: s  {-1,0,1} comparaison de L1 et L2 codant une racine chacun pour l'ordre du Thom Encoding
+#NOTE  : on fait appel à PetitThom2 sur 2 P-encoding dont l'un au moins est sur une racine de P 
+#        (l'indice au début est la pour ça), ce qui garantit la validité de la comparaison totale
+#        de la liste en ne comparant que deux éléments
 def CompP(L1,L2):
     i=L1[0]
     return PetitThom2(L1[i][1],L2[i][1])
-#(int * int list * Q[X1,...,Xl]) list * (int * int list * Q[X1,...,Xl]) list -> {-1,0,1}
+#COMPLEXITY: AVERAGE O(1)
 
-#Effectue le tri optimisÃ©  de deux listes triÃ©es pour la fonction OrderedMerge
+#INPUT : L1  (int * int list * Q[X1,...,Xl]) list list
+#        L2  (int * int list * Q[X1,...,Xl]) list list
+#OUTPUT: res (int * int list * Q[X1,...,Xl]) list list tri fusion optimisé de L1 et L2 
 def TriP(L1,L2):
     n=len(L1)
     m=len(L2)
@@ -110,18 +126,17 @@ def TriP(L1,L2):
     for k in range(j,m):
         res=res+[L2[k]]
     return res        
-#(int * int list * Q[X1,...,Xl]) list list * (int * int list * Q[X1,...,Xl]) list list ->
-#(int * int list * Q[X1,...,Xl]) list list
+#COMPLEXITY : O(n+m)
 
-#Effectue la fusion d'une liste de listes en une liste, qui est triÃ©e et dont
-#on a enlevÃ© les doublons : c'est Ã  dire trie les racines des diffÃ©rents polynomes Ã 
-#l'aide de leur Thom-Encoding
+#INPUT : SL (int * int list * Q[X1,...,Xl]) list list list 
+#OUTPUT: L  (int * int list * Q[X1,...,Xl]) list list : fusion des listes de SL avec TriP en enlevant
+#           les doublons: i.e trie les racines des différents polynomes à l'aide de leur Thom-Encoding
 def OrderedMerge(SL): 
     n=len(SL)
     mid=n//2
     if n==0:
         return []
-    elif n==1: #############rajouter le cas if n==0 renvoyer [] fait aussi planter
+    elif n==1: 
         return SL[0]
     elif n==2:
         return TriP(SL[0],SL[1])
@@ -132,10 +147,13 @@ def OrderedMerge(SL):
         L2=[SL[i] for i in range(mid,n)]
         L2=OrderedMerge(L2)
         return TriP(L1,L2)
-#(int * int list * Q[X1,...,Xl]) list list list -> 
-#(int * int list * Q[X1,...,Xl]) list list
+#COMPLEXITY : O( n * m * log(m) )
 
-#Renvoie le polynome sans ses coefficients nuls lorsque prÃ©cisÃ© en alpha_1,...,alpha_l
+#INPUT : l   integer
+#        T   (int * Q[X1,...,Xl] * int) list
+#        P   Q[X1,...,Xl]
+#OUTPUT: Res Q[X1,...,Xl-1][Xl] P sans ses coeffs nuls lorsque précisé en \alpha_1,...,\alpha_l-1
+#        p   integer
 def Normalize(l,T,P):
     p = Degree(l,T,P)
     Res = 0
@@ -143,10 +161,15 @@ def Normalize(l,T,P):
         Res = Res + P[j]*TdV[l-1]**j #La variable principale de P est X_l
     Res = Primitif(l,Res)    #On rend le polynome primitif
     return Res,p
-#int * (int * Q[X1,...Xl] * int) list * Q[X1,...Xl] -> Q[X1,...Xl]
+#COMPLEXITY: O(2EXP)
 
-#Effectue la partition de la ligne rÃ©elle selon les polynomes de PP Ã  l variables
-#dans le systÃ¨me triangulaire T de niveau l-1
+#INPUT : PP2    Q[X1,...,Xl] list 
+#        l      integer 
+#        T      (int * Q[X1,...,Xl] * int)  list : système triangulaire
+#OUTPUT: SL     (int * int list * Q[X1,...,Xl]) list list 
+#        Normed (Q[X1,...,Xl] * int) list : polynomes de PP2 normalisés
+#NOTE  : SL représente la partition de la ligne réelle en étant une liste de codage de racines 
+#        échantillon de chaque intervalle de la partition
 def LinePartition(PP2,l,T):
     lon2=len(PP2) #PP2 a des polynomes Ã  l variables
     Normed2=[Normalize(l,T,PP2[i]) for i in range(lon2)] #PrÃ©parcours pour calculer
@@ -173,11 +196,9 @@ def LinePartition(PP2,l,T):
             RootCodePi=RootCodePi+[Root]
             
 
-
     lon=len(Normed)#On place tous les RootCoding des polynomes normalisÃ©s dans une matrice
     SLL=[[0 for j in range(lon)] for i in range(lon)]
     ListArg=[] #Liste des arguments pour la parallélisation
-
 
     for i in range(lon):
         for j in range(lon):
@@ -187,7 +208,6 @@ def LinePartition(PP2,l,T):
                 Pi,pi=Normed[i]
                 Pj,pj=Normed[j]
                 ListArg=ListArg+[(l,T,Pi,pi,Pj,pj,i,j)]
-
     
     Output=list(RootPar2(ListArg))
     tal=len(Output)
@@ -199,7 +219,6 @@ def LinePartition(PP2,l,T):
                     if Output[k][1][1]==i and Output[k][1][2]==j:
                         SLL[i][j]=Output[k][1][0]
                         break
-    
     
     SL=[[] for i in range(lon)] 
     for i in range(lon):
@@ -218,5 +237,4 @@ def LinePartition(PP2,l,T):
     #for i in range(len(SL)): #On enlève l'information précédemment rajoutée
     #    SL[i]=[SL[i][j] for j in range(1,len(SL[i]))] 
     return SL,Normed
-#Q[X1,...,Xl] list * int * (int * Q[X1,...,Xl] * int)  list -> 
-#(int * int list * Q[X1,...,Xl]) list list * (Q[X1,...,Xl] * int) list
+#COMPLEXITY : O(2EXP)
