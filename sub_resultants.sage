@@ -22,6 +22,8 @@ attach("quotient.sage")
 #Note  : Ne calcule pas le degré de Res dans un système triangulaire, utilisé dans la
 #        phase d'élimination
 def IntRem2(l,Q,q,P,p):
+    if p>q:
+        return Q
     R= [Q[i] for i in range(q+1)]
     for i in range(q-p,-1,-1):
         for j in range(0,p):
