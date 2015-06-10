@@ -30,7 +30,7 @@ def nbVariables(P,max=10):
         max=max-1
     return max
 
-#Fusion de deux ensembles
+#Fusion de deux ensembles en éliminant les doublons
 def Fusion(e1,e2):
     return list(set(e1+e2))
 
@@ -48,7 +48,7 @@ def listepol(ITA,max=10):
 def Test(Con,cel):
     Cell=yolo[conv_lis_str(cel)]
     for po in Cell[1]:
-        if po=Con:
+        if po==Con:
             return True
     return False
 
