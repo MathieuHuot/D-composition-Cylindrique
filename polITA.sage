@@ -105,11 +105,20 @@ def AddCel(EPolist,Polist,cel,q1,q2,P,ITA):
     #Les autres cas:
     a=[cel[i] in range(len(a)-1)]
     Pere=yolo[conv_lis_str(a)]
-    for j in range(Pere[0]):
-        Frere=yolo[conv_lis_str(a+[j])]
-        for Co in Frere[1]
-            if Co[0]==P and Co[1]==0:
-                Access(EPolist,Polist,q1.clock(),q2.clock()-q1.clock(),k,a+[j]):
-                ##Remettre à zéro pour choisir la nouvelle cellule
-
-
+    i=q1.clock()
+    while i <=q2.clock(): 
+        trouve=False
+        for j in range(Pere[0]):
+            Frere=yolo[conv_lis_str(a+[j])]
+            for Co in Frere[1]
+                if Co[0]==P and Co[1]==0:
+                    a=a+[j]
+                    trouve=True
+                    Access(EPolist,Polist,i,1,a):
+                    break
+            if trouve:
+                break
+        Pere=Frere
+        P=TdV[i]
+        i=i+1
+    return a
