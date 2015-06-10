@@ -1,4 +1,4 @@
-attach("Accessibilite")
+attach("accessibilite.sage")
 
 class Etat:
     def __init__(self,nom,clock):
@@ -6,7 +6,7 @@ class Etat:
         self.clock= clock
 
 class Config:
-    """Une configuration d'un automate est un couple constitué:
+    """Une configuration d'un automate est un couple constituÃ©:
     -d'un etat actif
     -d'une cellule actif"""
     def __init__(self,etat,cellule):
@@ -14,8 +14,8 @@ class Config:
         self.etat=etat
     
 class PolITA(Etat):
-    """ Classe définissant un automate temporisé à garde polynomiale définie par:
-    -Une liste d'états
+    """ Classe dÃ©finissant un automate temporisÃ© Ã  garde polynomiale dÃ©finie par:
+    -Une liste d'Ã©tats
     -Un dictionnaire de transitions """
 
     def __init__(self,etats,initials,finals,ttransitions):
@@ -30,7 +30,7 @@ def nbVariables(P,max=10):
         max=max-1
     return max
 
-#Fusion de deux ensembles en éliminant les doublons
+#Fusion de deux ensembles en Ã©liminant les doublons
 def Fusion(e1,e2):
     return list(set(e1+e2))
 
@@ -44,7 +44,7 @@ def listepol(ITA,max=10):
             L[j]=L[j]+[P]
     return L
 
-#Teste si un polynome vérifie une condition sur une cellule fixée
+#Teste si un polynome vÃ©rifie une condition sur une cellule fixÃ©e
 def Test(Con,cel):
     Cell=yolo[conv_lis_str(cel)]
     for po in Cell[1]:
@@ -52,14 +52,14 @@ def Test(Con,cel):
             return True
     return False
 
-#Décrit si un etat est accessible dans un ITA donné
+#DÃ©crit si un etat est accessible dans un ITA donnÃ©
 def accessible(etat,ITA):
     Polist=listepol(ITA)
     EPolist=Elim(Polist)
     acc=[]
     qo=ITA.Initials()
     l=qo.clock()
-    Access(EPolist,Polist,0,1,[1]):
+    Access(EPolist,Polist,0,1,[1])
     etats=ITA.etats()
     a=[1]
     Pere=yolo[conv_lis_str(a)]
@@ -68,18 +68,18 @@ def accessible(etat,ITA):
         trouve=False
         for j in range(Pere[0]):
             Frere=yolo[conv_lis_str(a+[j])]
-            for Co in Frere[1]
-                if Co[0]==TdV|i] and Co[1]==0:
+            for Co in Frere[1]:
+                if Co[0]==TdV[i] and Co[1]==0:
                     a=a+[j]
                     trouve=True
-                    Access(EPolist,Polist,i,1,a):
+                    Access(EPolist,Polist,i,1,a)
                     break
             if trouve:
                 break
         Pere=Frere
         i=i+1
-    acc=[Config(a,qo)]  la config initiale 
-    newacc=acc #Nouveaux états à parcourir
+    acc=[Config(a,qo)]  #la config initiale 
+    newacc=acc #Nouveaux Ã©tats Ã  parcourir
     oldacc=[]#Etats accessibles precedemment
     while acc != oldacc:
         for conf in newacc :
@@ -88,20 +88,20 @@ def accessible(etat,ITA):
         ajout=[]
         for conf in newacc:
             if not (conf in oldacc):
-                confAcc=Transition(conf,EPolist,Polist,ITA) # etat accessibles en une étape
+                confAcc=Transition(conf,EPolist,Polist,ITA) # etat accessibles en une Ã©tape
                 ajout=ajout+confAcc
         oldacc=acc
         acc=Fusion(newAcc,acc)
         newAcc=ajout
     return False
 
-#Donne la liste des configurations accessibles en une étape:
+#Donne la liste des configurations accessibles en une Ã©tape:
 def Transition(conf,EPolist,Polist,ITA):
     q1=conf.etat()
     cel=conf.cellule()
     Tr=ITA.transitions()
     etats=ITA.etats()
-    confAtteinte=[] # Ajouter l'état suivant sur la ligne, toujours atteint
+    confAtteinte=[] # Ajouter l'Ã©tat suivant sur la ligne, toujours atteint
     for q2 in etats:
         trans=Tr[(q1,q2)]
         if trans == 0:
@@ -110,7 +110,7 @@ def Transition(conf,EPolist,Polist,ITA):
             nbc=len(condition)
             i=0
             while valide and i<nbc:
-                valide=Test(Condition[i],cel) #Teste si le polynome vérifie la condition 
+                valide=Test(Condition[i],cel) #Teste si le polynome vÃ©rifie la condition 
                 i=i+1
             if valide:
                 P=trans[1]
@@ -133,11 +133,11 @@ def AddCel(EPolist,Polist,cel,q1,q2,P,ITA):
         trouve=False
         for j in range(Pere[0]):
             Frere=yolo[conv_lis_str(a+[j])]
-            for Co in Frere[1]
+            for Co in Frere[1]:
                 if Co[0]==P and Co[1]==0:
                     a=a+[j]
                     trouve=True
-                    Access(EPolist,Polist,i,1,a):
+                    Access(EPolist,Polist,i,1,a)
                     break
             if trouve:
                 break
