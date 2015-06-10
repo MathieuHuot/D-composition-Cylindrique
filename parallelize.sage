@@ -21,3 +21,7 @@ def RootPar2(l,T,Pl,pl,P,p,i,j):
 @parallel
 def NormalizePar(l,t,P,i):
     return (Normalize(l,T,P),i)
+
+@parallel
+def LiftPar(PPtot,PPlist,l,T,k,i)
+    return (Lift(PPtot,PPlist,l,T,k),i)
