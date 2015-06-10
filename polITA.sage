@@ -56,10 +56,29 @@ def Test(Con,cel):
 def accessible(etat,ITA):
     Polist=listepol(ITA)
     EPolist=Elim(Polist)
-    acc=ITA.initial()# Ajouter la cellule initiale 
-    for i in 
-    
-    
+    acc=[]
+    qo=ITA.Initials():
+    l=qo.clock()
+    Access(EPolist,Polist,0,1,[1]):
+    etats=ITA.etats()
+    a=[1]
+    Pere=yolo[conv_lis_str(a)]
+    i=0
+    while i <=l: 
+        trouve=False
+        for j in range(Pere[0]):
+            Frere=yolo[conv_lis_str(a+[j])]
+            for Co in Frere[1]
+                if Co[0]==TdV|i] and Co[1]==0:
+                    a=a+[j]
+                    trouve=True
+                    Access(EPolist,Polist,i,1,a):
+                    break
+            if trouve:
+                break
+        Pere=Frere
+        i=i+1
+    acc=# Ajouter la cellule initiale 
     newacc=acc #Nouveaux états à parcourir
     oldacc=[]#Etats accessibles precedemment
     while acc != oldacc:
@@ -123,6 +142,6 @@ def AddCel(EPolist,Polist,cel,q1,q2,P,ITA):
             if trouve:
                 break
         Pere=Frere
-        P=TdV[i]
+        P=TdV[i+1]
         i=i+1
     return a
