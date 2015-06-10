@@ -53,11 +53,13 @@ def Test(Con,cel):
     return False
 
 #Décrit si un etat est accessible dans un ITA donné
-def access(etat,ITA):
+def accessible(etat,ITA):
     Polist=listepol(ITA)
     EPolist=Elim(Polist)
     acc=ITA.initial()# Ajouter la cellule initiale 
-    #TODO
+    for i in 
+    
+    
     newacc=acc #Nouveaux états à parcourir
     oldacc=[]#Etats accessibles precedemment
     while acc != oldacc:
@@ -80,7 +82,7 @@ def Transition(conf,EPolist,Polist,ITA):
     cel=conf.cellule()
     Tr=ITA.transitions()
     etats=ITA.etats()
-    etatAtteint=[] # Ajouter l'état suivant sur la ligne, toujours atteint
+    confAtteinte=[] # Ajouter l'état suivant sur la ligne, toujours atteint
     for q2 in etats:
         trans=Tr[(q1,q2)]
         if trans == 0:
@@ -94,7 +96,9 @@ def Transition(conf,EPolist,Polist,ITA):
             if valide:
                 P=trans[1]
                 NewCel=AddCel(EPolist,Polist,cel,q1,q2,P,ITA)
-    return
+                newConf=Config(NewCel,q2)
+                confAtteinte=confAtteinte+[newConf]
+    return confAtteinte
 
 def AddCel(EPolist,Polist,cel,q1,q2,P,ITA):
     if q1.clock()>q2.clock():
