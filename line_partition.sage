@@ -31,7 +31,7 @@ def PetitThom2(a,b):
 #        P   Q[X1,...Xl] 
 #OUTPUT: res ((int * (int list) * Q[X1,...Xl]) list) list
 #NOTE  : Transforme une liste d'objets en une liste de singletons contenant 
-#        ces objets et ajoute le numÃ©ro de la racine de P
+#        ces objets et ajoute le numéro de la racine de P
 def Singleton(L,P):
     res=[]
     l=len(L)
@@ -171,7 +171,7 @@ def Normalize(l,T,P):
 #NOTE  : SL représente la partition de la ligne réelle en étant une liste de codage de racines 
 #        échantillon de chaque intervalle de la partition
 def LinePartition(PP2,l,T):
-    lon2=len(PP2) #PP2 a des polynomes Ã  l variables
+    lon2=len(PP2) #PP2 a des polynomes à l variables
     Par=[] #liste à paralleliser
     for i in range(lon2):
         Par=Par+[(l,T,PP2[i],i)]
@@ -184,7 +184,7 @@ def LinePartition(PP2,l,T):
         Normed2[j]=Output[i][1][0]
     
     
-    Normed=[] #les polynomes normalisÃ©s avec racines qui vont aller dans Normed
+    Normed=[] #les polynomes normalisés avec racines qui vont aller dans Normed
     RootCodePi=[] #et leur Rootcoding dans RootCodePi
     List=[]
     for i in range(lon2):
@@ -207,13 +207,13 @@ def LinePartition(PP2,l,T):
             RootCodePi=RootCodePi+[Root]
             
 
-    lon=len(Normed)#On place tous les RootCoding des polynomes normalisÃ©s dans une matrice
+    lon=len(Normed)#On place tous les RootCoding des polynomes normalisés dans une matrice
     SLL=[[0 for j in range(lon)] for i in range(lon)]
     ListArg=[] #Liste des arguments pour la parallélisation
 
     for i in range(lon):
         for j in range(lon):
-            if i==j: #On a dÃ©jÃ  calculÃ© et stockÃ© le RootCoding de Pi sur ses racines
+            if i==j: #On a déjà calculé et stocké le RootCoding de Pi sur ses racines
                 SLL[i][i]=RootCodePi[i]
             else:
                 Pi,pi=Normed[i]
@@ -243,7 +243,7 @@ def LinePartition(PP2,l,T):
     for i in range(lon):
         for j in range(len(SL[i])):
             SL[i][j]=[i+1]+SL[i][j] 
-        #On précise devant chaque codage de racine le numÃ©ro du polynome qui l'engendre
+        #On précise devant chaque codage de racine le numéro du polynome qui l'engendre
     SL=OrderedMerge(SL)
     #for i in range(len(SL)): #On enlève l'information précédemment rajoutée
     #    SL[i]=[SL[i][j] for j in range(1,len(SL[i]))] 
