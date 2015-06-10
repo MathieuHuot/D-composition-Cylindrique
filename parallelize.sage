@@ -23,5 +23,5 @@ def NormalizePar(l,t,P,i):
     return (Normalize(l,T,P),i)
 
 @parallel
-def LiftPar(PPtot,PPlist,l,T,k,i)
+def LiftPar(PPtot,PPlist,l,T,k,i):
     return (Lift(PPtot,PPlist,l,T,k),i)
