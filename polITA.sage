@@ -78,7 +78,7 @@ def accessible(etat,ITA):
                 break
         Pere=Frere
         i=i+1
-    acc=# Ajouter la cellule initiale 
+    acc=[Config(a,qo)]  la config initiale 
     newacc=acc #Nouveaux états à parcourir
     oldacc=[]#Etats accessibles precedemment
     while acc != oldacc:
