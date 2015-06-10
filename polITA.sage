@@ -55,6 +55,7 @@ def Test(Con,cel):
 #Décrit si un etat est accessible dans un ITA donné
 def access(etat,ITA):
     Polist=listepol(ITA)
+    EPolist=Elim(Polist)
     acc=ITA.initial()# Ajouter la cellule initiale 
     #TODO
     newacc=acc #Nouveaux états à parcourir
@@ -66,7 +67,7 @@ def access(etat,ITA):
         ajout=[]
         for conf in newacc:
             if not (conf in oldacc):
-                confAcc=Transition(conf,Polist,ITA) # etat accessibles en une étape
+                confAcc=Transition(conf,EPolist,Polist,ITA) # etat accessibles en une étape
                 ajout=ajout+confAcc
         oldacc=acc
         acc=Fusion(newAcc,acc)
@@ -74,12 +75,12 @@ def access(etat,ITA):
     return False
 
 #Donne la liste des configurations accessibles en une étape:
-def Transition(conf,Polist,ITA):
+def Transition(conf,EPolist,Polist,ITA):
     q1=conf.etat()
     cel=conf.cellule()
     Tr=ITA.transitions()
     etats=ITA.etats()
-    etatAtteint=[]
+    etatAtteint=[] # Ajouter l'état suivant sur la ligne, toujours atteint
     for q2 in etats:
         trans=Tr[(q1,q2)]
         if trans == 0:
@@ -91,9 +92,24 @@ def Transition(conf,Polist,ITA):
                 valide=Test(Condition[i],cel) #Teste si le polynome vérifie la condition 
                 i=i+1
             if valide:
-                NewCel=AddCel(cel,q1,q2,ITA)
+                P=trans[1]
+                NewCel=AddCel(EPolist,Polist,cel,q1,q2,P,ITA)
     return
 
-
+def AddCel(EPolist,Polist,cel,q1,q2,P,ITA):
+    if q1.clock()>q2.clock():
+        #Cas ou on remonte d'un cran:
+        b=[cel[i] for i in range(q2.clock())]
+        return b
+        
+    #Les autres cas:
+    a=[cel[i] in range(len(a)-1)]
+    Pere=yolo[conv_lis_str(a)]
+    for j in range(Pere[0]):
+        Frere=yolo[conv_lis_str(a+[j])]
+        for Co in Frere[1]
+            if Co[0]==P and Co[1]==0:
+                Access(EPolist,Polist,q1.clock(),q2.clock()-q1.clock(),k,a+[j]):
+                ##Remettre à zéro pour choisir la nouvelle cellule
 
 
