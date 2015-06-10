@@ -140,11 +140,11 @@ def Lift(PPtot,PPlist,l,T,k): #Construction récursive de chaque niveau
             Output=list(LiftPar(ListArg))
             for i in range(len(L)):
                 for j in range(i,len(L)):
-                    if Output[i][1]>Output[j][1]:
-                        Output[i][1],Output[j][1]=Output[j][1],Output[i][1]
+                    if Output[i][1][1]>Output[j][1][1]:
+                        Output[i],Output[j]=Output[j],Output[i]
             for i in range(len(L)):
                 Teval=Eval2(L,T,l,PPlist,i,ListArg[i][3])
-                foret+=[[Teval,Output[i][0]]]
+                foret+=[[Teval,Output[i][1][0]]]
         else:    
             for i in range(len(L)):
                 Teval,Tbis=Eval(L,T,l,PPlist,i)
