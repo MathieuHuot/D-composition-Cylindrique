@@ -39,6 +39,7 @@ def RechP (P,rac):
 
 def Eval(L,T,l,PPlist,i):
     Teval=[]
+    lon=len(PPlist[l-1])
     ind=L[i][0] #L'indice i d'un Pi tel que L[i] code une racine de Pi 
     P=L[i][ind][2]
     r=L[i][ind][0]
@@ -68,7 +69,7 @@ def Eval(L,T,l,PPlist,i):
                             sP=sP*L[i][m][1][0]
             sP=sP*Sign(l,Tbis,Pol)
             Teval=Teval+[(Pol,sP)]
-    return Teval
+    return Teval,Tbis
 
 def Eval2(L,T,l,PPlist,i,Tbis):
     Teval=[]
@@ -111,8 +112,8 @@ def Lifting(PPtot,PPlist):
 
 def Lift(PPtot,PPlist,l,T,k): #Construction récursive de chaque niveau
     L,PP=LinePartition(PPtot[l-1],l,T)
-    lon=len(PPlist[l-1])
     if L==[]: #Aucun polynome n'a de racine
+        lon=len(PPlist[l-1])
         Tbis=T+[(1,TdV[l-1],1)] #X_l devient représentant de la ligne réelle
         Teval=[]
         for j in range(lon):
@@ -146,7 +147,7 @@ def Lift(PPtot,PPlist,l,T,k): #Construction récursive de chaque niveau
                 foret+=[[Teval,Output[i][0]]]
         else:    
             for i in range(len(L)):
-                Teval=Eval(L,T,l,PPlist,i)
+                Teval,Tbis=Eval(L,T,l,PPlist,i)
                 if l<k: #On appelle récursivement sur chaque noeud la construction du 
                     foret+=[[Teval,Lift(PPtot,PPlist,l+1,Tbis,k)]] #niveau suivant
                 else: #Ou alors on est arrivé au plus bas niveau et on a des feuilles
