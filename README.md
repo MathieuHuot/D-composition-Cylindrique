@@ -59,10 +59,13 @@ I) Avancement du stage
 -introduction à Lupa
 -ajout d'une simplification randomizée dans elim
 -mise en contact avec l'ingénieur du LSV pour la necessité de puissance de calcul
--parallélization de elim et line partition
+-parallélization de elim, line partition, completing
 -simplification dans Elim avec les pgcd
 -simplification de calcul de Sign dans Lifting
 -implémentation d'un dictionnaire pour l'algorithme "on the fly"
+-implémentation de la classe PolITA
+-amélioration générale de la qualité du code
+-amélioration de SignRealization
 
 6) juin 16-30
 ~~~~~~~~~~~~~
