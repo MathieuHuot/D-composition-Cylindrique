@@ -53,7 +53,11 @@ def listepol(ITA,max=10):
 
 #Teste si un polynome vérifie une condition sur une cellule fixée
 def Test(Con,cel):
-    #TODO
+    Cell=yolo[conv_lis_str(cel)]
+    for po in Cell[1]:
+        if po=Con:
+            return True
+    return False
 
 
 
@@ -80,7 +84,7 @@ def access(etat,ITA):
     return False
 
 
-
+#Donne la liste des configurations accessibles en une étape:
 def Transition(conf,Polist,ITA):
     q1=conf.etat()
     cel=conf.cellule()
