@@ -37,8 +37,8 @@ def nbVariables(P,max=10):
     return max
 
 #Fusion de deux ensembles
-def Fusion:
-    #TODO
+def Fusion(e1,e2):
+    return list(set(e1+e2))
  
 
 #Fait la liste des polynomes apparaissant dans un polITA
