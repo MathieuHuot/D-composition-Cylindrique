@@ -57,7 +57,7 @@ def accessible(etat,ITA):
     Polist=listepol(ITA)
     EPolist=Elim(Polist)
     acc=[]
-    qo=ITA.Initials():
+    qo=ITA.Initials()
     l=qo.clock()
     Access(EPolist,Polist,0,1,[1]):
     etats=ITA.etats()
