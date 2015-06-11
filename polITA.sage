@@ -7,7 +7,7 @@ class Etat:
         self.clock= clock
 
 class Config:
-    """Une configuration d'un automate est un couple constituÃ©:
+    """Une configuration d'un automate est un couple constitué:
     -d'un etat actif
     -d'une cellule actif"""
     def __init__(self,etat,cellule):
@@ -15,8 +15,8 @@ class Config:
         self.etat=etat
     
 class PolITA:
-    """ Classe dÃ©finissant un automate temporisÃ© Ã  garde polynomiale dÃ©finie par:
-    -Une liste d'Ã©tats
+    """ Classe définissant un automate temporisé à garde polynomiale définie par:
+    -Une liste d'états
     -Un dictionnaire de transitions """
 
     def __init__(self,etats,initials,finals,transitions):
@@ -51,7 +51,7 @@ def listepol(ITA):
             L[j]=L[j]+[P[0]]
     return L
 
-#Teste si un polynome vÃ©rifie une condition sur une cellule fixÃ©e
+#Teste si un polynome vérifie une condition sur une cellule fixée
 def Test(Con,cel):
     Cell=yolo[conv_lis_str(cel)]
     for po in Cell[1]:
@@ -59,7 +59,7 @@ def Test(Con,cel):
             return True
     return False
 
-#DÃ©crit si un etat est accessible dans un ITA donnÃ©
+#Décrit si un etat est accessible dans un ITA donné
 def accessible(etat,ITA):
     Polist=listepol(ITA)
     print(Polist)
@@ -87,7 +87,7 @@ def accessible(etat,ITA):
         Pere=Frere
         i=i+1
     acc=[Config(a,qo)]  #la config initiale 
-    newacc=acc #Nouveaux Ã©tats Ã  parcourir
+    newacc=acc #Nouveaux états à parcourir
     oldacc=[]#Etats accessibles precedemment
     while acc != oldacc:
         for conf in newacc :
@@ -96,20 +96,20 @@ def accessible(etat,ITA):
         ajout=[]
         for conf in newacc:
             if not (conf in oldacc):
-                confAcc=Transition(conf,EPolist,Polist,ITA) # etat accessibles en une Ã©tape
+                confAcc=Transition(conf,EPolist,Polist,ITA) # étatx accessibles en une étape
                 ajout=ajout+confAcc
         oldacc=acc
         acc=Fusion(newAcc,acc)
         newAcc=ajout
     return False
 
-#Donne la liste des configurations accessibles en une Ã©tape:
+#Donne la liste des configurations accessibles en une étape:
 def Transition(conf,EPolist,Polist,ITA):
     q1=conf.etat
     cel=conf.cellule
     Tr=ITA.transitions
     etats=ITA.etats
-    confAtteinte=[] # Ajouter l'Ã©tat suivant sur la ligne, toujours atteint
+    confAtteinte=[] # Ajouter l'état suivant sur la ligne, toujours atteint
     for q2 in etats:
         for trans in Tr:
             if trans[2]==q1 and trans[3]==q2: 
@@ -118,7 +118,7 @@ def Transition(conf,EPolist,Polist,ITA):
                 nbc=len(condition)
                 i=0
                 while valide and i<nbc:
-                    valide=Test(Condition[i],cel) #Teste si le polynome vÃ©rifie la condition 
+                    valide=Test(Condition[i],cel) #Teste si le polynome vérifie la condition 
                     i=i+1
                 if valide:
                     P=trans[1]
@@ -129,7 +129,7 @@ def Transition(conf,EPolist,Polist,ITA):
 
 def AddCel(EPolist,Polist,cel,q1,q2,P,ITA):
     if q1.clock>q2.clock:
-        #Cas ou on remonte d'un cran:
+        #Cas où on remonte d'un cran:
         b=[cel[i] for i in range(q2.clock())]
         return b
         
