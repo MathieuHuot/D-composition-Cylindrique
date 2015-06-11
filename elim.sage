@@ -57,7 +57,7 @@ def Separable(lis,i):
     for j in range(lon): 
         P1=lis[j]
         P2=diff(P1,TdV[i-1])
-        lis[j]=Quotient(i,P1,P2)
+        lis[j]=Quotient(i,P1,TdA[i](gcd(A(P1),A(P2))))
     return lis
 #COMPLEXITY : O(lon * 2**i * 2**(degmax(P_i)) )
 
