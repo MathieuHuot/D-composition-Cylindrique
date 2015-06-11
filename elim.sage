@@ -145,7 +145,6 @@ def Elim(Q):
     P[n-1]=[Primitif(n,Pol) for Pol in Q[n-1]] #dans le bon anneau
 
     for i in range(n-1,-1,-1): #Construction inductive des P_i
-        B=TdA[i+1] #On se place dans l'anneau Q[X1][X2]...[X_i+1]
         P[i]=Separable(P[i],i+1) #On rend chaque polynome à racine simple
         P[i]=Simplify_1(P[i],i+1)
         P=Simplify_2(P,i+1)
@@ -157,7 +156,7 @@ def Elim(Q):
             TruPol=Tru(i+1,Pol)
             for R in TruPol:
                 r=R.degree()
-                if PasDansR(R[r],i-1): #Si le coefficient dominant n'est pas dans QQ
+                if PasDansR(R[r],i): #Si le coefficient dominant n'est pas dans QQ
                     P[i-1]=P[i-1]+[Primitif(i,R[r])] #on l'ajoute
                 if r>1:
                     Sres=SubResultants(i+1,R,r,diff(R,TdV[i]),r-1)
