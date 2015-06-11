@@ -157,17 +157,13 @@ def Elim(Q):
             TruPol=Tru(i+1,Pol)
             for R in TruPol:
                 r=R.degree()
-                if PasDansR(R[r],i-1): #Si le coefficient dominant n'est pas dans QQ)
-                    R2=A(R[r])       #On rend le polynome (qui est le LCoef) primitif
-                    d=R2.content()
-                    P[i-1]=P[i-1]+[TdA[i](R[r]*(1/d))] #Et on l'ajoute à P_i
+                if PasDansR(R[r],i-1): #Si le coefficient dominant n'est pas dans QQ
+                    P[i-1]=P[i-1]+[Primitif(i,R[r])] #on l'ajoute
                 if r>1:
                     Sres=SubResultants(i+1,R,r,diff(R,TdV[i]),r-1)
                     for j in range(len(Sres)): #On rajoute les Sres_j non nuls
                         if PasDansR(0*TdV[i-1]+Sres[j],i):
-                            Sres2=A(Sres[j])  #On rend le polynome primitif
-                            d=Sres2.content()
-                            P[i-1]=P[i-1]+[TdA[i](Sres[j]*(1/d))]
+                            P[i-1]=P[i-1]+[Primitif(i,Sres[j])]
                 for Pol2 in P[i]:
                     TruPol2=Tru(i+1,Pol2)
                     for T in TruPol2:
@@ -178,7 +174,7 @@ def Elim(Q):
                                 if T2==0:
                                     Sres=[]
                                 else:
-                                    T2=B(T2*1/A(T2).content())
+                                    T2=Primitif(i+1,T2)
                                     t2=T2.degree()
                                     Sres=SubResultants(i+1,R,r,T2,t2)
                             else:
@@ -186,7 +182,6 @@ def Elim(Q):
                             for j in range(len(Sres)):
                                 #On rajoute ceux qui ont un degré >0
                                 if PasDansR(0*TdV[i-1]+Sres[j],i):
-                                    d=A(Sres[j]).content() #On rend le polynome primitif
-                                    P[i-1]=P[i-1]+[TdA[i](Sres[j]*(1/d))]
+                                    P[i-1]=P[i-1]+[Primitif(i,Sres[j])]
     return P
 #COMPLEXITY : O(2EXP)
