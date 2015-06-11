@@ -66,11 +66,13 @@ I) Avancement du stage
 -implémentation de la classe PolITA
 -amélioration générale de la qualité du code
 -amélioration de SignRealization
+- interface LUA : nous avons installé lupa, et essayé de faire marcher les tables. Il y avait un problème d'indicage avec les entiers Sage qui sont différents des entiers python. On a posé la question sur le forum Sage pour savoir comment contourner le problème.
+- algorithme "on the fly" et algorithme d'accessibilité
+
 
 6) juin 16-30
 ~~~~~~~~~~~~~
 
--dérécursivation de lifting et gain en mémoire
 
 II) Difficultés surmontées
 ==========================
