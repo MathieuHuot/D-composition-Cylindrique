@@ -179,7 +179,7 @@ def LinePartition(PP2,l,T):
     Output=list(NormalizePar(Par))
     Normed2=Zero(lon2)
     
-    for i in range(lon1):
+    for i in range(lon2):
         j=Output[i][1][1]
         Normed2[j]=Output[i][1][0]
     
