@@ -198,4 +198,4 @@ def Completing(l,T,L,PP):
     newL[2*n]=newL[2*n][len(newL[2*n])-1]
     newL[2*n]=[len(newL[2*n])]+newL[2*n] #On rajoute encore le "i" initial indiquant où chercher le
     return newL                          # "r" défini
-
+#COMPLEXITY : O(2EXP)
