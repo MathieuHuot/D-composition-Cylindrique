@@ -37,6 +37,13 @@ def RechP (P,rac):
     return i
 #COMPLEXITY : O(len(rac))
 
+#INPUT : L      (Q[X1,...,Xl] list) list : racines du lifting+completing
+#        T      (int * Q[X1,...,Xl-1] * int) list
+#        l      integer
+#        PPlist (Q[X1,...,Xn] list) list
+#        i      integer : indice de la racine traitée
+#OUTPUT: Teval  (Q[X1,...,Xl] * {-1,0,1}) list : évaluation de signe de PPlist[l-1] dans T
+#        Tbis   (int * Q[X1,...,Xl] * int) list : système triangulaire enrichi par L[i]
 def Eval(L,T,l,PPlist,i):
     Teval=[]
     lon=len(PPlist[l-1])
@@ -71,7 +78,13 @@ def Eval(L,T,l,PPlist,i):
             Teval=Teval+[(Pol,sP)]
     return Teval,Tbis
 
-def Eval2(L,T,l,PPlist,i,Tbis):
+#INPUT : L      (Q[X1,...,Xl] list) list : racines du lifting+completing
+#        Tbis   (int * Q[X1,...,Xl] * int) list
+#        l      integer
+#        PPlist (Q[X1,...,Xn] list) list
+#        i      integer : indice de la racine traitée
+#OUTPUT: Teval  (Q[X1,...,Xl] * {-1,0,1}) list : évaluation de signe de PPlist[l-1] dans T
+def Eval2(L,Tbis,l,PPlist,i):
     Teval=[]
     lon=len(PPlist[l-1])
     for j in range(lon):
@@ -144,7 +157,7 @@ def Lift(PPtot,PPlist,l,T,k): #Construction récursive de chaque niveau
                     if Output[i][1][1]>Output[j][1][1]:
                         Output[i],Output[j]=Output[j],Output[i]
             for i in range(len(L)):
-                Teval=Eval2(L,T,l,PPlist,i,ListArg[i][3])
+                Teval=Eval2(L,ListArg[i][3],l,PPlist,i)
                 foret+=[[Teval,Output[i][1][0]]]
         else:    
             for i in range(len(L)):
