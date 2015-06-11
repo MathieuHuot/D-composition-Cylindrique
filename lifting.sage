@@ -73,6 +73,7 @@ def Eval(L,T,l,PPlist,i):
 
 def Eval2(L,T,l,PPlist,i,Tbis):
     Teval=[]
+    lon=len(PPlist[l-1])
     for j in range(lon):
         Pol=PPlist[l-1][j]
         pos=RechP(Pol,L[i])
