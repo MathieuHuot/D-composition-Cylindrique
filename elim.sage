@@ -24,6 +24,7 @@ def PasDansR(P,i):
     if i==0 or P==0:
         return false
     else:
+        P=P+0*TdV[i-1]
         p=P.degree()
         if p > 0 :
             return true
