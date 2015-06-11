@@ -56,7 +56,7 @@ def Separable(lis,i):
     for j in range(lon): 
         P1=lis[j]
         P2=diff(P1,TdV[i-1])
-        lis[j]=TdA[i](A(P1)//gcd(A(P1),A(P2)))
+        lis[j]=Quotient(i,P1,P2)
     return lis
 #COMPLEXITY : O(lon * 2**i * 2**(degmax(P_i)) )
 
@@ -74,9 +74,9 @@ def Simplify_1(lis,i):
             p2=P2.degree()
             p3=P3.degree()
             if p3>=p1 and IntRem2(i,P3,p3,P1,p1)==0:
-                lis[k]=TdA[i](A(lis[k])//A(P3))
+                lis[k]=Quotient(i,P1,P3)
             elif p3>=p2 and IntRem2(i,P3,p3,P2,p2)==0:
-                lis[j]=TdA[i](A(lis[j])//A(P3))
+                lis[j]=Quotient(i,P2,P3)
     NewA=[] #On enlève les polynomes devenus constants ou identiques
     for j in range(lon):
         on_veut_pas=false
@@ -106,8 +106,8 @@ def Simplify_2(P,i):
         P3=TdA[i](gcd(A(P1),A(P2)))
         if PasDansR(P3,i): #On a un pgcd non trivial
             P3=Primitif(i,P3) #On le rend primitif
-            lis[j]=TdA[i](A(P1)//A(P3)) #On simplifie P_j et P_j+1
-            lis[j+1]=TdA[i](A(P2)//A(P3))
+            lis[j]=Quotient(i,P1,P3) #On simplifie P_j et P_j+1
+            lis[j+1]=Quotient(i,P2,P3)
             if P3.degree()>0: #Si il est de degré non nul en X_i+1 on l'ajoute directement
                 NewA+=[P3]
             else: #Sinon on l'ajoute dans le bon niveau en regardant pour quel variable son degré 
