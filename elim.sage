@@ -74,10 +74,10 @@ def Simplify_1(lis,i):
             p1=P1.degree()
             p2=P2.degree()
             p3=P3.degree()
-            if p3>=p1 and IntRem2(i,P3,p3,P1,p1)==0:
-                lis[k]=Quotient(i,P1,P3)
-            elif p3>=p2 and IntRem2(i,P3,p3,P2,p2)==0:
-                lis[j]=Quotient(i,P2,P3)
+            if IntRem2(i,P3,p3,P1,p1)==0:
+                lis[k]=Quotient(i,P2,P3)
+            elif IntRem2(i,P3,p3,P2,p2)==0:
+                lis[j]=Quotient(i,P1,P3)
     NewA=[] #On enlève les polynomes devenus constants ou identiques
     for j in range(lon):
         on_veut_pas=false
@@ -98,8 +98,6 @@ def Simplify_1(lis,i):
 #OUTPUT: P Q[X1,...,Xn] list list : P[i] est éventuellement simplifié 
 def Simplify_2(P,i):
     lis=P[i-1]
-    if lis==[]:
-        return P
     NewA=[] #On va réduire le degré de polynômes en divisant P_j et P_(j+1) par leur pgcd et 
     #en ajoutant ce dernier à la liste s'il est non constant
     lon=len(lis)
