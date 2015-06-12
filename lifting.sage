@@ -83,18 +83,18 @@ def Lifting(PPtot,PPlist):
                             for m in range(1,len(L[i])):
                                 trouve=False
                                 Pol2=L[i][m][2]
-                                A=IntRem2(l,Pol,Pol.degree(),Pol2,Pol2.degree())
-                                if A==0:
+                                Al=IntRem2(l,Pol,Pol.degree(),Pol2,Pol2.degree())
+                                if Al==0:
                                     trouve=True
                                     if L[i][m][1][0]==0: #i.e Pol2(\alpha)=0
                                         sP=0
                                         fini=True
                                         break
                                     else:
-                                        Pol=B(A(Pol)//A(Pol2)) #A remplacer par Quotient
+                                        Pol=Quotient(l,Pol,Pol2)
                                         sP=sP*L[i][m][1][0]
                         sP=sP*Sign(l,Tbis,Pol)
-                        Teval=Teval+[(Pol,sP)]
+                        Teval=Teval+[(PPlist[l-1][j],sP)]
                 if l<k: #On appelle récursivement sur chaque noeud la construction du 
                     foret=foret+[[Teval,Lift(l+1,Tbis)]] #niveau suivant
                 else: #Ou alors on est arrivé au plus bas niveau et on a des feuilles
