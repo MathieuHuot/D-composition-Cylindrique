@@ -63,7 +63,7 @@ def Access(PolElim,PolIni,l,k,a): #Construction récursive de chaque niveau
             Tbis=T+[[1,TdV[l-1],1]] #X_l devient représentant de la ligne rÃ©elle
             Teval=[]
             for j in range(lon):
-                P=PPlist[l-1][j]
+                P=PolIni[l-1][j]
                 p=P.degree()
                 s=Sign(l-1,T,P[p])  #Le signe d'un polynome sans racine réelle
                 Teval=Teval+[(P,s)] #est celui de son coefficient dominant
