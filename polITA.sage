@@ -1,3 +1,17 @@
+# -*-coding:Latin-1 -*
+
+#(***************************************************************************************)
+#(*                                                                                     *)
+#(*                                                                                     *)
+#(*                              HUOT Mathieu                                           *)
+#(*                              GARNIER Remy                                           *)
+#(*                    Licence 3 : stage de MathÃ©matiques                              *)
+#(*                            Version Q[X1,...Xn]                                      *)
+#(*                       décision de l'accessibilité                                   *)
+#(*                                                                                     *)
+#(*                                                                                     *)
+#(***************************************************************************************)
+
 
 attach("accessibilite.sage")
 
@@ -49,6 +63,11 @@ def listepol(ITA):
                 L=L+[[TdV[k]]]
             nbV=max(j,nbV)
             L[j]=L[j]+[P[0]]
+
+    for i in range(len(Tr)):
+         P = Tr[i][1]
+         j=nbVariables(P)
+         L[j]+=[P]
     return L
 
 #Teste si un polynome vérifie une condition sur une cellule fixée
@@ -67,11 +86,12 @@ def accessible(etat,ITA):
     acc=[]
     qo=(ITA.initial)[0]
     l=qo.clock
-    Access(EPolist,Polist,1,1,[1])
+    Access(EPolist,Polist,1,l,[1])
+    print(yolo)
     etats=ITA.etats
     a=[1]
     Pere=yolo[conv_lis_str(a)]
-    i=0
+    i=1
     while i <=l: 
         trouve=False
         for j in range(Pere[0]):
@@ -80,7 +100,7 @@ def accessible(etat,ITA):
                 if Co[0]==TdV[i] and Co[1]==0:
                     a=a+[j]
                     trouve=True
-                    Access(EPolist,Polist,i,1,a)
+                    Access(EPolist,Polist,i,i,a)
                     break
             if trouve:
                 break
@@ -99,8 +119,8 @@ def accessible(etat,ITA):
                 confAcc=Transition(conf,EPolist,Polist,ITA) # étatx accessibles en une étape
                 ajout=ajout+confAcc
         oldacc=acc
-        acc=Fusion(newAcc,acc)
-        newAcc=ajout
+        acc=Fusion(newacc,acc)
+        newacc=ajout
     return False
 
 #Donne la liste des configurations accessibles en une étape:
@@ -109,24 +129,35 @@ def Transition(conf,EPolist,Polist,ITA):
     cel=conf.cellule
     Tr=ITA.transitions
     etats=ITA.etats
-    confAtteinte=[] # Ajouter l'état suivant sur la ligne, toujours atteint
+    
+    #On ajoute l'état suivant par passage du temps
+    hauteur=len(list(cel))
+    rang=cel[hauteur-1]
+    ap=[cel[i] in range(hauteur-1)]
+    pere=yolo[conv_lis_str(ap)]
+    if rang<pere[0]:
+        confAtteinte=[Config(ap+[rang+1],q2)]
+    else:
+        confAtteinte=[]
+    #Puis les configurations obtenues après tran
     for q2 in etats:
         for trans in Tr:
             if trans[2]==q1 and trans[3]==q2: 
                 valide=True
-                condition=trans[0]
-                nbc=len(condition)
+                conditions=trans[0]
+                nbc=len(conditions)
                 i=0
                 while valide and i<nbc:
-                    valide=Test(Condition[i],cel) #Teste si le polynome vérifie la condition 
+                    valide=Test(conditions[i],cel) #Teste si le polynome vérifie la condition 
                     i=i+1
                 if valide:
-                    P=trans[1]
-                    NewCel=AddCel(EPolist,Polist,cel,q1,q2,P,ITA)
+                    Update=trans[1]
+                    NewCel=AddCel(EPolist,Polist,cel,q1,q2,Update,ITA) #Renvoie la cellule en fin de transition
                     newConf=Config(NewCel,q2)
                     confAtteinte=confAtteinte+[newConf]
     return confAtteinte
 
+#Renvoie la cellule associée  après la transition q1->q2 en partant de cel
 def AddCel(EPolist,Polist,cel,q1,q2,P,ITA):
     if q1.clock>q2.clock:
         #Cas où on remonte d'un cran:
@@ -145,7 +176,7 @@ def AddCel(EPolist,Polist,cel,q1,q2,P,ITA):
                 if Co[0]==P and Co[1]==0:
                     a=a+[j]
                     trouve=True
-                    Access(EPolist,Polist,i,1,a)
+                    Access(EPolist,Polist,i,i,a)
                     break
             if trouve:
                 break
