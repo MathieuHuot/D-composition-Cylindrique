@@ -75,7 +75,7 @@ def Eval(L,T,l,PPlist,i):
                             Pol=Quotient(l,Pol,Pol2)
                             sP=sP*L[i][m][1][0]
             sP=sP*Sign(l,Tbis,Pol)
-            Teval=Teval+[(Pol,sP)]
+            Teval=Teval+[(PP[l-1][j],sP)]
     return Teval,Tbis
 
 #INPUT : L      (Q[X1,...,Xl] list) list : racines du lifting+completing
@@ -111,7 +111,7 @@ def Eval2(L,Tbis,l,PPlist,i):
                             Pol=Quotient(l,Pol,Pol2)
                             sP=sP*L[i][m][1][0]
             sP=sP*Sign(l,Tbis,Pol)
-            Teval=Teval+[(Pol,sP)]
+            Teval=Teval+[(PP[l-1][j],sP)]
     return Teval
 
 #Crée l'arbre de la phase de remontée
