@@ -68,7 +68,7 @@ def Access(PolElim,PolIni,l,k,a): #Construction récursive de chaque niveau
                 s=Sign(l-1,T,P[p])  #Le signe d'un polynome sans racine réelle
                 Teval=Teval+[(P,s)] #est celui de son coefficient dominant
             b=a+[0]
-            yolo[conv_lis_str(b)]=[0,Tsup+Teval,Tbis]  
+            yolo[conv_lis_str(b)]=[1,Tsup+Teval,Tbis]  
             if l<k:   #Si il reste un niveau à construire, on appelle récursivement
                 Access(PolElim,PolIni,l+1,k,b)
             return ()
@@ -108,7 +108,7 @@ def Access(PolElim,PolIni,l,k,a): #Construction récursive de chaque niveau
                                         Pol=Quotient(l,Pol,Pol2)
                                         sP=sP*L[i][m][1][0]
                         sP=sP*Sign(l,Tbis,Pol)
-                        Teval=Teval+[(Pol,sP)]
+                        Teval=Teval+[(PolIni[l-1][j],sP)]
                 b=a+[i]
                 EvalP=Teval+Tsup
                 yolo[conv_lis_str(b)]=[0,EvalP,Tbis]    
