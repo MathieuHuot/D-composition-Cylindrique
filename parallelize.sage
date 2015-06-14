@@ -25,3 +25,11 @@ def NormalizePar(l,T,P,i):
 @parallel
 def LiftPar(PPtot,PPlist,l,T,k,i):
     return (Lift(PPtot,PPlist,l,T,k),i)
+
+@parallel
+def ParPreCalculCompleting(l,T,PP,i,j):
+    return PreCalculCompleting(l,T,PP,i,j)
+    
+@parallel
+def ParPreCalculCompleting2(l,T,PP,i):
+    return PreCalculCompleting2(l,T,PP,i)
