@@ -12,7 +12,6 @@
 #(*                                                                                     *)
 #(***************************************************************************************)
 
-
 attach("accessibilite.sage")
 
 class Etat:
@@ -39,7 +38,9 @@ class PolITA:
         self.final=finals
         self.transitions=transitions
 
-#Donne le nombre de variables d'un polynome
+#INPUT : P Q[X1,...,Xm]
+#        m integer (optionnal)
+#OUTPUT: m integer : nombre de variables effectivement dans P
 def nbVariables(P,maxi=4):
     if P in QQ:
         return 0
@@ -47,11 +48,14 @@ def nbVariables(P,maxi=4):
         maxi=maxi-1
     return maxi
 
-#Fusion de deux ensembles en Ã©liminant les doublons
+#INPUT : e1 list
+#        e2 list
+#OUTPUT: e  list : fusion de e1 et e2 en enlevant les doublons
 def Fusion(e1,e2):
     return list(set(e1+e2))
 
-#Fait la liste des polynomes apparaissant dans un polITA
+#INPUT : ITA PolITA
+#OUTPUT: L   Q[X1,...,Xn] list : liste des polynômes apparaissant dans ITA
 def listepol(ITA):
     L=[]
     Tr=ITA.transitions
@@ -70,7 +74,9 @@ def listepol(ITA):
          L[j]+=[P]
     return L
 
-#Teste si un polynome vérifie une condition sur une cellule fixée
+#INPUT : Con int list
+#        cel cellule
+#OUTPUT: b   boolean : test si il existe un polynome vérifiant la condition Con sur la cellule cel
 def Test(Con,cel):
     Cell=yolo[conv_lis_str(cel)]
     for po in Cell[1]:
@@ -78,7 +84,9 @@ def Test(Con,cel):
             return True
     return False
 
-#Décrit si un etat est accessible dans un ITA donné
+#INPUT : etat etat
+#        ITA  PolITA
+#OUTPUT: b boolean : dit si l'état etat est accessible dans le PolITA ITA
 def accessible(etat,ITA):
     Polist=listepol(ITA)
     print(Polist)
@@ -108,7 +116,7 @@ def accessible(etat,ITA):
         i=i+1
     acc=[Config(a,qo)]  #la config initiale 
     newacc=acc #Nouveaux états à parcourir
-    oldacc=[]#Etats accessibles precedemment
+    oldacc=[]#Etats accessibles précedemment
     while acc != oldacc:
         for conf in newacc :
             if conf.etat==etat:
@@ -116,14 +124,18 @@ def accessible(etat,ITA):
         ajout=[]
         for conf in newacc:
             if not (conf in oldacc):
-                confAcc=Transition(conf,EPolist,Polist,ITA) # étatx accessibles en une étape
+                confAcc=Transition(conf,EPolist,Polist,ITA) # états accessibles en une étape
                 ajout=ajout+confAcc
         oldacc=acc
         acc=Fusion(newacc,acc)
         newacc=ajout
     return False
 
-#Donne la liste des configurations accessibles en une étape:
+#INPUT : conf
+#        EPolist
+#        Polist
+#        ITA
+#OUTPUT: confAtteinte : liste des configurations accessibles en une étape
 def Transition(conf,EPolist,Polist,ITA):
     q1=conf.etat
     cel=conf.cellule
