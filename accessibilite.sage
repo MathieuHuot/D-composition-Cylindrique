@@ -10,7 +10,6 @@
 #(*                                                                                     *)
 #(***************************************************************************************)
 
-
 test=False
 debug=False
 
@@ -20,13 +19,12 @@ attach("completing.sage")
 attach("parallelize.sage")
 attach("print.sage")
 
-
-
 #Création du dictionnaire pour le lifting
 yolo=dict()
 yolo['1.']=[0,[],[]]
 
-#Conversion de liste vers string
+#INPUT : lis int list
+#OUTPUT: s   string composée des des éléments de lis séparés par des points
 def conv_lis_str(lis):
     s= ''.join([str(_)+'.' for _ in lis])
     return s
@@ -46,15 +44,16 @@ def RechP (P,rac):
     return i
 #COMPLEXITY : O(len(rac))
 
-
-
-
-
-#Fonction Lifting remplissant le dictionnaire
+#INPUT : PolElim Q[X1,...,Xn] list : polynômes issus de la phase d'élimination
+#        PolIni  Q[X1,...,Xn] list : polynômes initiaux
+#        l       integer  : niveau actuel
+#        k       integer  : niveau maximum
+#        a       int list : code la cellule en train d'être traitée
+#OUTPUT: None
+#Note  : fonction de lifting remplissant le dictionnaire yolo
 def Access(PolElim,PolIni,l,k,a): #Construction récursive de chaque niveau
     Cel=yolo[conv_lis_str(a)]
     if Cel[0]==0:
-
         Tsup=Cel[1]
         T=Cel[2]
         L,PP=LinePartition(PolElim[l-1],l,T)
@@ -113,8 +112,6 @@ def Access(PolElim,PolIni,l,k,a): #Construction récursive de chaque niveau
                 EvalP=Teval+Tsup
                 yolo[conv_lis_str(b)]=[0,EvalP,Tbis]    
                 if l<k: #On appelle récursivement sur chaque noeud la construction du 
-
-
                     Access(PolElim,PolIni,l+1,k,b) #niveau suivant
             return ()
     else:
