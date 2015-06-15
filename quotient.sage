@@ -20,7 +20,8 @@ attach("fonctions_generales.sage")
 #OUTPUT: P//Q Q[X1,...,Xl] : division exacte de P par Q
 #WARNING: ne fonctionne que si la divison exacte est possible selon notre ordre
 #         sur les variables, ie : X_l > X_l-1 > ... > X1
-def Quotient(l,P,Q):
+def Quotient(l,P,Q,numero=50):
+    P=A(P)
     def Quo(n,P,Q):
         P=TdA[n](P)
         Q=TdA[n](Q)	
@@ -31,15 +32,19 @@ def Quotient(l,P,Q):
             q=Q.degree()
             if P==0:
                 return 0
-            elif p<q:
-                raise ValueError("P n'est pas divisible par Q")
             else:
                 lcofR=Quo(n-1,P[p],Q[q])
                 P=P-lcofR*TdV[n-1]**(p-q)*Q
                 restR=Quo(n,P,Q)
                 return (lcofR*TdV[n-1]**(p-q)+restR)
-    try:
+    if len(P.monomials())>numero:
         return Quo(l,P,Q)
-    except ValueError as err:
-        print("P n'est pas divisible par Q", "P=%s" %P, "Q=%s" %Q)
+    else:
+        F=A(Q)
+        Q=0
+        while P.lm()!=0:
+            D=P.lt()//F.lt()
+            Q+=D
+            P-=D*F
+        return TdA[l](Q)
 #COMPLEXITY : O(2**l * 2**deg(P))        
