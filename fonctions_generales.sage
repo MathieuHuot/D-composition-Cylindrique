@@ -110,8 +110,8 @@ def ListOfDerivate(l,P,p):
     for i in range(p-1,-1,-1):
         Q=diff(Q,TdV[l-1])
         Q=Primitif(l,Q)
-        Res=Res+[Q]
-        deg=deg+[i]
+        Res+=[Q]
+        deg+=[i]
     return Res,deg
 #COMPLEXITY : O(p*p)
 
@@ -122,7 +122,7 @@ def ListOfDerivate(l,P,p):
 def InitPoly (l,R,q):
     Q=0
     for i in range(0,q+1):
-        Q=Q+R[i]*TdV[l-1]**i
+        Q+=R[i]*TdV[l-1]**i
     Q=Primitif(l,Q) #On le rend primitif
     return Q
 #COMPLEXITY : O(q*q)
@@ -132,10 +132,10 @@ def InitPoly (l,R,q):
 #        i   rationnal
 #OUTPUT: Res Q[X1,...,Xl] : Res=P(X+i)
 def Decale(l,P,i):
-    p = P.degree()
-    Res = P[p]
+    p=P.degree()
+    Res=P[p]
     for j in range(p-1,-1,-1): #On fait comme un Horner
-        Res = Res*(TdV[l-1]+i) + P[j] #La variable principale de P est X_l
+        Res=Res*(TdV[l-1]+i)+P[j] #La variable principale de P est X_l
     Res=Primitif(l,Res) #On le rend primitif
     return Res
 #Complexity : O(deg(P)**2)
