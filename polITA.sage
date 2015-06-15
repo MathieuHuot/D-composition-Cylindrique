@@ -1,4 +1,3 @@
-
 # -*-coding:Latin-1 -*
 
 #(***************************************************************************************)
@@ -75,7 +74,7 @@ def listepol(ITA):
          L[j]+=[P]
     return L
 
-#INPUT : Con int list
+#INPUT : Con (Q[X1,...,Xn] * {-1,0,1}) list
 #        cel cellule
 #OUTPUT: b   boolean : test si il existe un polynome vérifiant la condition Con sur la cellule cel
 def Test(Con,cel):
@@ -113,7 +112,7 @@ def accessible(etat,ITA):
                 break
         Pere=Frere
         i=i+1
-    acc=[Config(qo,a)]  #la config initiale
+    acc=[Config(qo,a)]  #la configurationinitiale
     newacc=acc #Nouveaux états à parcourir
     oldacc=[]#Etats accessibles précedemment
     while acc != oldacc:
@@ -130,10 +129,10 @@ def accessible(etat,ITA):
         newacc=ajout
     return False
 
-#INPUT : conf: Une configuration initiame
-#        EPolist: L'ensemble des polynomes obtenus par Elim
-#        Polist: L'ensemble des polynomes initials
-#        ITA: un polITA
+#INPUT : conf     : Une configuration initiale
+#        EPolist  : L'ensemble des polynomes obtenus par Elim
+#        Polist   : L'ensemble des polynomes initiaux
+#        ITA      : un polITA
 #OUTPUT: confAtteinte : liste des configurations accessibles en une étape
 def Transition(conf,EPolist,Polist,ITA):
     q1=conf.etat
@@ -164,11 +163,19 @@ def Transition(conf,EPolist,Polist,ITA):
                 if valide:
                     Update=trans[1]
                     NewCel=AddCel(EPolist,Polist,cel,q1,q2,Update,ITA) #Renvoie la cellule en fin de transition
-                    newConf=Config(NewCel,q2)
+                    newConf=Config(q2,NewCel)
                     confAtteinte=confAtteinte+[newConf]
     return confAtteinte
 
 #Renvoie la cellule associée  après la transition q1->q2 en partant de cel
+#INPUT : EPolist 
+#        Polist
+#        cel
+#        q1
+#        q2
+#        P
+#        ITA
+#OUTPUT: b    
 def AddCel(EPolist,Polist,cel,q1,q2,P,ITA):
     if q1.clock>q2.clock:
         #Cas où on remonte d'un cran:
