@@ -104,7 +104,7 @@ def Simplify_2(P,i):
     for j in range(lon-1):
         P1=lis[j]
         P2=lis[j+1]
-        P3=gcd(A(P1),A(P2))
+        P3=TdA[i](gcd(A(P1),A(P2)))
         if PasDansR(P3,i): #On a un pgcd non trivial
             P3=Primitif(i,P3) #On le rend primitif
             lis[j]=Quotient(i,P1,P3) #On simplifie P_j et P_j+1
