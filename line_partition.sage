@@ -19,13 +19,10 @@ def PetitThom2(a,b):
     k=len(a)-1
     while a[k]==b[k]:
         k-=1
-    if a[k+1]==1 and a[k]<b[k]:
-        return -1
-    if a[k+1]==-1 and a[k]>b[k]:
+    if (a[k+1]==1 and a[k]<b[k]) or (a[k+1]==-1 and a[k]>b[k]):
         return -1
     return 1
 #COMPLEXITY : WORSE : O(len(a)) AVERAGE : O(1)
-
 
 #INPUT : L   (int list) list 
 #        P   Q[X1,...Xl] 
@@ -36,7 +33,7 @@ def Singleton(L,P):
     res=[]
     l=len(L)
     for i in range(0,l):
-        res= res + [[[i+1,L[i],P]]] #on code un triplet par une liste
+        res+=[[[i+1,L[i],P]]] #on code un triplet par une liste
     return res
 #COMPLEXITY : O(len(L))
 
@@ -85,7 +82,7 @@ def EnlargeWithDroite(SLj,SLL,NormedQ,SLi,i):
             if SLL[k]==SLi[g][i][1]:
                 r=g+1
                 break
-        res=res + [SLj[k]+[[r,SLL[k],Q]]]
+        res+=[SLj[k]+[[r,SLL[k],Q]]]
     return res
 #COMPLEXITY : O(lon * lon2)   
 
@@ -112,19 +109,19 @@ def TriP(L1,L2):
     while(i<n and j<m):
         k=CompP(L1[i],L2[j])
         if k==-1:
-            res=res+[L1[i]]
+            res+=[L1[i]]
             i+=1
         elif k==1:
-            res=res+[L2[j]]
+            res+=[L2[j]]
             j+=1
         else:
-            res=res+[L1[i]]
+            res+=[L1[i]]
             i+=1
             j+=1
     for k in range(i,n):
-        res=res+[L1[k]]
+        res+=[L1[k]]
     for k in range(j,m):
-        res=res+[L2[k]]
+        res+=[L2[k]]
     return res        
 #COMPLEXITY : O(n+m)
 
@@ -140,12 +137,9 @@ def OrderedMerge(SL):
         return SL[0]
     elif n==2:
         return TriP(SL[0],SL[1])
-  
     else:
-        L1=[SL[i] for i in range(mid)]
-        L1=OrderedMerge(L1)
-        L2=[SL[i] for i in range(mid,n)]
-        L2=OrderedMerge(L2)
+        L1=OrderedMerge([SL[i] for i in range(mid)])
+        L2=OrderedMerge([SL[i] for i in range(mid,n)])
         return TriP(L1,L2)
 #COMPLEXITY : O( n * m * log(m) )
 
@@ -155,11 +149,11 @@ def OrderedMerge(SL):
 #OUTPUT: Res Q[X1,...,Xl-1][Xl] P sans ses coeffs nuls lorsque précisé en \alpha_1,...,\alpha_l-1
 #        p   integer
 def Normalize(l,T,P):
-    p = Degree(l,T,P)
-    Res = 0
+    p=Degree(l,T,P)
+    Res=0
     for j in range(0,p+1):
-        Res = Res + P[j]*TdV[l-1]**j #La variable principale de P est X_l
-    Res = Primitif(l,Res)    #On rend le polynome primitif
+        Res+=P[j]*TdV[l-1]**j #La variable principale de P est X_l
+    Res=Primitif(l,Res)    #On rend le polynome primitif
     return Res,p
 #COMPLEXITY: O(2EXP)
 
@@ -171,19 +165,16 @@ def Normalize(l,T,P):
 #NOTE  : SL représente la partition de la ligne réelle en étant une liste de codage de racines 
 #        échantillon de chaque intervalle de la partition
 def LinePartition(PP2,l,T):
+    
     lon2=len(PP2) #PP2 a des polynomes à l variables
     Par=[] #liste à paralleliser
     for i in range(lon2):
         Par=Par+[(l,T,PP2[i],i)]
-    
     Output=list(NormalizePar(Par))
     Normed2=Zero(lon2)
-    
     for i in range(lon2):
         j=Output[i][1][1]
         Normed2[j]=Output[i][1][0]
-    
-    
     Normed=[] #les polynomes normalisés avec racines qui vont aller dans Normed
     RootCodePi=[] #et leur Rootcoding dans RootCodePi
     List=[]
@@ -194,7 +185,6 @@ def LinePartition(PP2,l,T):
             
     lon=len(List)
     Output=list(RootPar(List)) # Parallelisation des rootcodings
-    
     for i in range(lon):
         k=0
         for j in range(lon):
@@ -206,11 +196,9 @@ def LinePartition(PP2,l,T):
             Normed=Normed+[Normed2[i]]
             RootCodePi=RootCodePi+[Root]
             
-
     lon=len(Normed)#On place tous les RootCoding des polynomes normalisés dans une matrice
     SLL=[[0 for j in range(lon)] for i in range(lon)]
     ListArg=[] #Liste des arguments pour la parallélisation
-
     for i in range(lon):
         for j in range(lon):
             if i==j: #On a déjà calculé et stocké le RootCoding de Pi sur ses racines
@@ -219,10 +207,8 @@ def LinePartition(PP2,l,T):
                 Pi,pi=Normed[i]
                 Pj,pj=Normed[j]
                 ListArg=ListArg+[(l,T,Pi,pi,Pj,pj,i,j)]
-    
     Output=list(RootPar2(ListArg))
     tal=len(Output)
-    
     for i in range(lon):
         for j in range(lon):
             if i !=j:    
