@@ -19,9 +19,7 @@ def PetitThom(a,b):
     k=len(a)-1
     while a[k]==b[k]:
         k-=1
-    if a[k+1]==1 and a[k]<b[k]:
-        return True
-    if a[k+1]==-1 and a[k]>b[k]:
+    if (a[k+1]==1 and a[k]<b[k]) or (a[k+1]==-1 and a[k]>b[k]):
         return True
     return False
 #COMPLEXITY : WORSE : O(len(a)) AVERAGE : O(1)
@@ -41,7 +39,7 @@ def TriRapide(L):
             if i>j:
                 break
             if i<j:
-                L[i], L[j] = L[j], L[i]
+                L[i],L[j]=L[j],L[i]
             i+=1
             j-=1
         if g<j:
