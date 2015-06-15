@@ -112,7 +112,7 @@ def accessible(etat,ITA):
                 break
         Pere=Frere
         i=i+1
-    acc=[Config(qo,a)]  #la config initiale
+    acc=[Config(qo,a)]  #la configuration initiale
     newacc=acc #Nouveaux états à parcourir
     oldacc=[]#Etats accessibles précedemment
     while acc != oldacc:
@@ -169,6 +169,14 @@ def Transition(conf,EPolist,Polist,ITA):
     return confAtteinte
 
 #Renvoie la cellule associée  après la transition q1->q2 en partant de cel
+#INPUT : EPolist 
+#        Polist
+#        cel
+#        q1
+#        q2
+#        P
+#        ITA
+#OUTPUT: b    
 def AddCel(EPolist,Polist,cel,q1,q2,P,ITA):
     if q1.clock>q2.clock:
         #Cas où on remonte d'un cran:
