@@ -84,4 +84,8 @@ def PrintArb(Arb,prof_max=2): #prof_max à changer
                         PrintArbAux(Arb,1,s,0)
                     else:
                         PrintArbAux(Arb,i-1,s,1)
+            elif i==prof_max:
+                print("Vous êtes déjà à la profondeur maximale...")
+                print("                                          ")
+                PrintArbAux(Arb,i,s,count)
         PrintArbAux(Arb,1,['-'],0)
