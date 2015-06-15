@@ -149,16 +149,16 @@ def Completing(l,T,L,PP):
                 MPar+=[(l,T,PP,i,j)] #arrive au moins deux fois
     ResPar=list(ParPreCalculCompleting(MPar))
     for k in range(len(ResPar)):
-        i,j=ResPar[k][0][3],ResPar[k][0][4]
-        M[i][j]=ResPar[k][1][0]
+        i,j=ResPar[k][0][0][3],ResPar[k][0][0][4]
+        M[i][j]=ResPar[k][1]
     MPar=[]
     for i in range(m):
         if Mtemp[i][i]>0: #ie on veut éviter de calculer (PiPi)'
             MPar+=[(l,T,PP,i)]
     ResPar=list(ParPreCalculCompleting2(MPar))
     for k in range(len(ResPar)):
-        i=ResPar[k][0][3]
-        M[i][i]=ResPar[k][1][0]
+        i=ResPar[k][0][0][3]
+        M[i][i]=ResPar[k][1]
     
     for i in range(n): #On recopie ce qui ne change pas : les cellules qui sont des
         newL[2*i+1]=L[i] #singletons contenant les racines des polynomes de PP
