@@ -10,6 +10,8 @@
 #(*                                                                                     *)
 #(***************************************************************************************)
 
+import numpy #pour le produit tensoriel
+
 #1°)Conversion des indices
 #~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -100,16 +102,9 @@ def Extractlibre(M,A,Sigma,n,Lignes,Colonnes):
 #        M1  'a matrix de taille m2*n2
 #        m2  integer
 #        n2  integer
-#OUTPUT: nMe 'a matrix de taille m1m2*n1n2 : produit tensoriel de M1 par M2
-def Tproduit(M1,m1,n1,M2,m2,n2):
-    gromatrix=MatrixSpace(QQ,m1*m2,n1*n2)
-    nMe=[0 for i in range(0,m1*m2*n1*n2)]
-    for i1 in range(0,m1):
-        for i2 in range(0,m2):
-            for j1 in range(0,n1):
-                for j2 in range(0,n2):
-                    nMe[(i1*m2+i2)*n1*n2+j1*n2+j2]=(M1[i1][j1])*(M2[i2][j2])
-    return gromatrix(nMe)
+#OUTPUT: res 'a matrix de taille m1m2*n1n2 : produit tensoriel de M1 par M2
+def Tproduit(A,m1,n1,B,m2,n2):
+    return (MatrixSpace(QQ,m1*m2,n1*n2))((numpy.kron(A,B)).tolist())
 
 #4°)Produits cartésiens 
 #~~~~~~~~~~~~~~~~~~~~~~~
