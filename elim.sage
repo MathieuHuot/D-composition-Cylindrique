@@ -57,7 +57,7 @@ def Separable(lis,i):
     for j in range(lon): 
         P1=lis[j]
         P2=diff(P1,TdV[i-1])
-        lis[j]=Quotient(i,P1,TdA[i](gcd(A(P1),A(P2))))
+        lis[j]=Quotient(i,P1,gcd(A(P1),A(P2)))
     return lis
 #COMPLEXITY : O(lon * 2**i * 2**(degmax(P_i)) )
 
@@ -104,7 +104,7 @@ def Simplify_2(P,i):
     for j in range(lon-1):
         P1=lis[j]
         P2=lis[j+1]
-        P3=TdA[i](gcd(A(P1),A(P2)))
+        P3=gcd(A(P1),A(P2))
         if PasDansR(P3,i): #On a un pgcd non trivial
             P3=Primitif(i,P3) #On le rend primitif
             lis[j]=Quotient(i,P1,P3) #On simplifie P_j et P_j+1
@@ -162,7 +162,7 @@ def Elim(Q):
                 if r>1:
                     Sres=SubResultants(i+1,R,r,diff(R,TdV[i]),r-1)
                     for j in range(len(Sres)): #On rajoute les Sres_j non nuls
-                        if PasDansR(0*TdV[i-1]+Sres[j],i):
+                        if PasDansR(Sres[j],i):
                             P[i-1]=P[i-1]+[Primitif(i,Sres[j])]
                 for Pol2 in P[i]:
                     TruPol2=Tru(i+1,Pol2)
@@ -181,7 +181,7 @@ def Elim(Q):
                                 Sres=SubResultants(i+1,R,r,T,t)
                             for j in range(len(Sres)):
                                 #On rajoute ceux qui ont un degré >0
-                                if PasDansR(0*TdV[i-1]+Sres[j],i):
+                                if PasDansR(Sres[j],i):
                                     P[i-1]=P[i-1]+[Primitif(i,Sres[j])]
     return P
 #COMPLEXITY : O(2EXP)
