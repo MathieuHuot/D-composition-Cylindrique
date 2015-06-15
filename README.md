@@ -70,6 +70,9 @@ I) Avancement du stage
 6) juin 15-29
 ~~~~~~~~~~~~~
 
+-tests de PolITA
+-amélioration du produit tensoriel de SignRealisation
+-amélioration de la fonction Quotient 
 
 II) Difficultés surmontées
 ==========================
