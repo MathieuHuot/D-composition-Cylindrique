@@ -176,6 +176,7 @@ def Completing(l,T,L,PP):
     for j in range(m-1,-1,-1):
         for k in range(len(ResPar)):
             if ResPar[k][1][1]==j:
+                Q,q=PP[j]
                 newL[0]=EnlargeWithCompleting(newL[0],ResPar[k][1][0],Q)
     newL[0]=[len(newL[0][0])]+newL[0][0] #C'est la 1ère racine qui nous intéresse
     oldv=v
@@ -210,6 +211,7 @@ def Completing(l,T,L,PP):
     for j in range(m-1,-1,-1):
         for k in range(len(ResPar)):
             if ResPar[k][1][1]==j:
+                Q,q=PP[j]
                 newL[2*n]=EnlargeWithCompleting(newL[2*n],ResPar[k][1][0],Q)
     #C'est la plus grande racine qui nous intéresse :
     newL[2*n]=newL[2*n][len(newL[2*n])-1]
