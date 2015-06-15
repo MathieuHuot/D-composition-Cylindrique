@@ -115,7 +115,7 @@ def accessible(etat,ITA):
     acc=[Config(qo,a)]  #la configuration initiale
     newacc=acc #Nouveaux états à parcourir
     oldacc=[]#Etats accessibles précedemment
-    while acc != oldacc:
+    while set(acc) != set(oldacc):
         for conf in newacc :
             if conf.etat==etat:
                 return True
@@ -145,7 +145,7 @@ def Transition(conf,EPolist,Polist,ITA):
     rang=cel[hauteur-1]
     ap=[cel[i] for i in range(hauteur-1)]
     pere=yolo[conv_lis_str(ap)]
-    if rang<pere[0]:
+    if rang<(pere[0]-1): #On vérifie que l'on est pas en bout de ligne
         confAtteinte=[Config(q1,ap+[rang+1])]
     else:
         confAtteinte=[]
