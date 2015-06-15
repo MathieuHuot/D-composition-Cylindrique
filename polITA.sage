@@ -74,7 +74,7 @@ def listepol(ITA):
          L[j]+=[P]
     return L
 
-#INPUT : Con (Q[X1,...,Xn] * {-1,0,1}) list
+#INPUT : Con int list
 #        cel cellule
 #OUTPUT: b   boolean : test si il existe un polynome vérifiant la condition Con sur la cellule cel
 def Test(Con,cel):
@@ -112,7 +112,7 @@ def accessible(etat,ITA):
                 break
         Pere=Frere
         i=i+1
-    acc=[Config(qo,a)]  #la configurationinitiale
+    acc=[Config(qo,a)]  #la config initiale
     newacc=acc #Nouveaux états à parcourir
     oldacc=[]#Etats accessibles précedemment
     while acc != oldacc:
@@ -125,14 +125,14 @@ def accessible(etat,ITA):
                 confAcc=Transition(conf,EPolist,Polist,ITA) # états accessibles en une étape
                 ajout=ajout+confAcc
         oldacc=acc
-        acc=Fusion(newacc,acc)
         newacc=ajout
+        acc=Fusion(newacc,acc)
     return False
 
-#INPUT : conf     : Une configuration initiale
-#        EPolist  : L'ensemble des polynomes obtenus par Elim
-#        Polist   : L'ensemble des polynomes initiaux
-#        ITA      : un polITA
+#INPUT : conf: Une configuration initiame
+#        EPolist: L'ensemble des polynomes obtenus par Elim
+#        Polist: L'ensemble des polynomes initials
+#        ITA: un polITA
 #OUTPUT: confAtteinte : liste des configurations accessibles en une étape
 def Transition(conf,EPolist,Polist,ITA):
     q1=conf.etat
@@ -165,17 +165,10 @@ def Transition(conf,EPolist,Polist,ITA):
                     NewCel=AddCel(EPolist,Polist,cel,q1,q2,Update,ITA) #Renvoie la cellule en fin de transition
                     newConf=Config(q2,NewCel)
                     confAtteinte=confAtteinte+[newConf]
+
     return confAtteinte
 
 #Renvoie la cellule associée  après la transition q1->q2 en partant de cel
-#INPUT : EPolist 
-#        Polist
-#        cel
-#        q1
-#        q2
-#        P
-#        ITA
-#OUTPUT: b    
 def AddCel(EPolist,Polist,cel,q1,q2,P,ITA):
     if q1.clock>q2.clock:
         #Cas où on remonte d'un cran:
@@ -183,10 +176,10 @@ def AddCel(EPolist,Polist,cel,q1,q2,P,ITA):
         return b
         
     #Les autres cas:
-    a=[cel[i] in range(len(a)-1)]
+    a=[cel[i] for i in range(len(cel)-1)]
     Pere=yolo[conv_lis_str(a)]
-    i=q1.clock()
-    while i <=q2.clock(): 
+    i=q1.clock
+    while i <=q2.clock: 
         trouve=False
         for j in range(Pere[0]):
             Frere=yolo[conv_lis_str(a+[j])]
@@ -202,3 +195,4 @@ def AddCel(EPolist,Polist,cel,q1,q2,P,ITA):
         P=TdV[i]
         i=i+1
     return a
+
