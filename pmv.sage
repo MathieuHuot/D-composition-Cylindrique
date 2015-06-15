@@ -23,8 +23,8 @@ def PmV(s):
 	if i+count==a:
 	   return res
         if ((count%2)!=0):
-            res=res+Epsilon(count)*Sign_1(s[i]*s[i+count])
-        i=i+count
+            res+=Epsilon(count)*Sign_1(s[i]*s[i+count])
+        i+=count
         count=1
     return res
 #COMPLEXITY : O(len(s))
