@@ -1,3 +1,4 @@
+
 # -*-coding:Latin-1 -*
 
 #(***************************************************************************************)
@@ -89,23 +90,21 @@ def Test(Con,cel):
 #OUTPUT: b boolean : dit si l'état etat est accessible dans le PolITA ITA
 def accessible(etat,ITA):
     Polist=listepol(ITA)
-    print(Polist)
     EPolist=Elim(Polist)
     acc=[]
     qo=(ITA.initial)[0]
     l=qo.clock
     Access(EPolist,Polist,1,l,[1])
-    print(yolo)
     etats=ITA.etats
     a=[1]
     Pere=yolo[conv_lis_str(a)]
     i=1
-    while i <=l: 
+    while i <=l:
         trouve=False
         for j in range(Pere[0]):
             Frere=yolo[conv_lis_str(a+[j])]
             for Co in Frere[1]:
-                if Co[0]==TdV[i] and Co[1]==0:
+                if Co[0]==TdV[i-1] and Co[1]==0:
                     a=a+[j]
                     trouve=True
                     Access(EPolist,Polist,i,i,a)
@@ -114,7 +113,7 @@ def accessible(etat,ITA):
                 break
         Pere=Frere
         i=i+1
-    acc=[Config(a,qo)]  #la config initiale 
+    acc=[Config(qo,a)]  #la config initiale
     newacc=acc #Nouveaux états à parcourir
     oldacc=[]#Etats accessibles précedemment
     while acc != oldacc:
@@ -131,24 +130,24 @@ def accessible(etat,ITA):
         newacc=ajout
     return False
 
-#INPUT : conf
-#        EPolist
-#        Polist
-#        ITA
+#INPUT : conf: Une configuration initiame
+#        EPolist: L'ensemble des polynomes obtenus par Elim
+#        Polist: L'ensemble des polynomes initials
+#        ITA: un polITA
 #OUTPUT: confAtteinte : liste des configurations accessibles en une étape
 def Transition(conf,EPolist,Polist,ITA):
     q1=conf.etat
     cel=conf.cellule
     Tr=ITA.transitions
     etats=ITA.etats
-    
+    print(cel)
     #On ajoute l'état suivant par passage du temps
-    hauteur=len(list(cel))
+    hauteur=len(cel)
     rang=cel[hauteur-1]
-    ap=[cel[i] in range(hauteur-1)]
+    ap=[cel[i] for i in range(hauteur-1)]
     pere=yolo[conv_lis_str(ap)]
     if rang<pere[0]:
-        confAtteinte=[Config(ap+[rang+1],q2)]
+        confAtteinte=[Config(q1,ap+[rang+1])]
     else:
         confAtteinte=[]
     #Puis les configurations obtenues après tran
@@ -193,6 +192,6 @@ def AddCel(EPolist,Polist,cel,q1,q2,P,ITA):
             if trouve:
                 break
         Pere=Frere
-        P=TdV[i+1]
+        P=TdV[i]
         i=i+1
     return a
