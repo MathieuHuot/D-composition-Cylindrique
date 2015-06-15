@@ -69,3 +69,6 @@ if Tests:
             Lift=Lifting(C,L)
             print("Durée du Lifting=%s" %(t2-t1))
 
+    def CreationMatrice (nbx,nby,min,max) :
+        import random
+        return [[random.randint(min, max) for i in range(nby)] for j in range(nbx)]
