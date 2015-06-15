@@ -103,8 +103,8 @@ def Extractlibre(M,A,Sigma,n,Lignes,Colonnes):
 #        m2  integer
 #        n2  integer
 #OUTPUT: res 'a matrix de taille m1m2*n1n2 : produit tensoriel de M1 par M2
-def Tproduit(A,m1,n1,B,m2,n2):
-    return (MatrixSpace(QQ,m1*m2,n1*n2))((numpy.kron(A,B)).tolist())
+def Tproduit(M1,m1,n1,M2,m2,n2):
+    return (MatrixSpace(QQ,m1*m2,n1*n2))((numpy.kron(M1,M2)).tolist())
 
 #4°)Produits cartésiens 
 #~~~~~~~~~~~~~~~~~~~~~~~
