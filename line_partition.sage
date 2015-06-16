@@ -165,57 +165,80 @@ def Normalize(l,T,P):
 #NOTE  : SL représente la partition de la ligne réelle en étant une liste de codage de racines 
 #        échantillon de chaque intervalle de la partition
 def LinePartition(PP2,l,T):
-    
     lon2=len(PP2) #PP2 a des polynomes à l variables
-    Par=[] #liste à paralleliser
-    for i in range(lon2):
-        Par=Par+[(l,T,PP2[i],i)]
-    Output=list(NormalizePar(Par))
+    
     Normed2=Zero(lon2)
-    for i in range(lon2):
-        j=Output[i][1][1]
-        Normed2[j]=Output[i][1][0]
-    Normed=[] #les polynomes normalisés avec racines qui vont aller dans Normed
-    RootCodePi=[] #et leur Rootcoding dans RootCodePi
-    List=[]
-    for i in range(lon2):
+    if NORM_PAR:
+        Par=[] #liste à paralleliser
+        for i in range(lon2):
+            Par=Par+[(l,T,PP2[i],i)]
+        Output=list(NormalizePar(Par))
+        for i in range(lon2):
+            j=Output[i][1][1]
+            Normed2[j]=Output[i][1][0]
+    else:
+        Normed2=[Normalize(l,T,PP2[i]) for i in range(lon2)]
+        
+    if ROOT_PAR:
+        Normed=[] #les polynomes normalisés avec racines qui vont aller dans Normed
+        RootCodePi=[] #et leur Rootcoding dans RootCodePi
+        List=[]
+        for i in range(lon2):
+            Pi,pi=Normed2[i]
+            if pi>0:
+                List=List+ [(l,T,Pi,pi,Pi,pi,i)]
+        lon=len(List)
+        Output=list(RootPar(List)) # Parallelisation des rootcodings
+        for i in range(lon):
+            k=0
+            for j in range(lon):
+                if Output[j][1][1]==i:
+                    k=j
+                    break
+            Root=Output[k][1][0]
+            if Root!=[]: #On ne garde que les polynomes qui ont des racines
+                Normed=Normed+[Normed2[i]]
+                RootCodePi=RootCodePi+[Root]
+    else:
+        for i in range(lon2):
         Pi,pi=Normed2[i]
-        if pi>0:
-            List=List+ [(l,T,Pi,pi,Pi,pi,i)]
-            
-    lon=len(List)
-    Output=list(RootPar(List)) # Parallelisation des rootcodings
-    for i in range(lon):
-        k=0
-        for j in range(lon):
-            if Output[j][1][1]==i:
-                k=j
-                break
-        Root=Output[k][1][0]
-        if Root!=[]: #On ne garde que les polynomes qui ont des racines
-            Normed=Normed+[Normed2[i]]
-            RootCodePi=RootCodePi+[Root]
+        if pi>0: #On ne veut pas des polynomes constants
+            Root=RootCoding(l,T,Pi,pi,Pi,pi)           
+            if Root!=[]: #On ne garde que les polynomes qui ont des racines
+                Normed=Normed+[Normed2[i]]
+                RootCodePi=RootCodePi+[Root]
             
     lon=len(Normed)#On place tous les RootCoding des polynomes normalisés dans une matrice
     SLL=[[0 for j in range(lon)] for i in range(lon)]
-    ListArg=[] #Liste des arguments pour la parallélisation
-    for i in range(lon):
-        for j in range(lon):
-            if i==j: #On a déjà calculé et stocké le RootCoding de Pi sur ses racines
-                SLL[i][i]=RootCodePi[i]
-            else:
-                Pi,pi=Normed[i]
-                Pj,pj=Normed[j]
-                ListArg=ListArg+[(l,T,Pi,pi,Pj,pj,i,j)]
-    Output=list(RootPar2(ListArg))
-    tal=len(Output)
-    for i in range(lon):
-        for j in range(lon):
-            if i !=j:    
-                for k in range(tal):
-                    if Output[k][1][1]==i and Output[k][1][2]==j:
-                        SLL[i][j]=Output[k][1][0]
-                        break
+    
+    if ROOT_PAR2:
+        ListArg=[] #Liste des arguments pour la parallélisation
+        for i in range(lon):
+            for j in range(lon):
+                if i==j: #On a déjà calculé et stocké le RootCoding de Pi sur ses racines
+                    SLL[i][i]=RootCodePi[i]
+                else:
+                    Pi,pi=Normed[i]
+                    Pj,pj=Normed[j]
+                    ListArg=ListArg+[(l,T,Pi,pi,Pj,pj,i,j)]
+        Output=list(RootPar2(ListArg))
+        tal=len(Output)
+        for i in range(lon):
+            for j in range(lon):
+                if i !=j:    
+                    for k in range(tal):
+                        if Output[k][1][1]==i and Output[k][1][2]==j:
+                            SLL[i][j]=Output[k][1][0]
+                            break
+    else:
+        for i in range(lon):
+             for j in range(lon):
+                if i==j: #On a déjà calculé et stocké le RootCoding de Pi sur ses racines
+                     SLL[i][i]=RootCodePi[i]
+                else:
+                    Pi,pi=Normed[i]
+                    Pj,pj=Normed[j]
+                    SLL[i][j]=RootCoding(l,T,Pi,pi,Pj,pj)
     
     SL=[[] for i in range(lon)] 
     for i in range(lon):
