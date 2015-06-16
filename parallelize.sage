@@ -12,13 +12,13 @@
 
 PARALLELIZE=True
 
-def Parallelize_Mode():
-    if PARALLELIZE:
-        PARALLELIZE=False
-        print("parallelization switched off.")
-    else:
-        PARALLELIZE=True
+def Parallelize_Mode(a):
+    PARALLELIZE=a
+    if a:
         print("parallelization switched on.")
+    else:
+        print("parallelization switched off.")
+        
 
 ROOT_PAR=True
 @parallel
