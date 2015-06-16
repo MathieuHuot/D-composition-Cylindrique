@@ -13,21 +13,21 @@ I) Avancement du stage
 ======================
 
 1) janvier février
-~~~~~~~~~~~~~~~~~~
+~~~~~~~~
 
 -auto formation à Python
 -auto formation à Sage
 -cours et réunion avec encadrants pour comprendre l'article
 -compréhension des preuves et des algorithmes
 -correction de coquilles et imprécisions dans l'article
-
+~~~~~~~~
 2) mars 
-~~~~~~~
+~~~~~~~~
 
 -utilisation de Sagecloud et Overleaf
 -implémentation de la phase de Sign dans Q[X] (les 7 algorithmes récursifs)
 -correction de coquilles et imprécisions dans l'article
-
+~~~~~~~~
 3) avril
 ~~~~~~~~
 
@@ -35,7 +35,7 @@ I) Avancement du stage
 -implémentation de la décomposition cylindrique dans Q[X1,X2] (Elim, Lifting, LinePartition et Completing)
 -utilisation de beamer latek, géogebra, wolfram alpha
 -préparation de la soutenance de mi-stage
-
+~~~~~~~~
 4) mai
 ~~~~~~
 
@@ -46,7 +46,7 @@ I) Avancement du stage
 -simplification dans Line Partition et Completing avec les précalculs
 -introduction aux PolITA : interets, antécédants, cadre de l'étude
 -refonte du code de base : plus de commentaires et de clarté, suppression de fonctions devenues inutiles
-
+~~~~~~~~
 5) juin 1-14
 ~~~~~~~~~~~~
 
@@ -66,17 +66,17 @@ I) Avancement du stage
 - algorithme "on the fly" et algorithme d'accessibilité
 - parallelisation de completing, lifting
 - avancées dans les PolITA
-
+~~~~~~~~
 6) juin 15-29
 ~~~~~~~~~~~~~
 
 -tests de PolITA
 -amélioration du produit tensoriel de SignRealisation
 -amélioration de la fonction Quotient 
-
+~~~~~~~~
 II) Difficultés surmontées
 ==========================
-
+~~~~~~~~
 -isomorphisme en mathématiques des anneaux Q[X1][X2]...[Xn], Q[X1,...,Xn], Q[X1,...,Xn-1][Xn] mais bien entendu pas en programmation !
 -découverte assez tardive de l'ordre monomial sur les variables et des bases de Gröbner pour la compréhesnion de certaines opérations d'anneaux
 -la division d'un polynome par 1 fait une fraction rationnelle 
@@ -85,3 +85,4 @@ II) Difficultés surmontées
 -la facilité d'utilisation de Python est contrebalancée par un manque de typage qui demande parfois un debugging assez long
 -sage est parfois trop typé
  
+~~~~~~~~
