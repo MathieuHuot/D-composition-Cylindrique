@@ -10,16 +10,19 @@
 #(*                                                                                     *)
 #(***************************************************************************************)
 
-PARALLELIZE=True
-
+#Active ou désactive la parallelization
 def Parallelize_Mode(a):
-    PARALLELIZE=a
+    ROOT_PAR=a
+    ROOT_PAR2=a
+    NORM_PAR=a
+    LIFT_PAR=a
+    PAR_PCC=a
+    PAR_PCC2=a
     if a:
         print("parallelization switched on.")
     else:
         print("parallelization switched off.")
         
-
 ROOT_PAR=True
 @parallel
 def RootPar(l,T,Pl,pl,P,p,i):
@@ -30,7 +33,7 @@ ROOT_PAR2=True
 def RootPar2(l,T,Pl,pl,P,p,i,j):
     return (RootCoding(l,T,Pl,pl,P,p),i,j)
 
-ROOT_PAR3=True
+NORM_PAR=True
 @parallel
 def NormalizePar(l,T,P,i):
     return (Normalize(l,T,P),i)
