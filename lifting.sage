@@ -83,8 +83,8 @@ def Lifting(PPtot,PPlist):
                             for m in range(1,len(L[i])):
                                 trouve=False
                                 Pol2=L[i][m][2]
-                                Al=IntRem2(l,Pol,Pol.degree(),Pol2,Pol2.degree())
-                                if Al==0:
+                                A=IntRem2(l,Pol,Pol.degree(),Pol2,Pol2.degree())
+                                if A==0:
                                     trouve=True
                                     if L[i][m][1][0]==0: #i.e Pol2(\alpha)=0
                                         sP=0
