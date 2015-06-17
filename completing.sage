@@ -196,9 +196,9 @@ def Completing(l,T,L,PP):
                     newL[0]=EnlargeWithCompleting(newL[0],ResPar[k][1][0],Q)
     else:
         for j in range(m-1,-1,-1):
-        Q,q=PP[j]
-        SLL=RootCoding(l,T,R,r,Q,q)
-        newL[0]=EnlargeWithCompleting(newL[0],SLL,Q)
+            Q,q=PP[j]
+            SLL=RootCoding(l,T,R,r,Q,q)
+            newL[0]=EnlargeWithCompleting(newL[0],SLL,Q)
                     
     newL[0]=[len(newL[0][0])]+newL[0][0] #C'est la 1ère racine qui nous intéresse
     oldv=v
