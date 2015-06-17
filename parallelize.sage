@@ -50,7 +50,7 @@ def LiftPar(PPtot,PPlist,l,T,k,i):
     return (Lift(PPtot,PPlist,l,T,k),i)
 
 @parallel
-def EvalPar(L,T,l,PPlist,i)
+def EvalPar(L,T,l,PPlist,i):
     return (Eval(L,T,l,PPlist)[0],i)
 
 PAR_PCC=True
