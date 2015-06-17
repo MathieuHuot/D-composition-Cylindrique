@@ -144,21 +144,32 @@ def Lift(PPtot,PPlist,l,T,k): #Construction récursive de chaque niveau
         foret=[]  #La ligne réelle est scindée par des racines de polynomes
         #On appelle donc completing pour avoir un représentant de de chaque cellule
         L=Completing(l,T,L,PP) 
-        if LIFT_PAR and l<k:
+        if LIFT_PAR:
             ListArg=[] #Début de la séquence de parellization
-            for i in range(len(L)):
-                ind=L[i][0] #L'indice i d'un Pi tel que L[i] code une racine de Pi 
-                P=L[i][ind][2]
-                r=L[i][ind][0]
-                ListArg+=[(PPtot,PPlist,l+1,T+[(r,P,Degree(l,T,P))],k,i)]
-            Output=list(LiftPar(ListArg))
-            for i in range(len(L)):
-                for j in range(i,len(L)):
-                    if Output[i][1][1]>Output[j][1][1]:
-                        Output[i],Output[j]=Output[j],Output[i]
-            for i in range(len(L)):
-                Teval=Eval2(L,Output[i][0][0][3],l,PPlist,i)
-                foret+=[[Teval,Output[i][1][0]]]
+            if l==k:
+                for i in range(len(L)):
+                    ListArg+=[(L,T,l,PPlist,i)]           
+                Output=list(EvalPar(ListArg))
+                for i in range(len(L)):
+                    for j in range(i,len(L)):
+                        if Output[i][1][1]>Output[j][1][1]:
+                            Output[i],Output[j]=Output[j],Output[i]
+                for i in range(len(L)):
+                    foret+=[[Output[i][1][0],[]]]
+            else:
+                for i in range(len(L)):
+                    ind=L[i][0] #L'indice i d'un Pi tel que L[i] code une racine de Pi 
+                    P=L[i][ind][2]
+                    r=L[i][ind][0]
+                    ListArg+=[(PPtot,PPlist,l+1,T+[(r,P,Degree(l,T,P))],k,i)]
+                Output=list(LiftPar(ListArg))
+                for i in range(len(L)):
+                    for j in range(i,len(L)):
+                        if Output[i][1][1]>Output[j][1][1]:
+                            Output[i],Output[j]=Output[j],Output[i]
+                for i in range(len(L)):
+                    Teval=Eval2(L,Output[i][0][0][3],l,PPlist,i)
+                    foret+=[[Teval,Output[i][1][0]]]
         else:    
             for i in range(len(L)):
                 Teval,Tbis=Eval(L,T,l,PPlist,i)
