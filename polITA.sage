@@ -139,7 +139,6 @@ def Transition(conf,EPolist,Polist,ITA):
     cel=conf.cellule
     Tr=ITA.transitions
     etats=ITA.etats
-    print(cel)
     #On ajoute l'état suivant par passage du temps
     hauteur=len(cel)
     rang=cel[hauteur-1]
