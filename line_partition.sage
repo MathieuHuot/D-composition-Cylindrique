@@ -201,12 +201,12 @@ def LinePartition(PP2,l,T):
                 RootCodePi=RootCodePi+[Root]
     else:
         for i in range(lon2):
-        Pi,pi=Normed2[i]
-        if pi>0: #On ne veut pas des polynomes constants
-            Root=RootCoding(l,T,Pi,pi,Pi,pi)           
-            if Root!=[]: #On ne garde que les polynomes qui ont des racines
-                Normed=Normed+[Normed2[i]]
-                RootCodePi=RootCodePi+[Root]
+            Pi,pi=Normed2[i]
+            if pi>0: #On ne veut pas des polynomes constants
+                Root=RootCoding(l,T,Pi,pi,Pi,pi)           
+                if Root!=[]: #On ne garde que les polynomes qui ont des racines
+                    Normed=Normed+[Normed2[i]]
+                    RootCodePi=RootCodePi+[Root]
             
     lon=len(Normed)#On place tous les RootCoding des polynomes normalisés dans une matrice
     SLL=[[0 for j in range(lon)] for i in range(lon)]
