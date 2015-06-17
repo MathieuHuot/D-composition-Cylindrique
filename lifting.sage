@@ -144,7 +144,7 @@ def Lift(PPtot,PPlist,l,T,k): #Construction récursive de chaque niveau
         foret=[]  #La ligne réelle est scindée par des racines de polynomes
         #On appelle donc completing pour avoir un représentant de de chaque cellule
         L=Completing(l,T,L,PP) 
-        if l==1:
+        if LIFT_PAR and l<k:
             ListArg=[] #Début de la séquence de parellization
             for i in range(len(L)):
                 ind=L[i][0] #L'indice i d'un Pi tel que L[i] code une racine de Pi 
