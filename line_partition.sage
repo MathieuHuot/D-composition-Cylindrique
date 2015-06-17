@@ -179,8 +179,8 @@ def LinePartition(PP2,l,T):
     else:
         Normed2=[Normalize(l,T,PP2[i]) for i in range(lon2)]
         
+    Normed=[] #les polynomes normalisés avec racines qui vont aller dans Normed    
     if ROOT_PAR:
-        Normed=[] #les polynomes normalisés avec racines qui vont aller dans Normed
         RootCodePi=[] #et leur Rootcoding dans RootCodePi
         List=[]
         for i in range(lon2):
