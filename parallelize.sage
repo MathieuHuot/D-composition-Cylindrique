@@ -12,12 +12,18 @@
 
 #Active ou désactive la parallelization
 def Parallelize_Mode(a):
-    global.ROOT_PAR=a
-    global.ROOT_PAR2=a
-    global.NORM_PAR=a
-    global.LIFT_PAR=a
-    global.PAR_PCC=a
-    global.PAR_PCC2=a
+    global ROOT_PAR
+    global ROOT_PAR2
+    global NORM_PAR
+    global LIFT_PAR
+    global PAR_PCC
+    global PAR_PCC2
+    ROOT_PAR=a
+    ROOT_PAR2=a
+    NORM_PAR=a
+    LIFT_PAR=a
+    PAR_PCC=a
+    PAR_PCC2=a
     if a:
         print("parallelization switched on.")
     else:
