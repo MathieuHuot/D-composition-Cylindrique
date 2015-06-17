@@ -135,30 +135,44 @@ def Completing(l,T,L,PP):
 #calculs.
     M=[["Vide" for i in range(m)] for j in range(m)] #pour stocker les Root-Coding
     Mtemp=[[0 for i in range(m)] for j in range(m)] #pour compter si un précalcul est rentable
-    MPar=[] #pour pouvoir paralléliser les précalculs
+    
     for i in range(n-1):
         e=L[i]
         f=L[i+1]
         Ind1=e[0]-1 #P_Ind1(e)=0
         Ind2=f[0]-1 #P_Ind2(f)=0
         Mtemp[Ind1][Ind2]+=1
-    for i in range(m): 
-        for j in range(i):
-            Mtemp[i][j]+=Mtemp[j][i]
-            if Mtemp[i][j]>1: #On a alors intéret à précalculer car le cas ci-dessus 
-                MPar+=[(l,T,PP,i,j)] #arrive au moins deux fois
-    ResPar=list(ParPreCalculCompleting(MPar))
-    for k in range(len(ResPar)):
-        i,j=ResPar[k][0][0][3],ResPar[k][0][0][4]
-        M[i][j]=ResPar[k][1]
-    MPar=[]
-    for i in range(m):
-        if Mtemp[i][i]>0: #ie on veut éviter de calculer (PiPi)'
-            MPar+=[(l,T,PP,i)]
-    ResPar=list(ParPreCalculCompleting2(MPar))
-    for k in range(len(ResPar)):
-        i=ResPar[k][0][0][3]
-        M[i][i]=ResPar[k][1]
+    if PAR_PCC:
+        MPar=[] #pour pouvoir paralléliser les précalculs
+        for i in range(m): 
+            for j in range(i):
+                Mtemp[i][j]+=Mtemp[j][i]
+                if Mtemp[i][j]>1: #On a alors intéret à précalculer car le cas ci-dessus 
+                    MPar+=[(l,T,PP,i,j)] #arrive au moins deux fois
+        ResPar=list(ParPreCalculCompleting(MPar))
+        for k in range(len(ResPar)):
+            i,j=ResPar[k][0][0][3],ResPar[k][0][0][4]
+            M[i][j]=ResPar[k][1]
+    else:
+        for i in range(m): 
+            for j in range(i):
+                Mtemp[i][j]+=Mtemp[j][i]
+                if Mtemp[i][j]>1:  
+                    M[i][j]=PreCalculCompleting(l,T,PP,i,j)
+    
+    if PAR_PCC2:    
+        MPar=[]
+        for i in range(m):
+            if Mtemp[i][i]>0: #ie on veut éviter de calculer (PiPi)'
+                MPar+=[(l,T,PP,i)]
+        ResPar=list(ParPreCalculCompleting2(MPar))
+        for k in range(len(ResPar)):
+            i=ResPar[k][0][0][3]
+            M[i][i]=ResPar[k][1]
+    else:
+        for i in range(m):
+            if Mtemp[i][i]>0:
+                M[i][i]=PreCalculCompleting2(l,T,PP,i)
     
     for i in range(n): #On recopie ce qui ne change pas : les cellules qui sont des
         newL[2*i+1]=L[i] #singletons contenant les racines des polynomes de PP
@@ -168,16 +182,24 @@ def Completing(l,T,L,PP):
     R,r=Normalize(l,T,Decale(l,P,1))
     SLL=RootCoding(l,T,R,r,R,r)
     newL[0]=Singleton(SLL,R)
-    MPar=[]
-    for j in range(m-1,-1,-1):
+    
+    if ROOT_PAR:
+        MPar=[]
+        for j in range(m-1,-1,-1):
+            Q,q=PP[j]
+            MPar+=[(l,T,R,r,Q,q,j)]
+        ResPar=list(RootPar(MPar))
+        for j in range(m-1,-1,-1):
+            for k in range(len(ResPar)):
+                if ResPar[k][1][1]==j:
+                    Q,q=PP[j]
+                    newL[0]=EnlargeWithCompleting(newL[0],ResPar[k][1][0],Q)
+    else:
+        for j in range(m-1,-1,-1):
         Q,q=PP[j]
-        MPar+=[(l,T,R,r,Q,q,j)]
-    ResPar=list(RootPar(MPar))
-    for j in range(m-1,-1,-1):
-        for k in range(len(ResPar)):
-            if ResPar[k][1][1]==j:
-                Q,q=PP[j]
-                newL[0]=EnlargeWithCompleting(newL[0],ResPar[k][1][0],Q)
+        SLL=RootCoding(l,T,R,r,Q,q)
+        newL[0]=EnlargeWithCompleting(newL[0],SLL,Q)
+                    
     newL[0]=[len(newL[0][0])]+newL[0][0] #C'est la 1ère racine qui nous intéresse
     oldv=v
     oldP=P
@@ -203,16 +225,24 @@ def Completing(l,T,L,PP):
     R,r=Normalize(l,T,Decale(l,P,-1))
     SLL=RootCoding(l,T,R,r,R,r)
     newL[2*n]=Singleton(SLL,R)
-    MPar=[]
-    for j in range(m-1,-1,-1):
-        Q,q=PP[j]
-        MPar+=[(l,T,R,r,Q,q,j)]
-    ResPar=list(RootPar(MPar))
-    for j in range(m-1,-1,-1):
-        for k in range(len(ResPar)):
-            if ResPar[k][1][1]==j:
-                Q,q=PP[j]
-                newL[2*n]=EnlargeWithCompleting(newL[2*n],ResPar[k][1][0],Q)
+    
+    if ROOT_PAR:
+        MPar=[]
+        for j in range(m-1,-1,-1):
+            Q,q=PP[j]
+            MPar+=[(l,T,R,r,Q,q,j)]
+        ResPar=list(RootPar(MPar))
+        for j in range(m-1,-1,-1):
+            for k in range(len(ResPar)):
+                if ResPar[k][1][1]==j:
+                    Q,q=PP[j]
+                    newL[2*n]=EnlargeWithCompleting(newL[2*n],ResPar[k][1][0],Q)
+    else:
+        for j in range(m-1,-1,-1):
+            Q,q=PP[j]
+            SLL=RootCoding(l,T,R,r,Q,q)
+            newL[2*n]=EnlargeWithCompleting(newL[2*n],SLL,Q)  
+            
     #C'est la plus grande racine qui nous intéresse :
     newL[2*n]=newL[2*n][len(newL[2*n])-1]
     newL[2*n]=[len(newL[2*n])]+newL[2*n] #On rajoute encore le "i" initial indiquant où chercher le
