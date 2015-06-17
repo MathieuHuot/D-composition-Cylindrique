@@ -148,7 +148,7 @@ def Lift(PPtot,PPlist,l,T,k): #Construction récursive de chaque niveau
             ListArg=[] #Début de la séquence de parellization
             if l==k:
                 for i in range(len(L)):
-                    ListArg+=[(L,T,l,PPlist,i)]           
+                    ListArg+=[(L,T,l,PPlist,i,i)]           
                 Output=list(EvalPar(ListArg))
                 for i in range(len(L)):
                     for j in range(i,len(L)):
