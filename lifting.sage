@@ -120,6 +120,12 @@ def Eval2(L,Tbis,l,PPlist,i):
 #OUTPUT: foret  (Q[X1,...,Xn] * int) tree : l'arbre de remontée contenant les polynomes et 
 #                                           leur valuation de signe
 def Lifting(PPtot,PPlist):
+    global ROOT_PAR
+    global ROOT_PAR2
+    global NORM_PAR
+    global LIFT_PAR
+    global PAR_PCC
+    global PAR_PCC2
     k=len(PPtot)
     return [[],Lift(PPtot,PPlist,1,[],k)] #Construction à partir de la racine
 #COMPLEXITY : O(2EXP)
