@@ -11,4 +11,3 @@ trans=trans+[[[(X2*X1-1,-1)],X2-1,q3,q1]]
 
 ITA=PolITA([q1,q2,q3],[q1],[q3],trans)
 
-accessible(q2,ITA)
