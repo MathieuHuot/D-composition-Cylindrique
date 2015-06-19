@@ -19,7 +19,7 @@ attach("sign_realization.sage")
 
 #INPUT : P Q[X1,...,Xi]
 #        i integer
-#OUTPUT: Booléen : True ssi P n'est pas dans Q
+#OUTPUT: Booléen : True iff P is not a rationnal number
 def PasDansR(P,i):
     if i==0 or P==0:
         return false
@@ -35,7 +35,7 @@ def PasDansR(P,i):
 
 #INPUT : l   integer
 #        P   Q[X1,...,Xl-1][Xl]
-#OUTPUT: res Q[X1,...,Xl-1][Xl] list : polynomes de la troncature de P
+#OUTPUT: res Q[X1,...,Xl-1][Xl] list : polynomes of the truncature of P
 def Tru(l,P):
     Q=0*TdV[l-1]+P
     p=Q.degree()
@@ -43,15 +43,15 @@ def Tru(l,P):
     for r in range(p,-1,-1):
         if Q[r]!=0:
             res=res+[Q]
-        if not PasDansR(P[r],l-1): #ie a_r est dans R*
+        if not PasDansR(P[r],l-1): #ie a_r is in R*
             break
         Q=Q-Q[r]*TdV[l-1]**r
     return res
 #COMPLEXITY : O(deg(P)*(l+deg(P)))
 
 #INPUT : lis Q[X1,...,Xi] list
-#        i   integer nombre de variable des polynomes de lis
-#OUTPUT: lis Q[X1,...,Xi] list : chaque polynome est devenu séparable 
+#        i   integer : number of variables of the polynomials of lis
+#OUTPUT: lis Q[X1,...,Xi] list : every polynomial became separable 
 def Separable(lis,i):
     lon=len(lis)
     for j in range(lon): 
@@ -62,8 +62,8 @@ def Separable(lis,i):
 #COMPLEXITY : O(lon * 2**i * 2**(degmax(P_i)) )
 
 #INPUT : lis  Q[X1,...,Xi] list
-#        i    integer nombre de variable des polynomes de lis
-#OUTPUT: NewA Q[X1,...,Xi] list : la liste de départ éventuellement restreinte 
+#        i    integer           : number of variables of the polynomials of lis
+#OUTPUT: NewA Q[X1,...,Xi] list : the list that is simplified
 def Simplify_1(lis,i):
     lon=len(lis)
     for j in range(lon): #Si P_i divise P_j on peut simplifier en gardant
@@ -95,7 +95,7 @@ def Simplify_1(lis,i):
 
 #INPUT : P Q[X1,...,Xn] list list
 #        i integer
-#OUTPUT: P Q[X1,...,Xn] list list : P[i] est éventuellement simplifié 
+#OUTPUT: P Q[X1,...,Xn] list list : P[i] is maybe simplified 
 def Simplify_2(P,i):
     lis=P[i-1]
     NewA=[] #On va réduire le degré de polynômes en divisant P_j et P_(j+1) par leur pgcd et 
