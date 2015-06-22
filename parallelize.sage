@@ -10,8 +10,13 @@
 #(*                                                                                     *)
 #(***************************************************************************************)
 
-#Active ou désactive la parallelization
-def Parallelize_Mode(a):
+NB_CORES=8
+
+#Switch parallelization mode on/off and ask for the number or cores to use
+def Parallelize_Mode():
+    print("Please enter True if you want to switch parallelization mode on and False else.")
+    prompt='>'
+    a=int(raw_input(prompt))
     global ROOT_PAR
     global ROOT_PAR2
     global NORM_PAR
@@ -25,9 +30,17 @@ def Parallelize_Mode(a):
     PAR_PCC=a
     PAR_PCC2=a
     if a:
-        print("parallelization switched on.")
+        print("Parallelization switched on.")
+        print("Please enter the number or cores you want to use for parallelization")
+        global NB_CORES
+        b=int(raw_input(prompt))
+        if b<1:
+            b=1
+        elif b>NB_CORES:
+            b=NB_CORES
+        NB_CORES=b
     else:
-        print("parallelization switched off.")
+        print("Parallelization switched off.")
         
 ROOT_PAR=True
 @parallel
