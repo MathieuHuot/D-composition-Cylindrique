@@ -1,13 +1,11 @@
-# -*-coding:Latin-1 -*
-
 #(***************************************************************************************)
 #(*                                                                                     *)
 #(*                                                                                     *)
-#(*                              HUOT Mathieu                                           *)
 #(*                              GARNIER Remy                                           *)
+#(*                              HUOT Mathieu                                           *)
 #(*                    Licence 3 : stage de MathÃ©matiques                              *)
 #(*                            Version Q[X1,...Xn]                                      *)
-#(*                       décision de l'accessibilité                                   *)
+#(*                           Accessibility decision                                    *)
 #(*                                                                                     *)
 #(*                                                                                     *)
 #(***************************************************************************************)
