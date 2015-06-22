@@ -50,7 +50,7 @@ def Tru(l,P):
 #COMPLEXITY : O(deg(P)*(l+deg(P)))
 
 #INPUT : lis Q[X1,...,Xi] list
-#        i   integer : number of variables of the polynomials of lis
+#        i   integer           : number of variables of the polynomials of lis
 #OUTPUT: lis Q[X1,...,Xi] list : every polynomial became separable 
 def Separable(lis,i):
     lon=len(lis)
@@ -66,8 +66,8 @@ def Separable(lis,i):
 #OUTPUT: NewA Q[X1,...,Xi] list : the list that is simplified
 def Simplify_1(lis,i):
     lon=len(lis)
-    for j in range(lon): #Si P_i divise P_j on peut simplifier en gardant
-        for k in range(j):       #P_j/P_i et P_i
+    for j in range(lon): #If P_i divides P_j we may simplify by keeping
+        for k in range(j):       #P_j//P_i and P_i
             P1=lis[j]
             P2=lis[k]
             P3=TdA[i](gcd(A(P1),A(P2)))
