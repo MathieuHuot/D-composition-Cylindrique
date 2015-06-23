@@ -20,7 +20,7 @@ attach("fonctions_generales.sage")
 #OUTPUT: P//Q Q[X1,...,Xl] : division exacte de P par Q
 #WARNING: ne fonctionne que si la divison exacte est possible selon notre ordre
 #         sur les variables, ie : X_l > X_l-1 > ... > X1
-def Quotient(l,P,Q,numero=50):
+def Quotient(l,P,Q):
     P=A(P)
     F=A(Q)
     Q=0
