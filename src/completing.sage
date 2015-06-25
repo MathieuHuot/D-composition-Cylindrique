@@ -120,21 +120,19 @@ def CalculCompleting(l,T,PP,oldP,P):
 #        L    (int * int list * Q[X1,...,Xl]) list list 
 #        PP   (Q[X1,...,Xl] * int) list 
 #OUTPUT: newL (int * int list * Q[X1,...,Xl]) list list
-#NOTE : Complète la ligne réelle de niveau l partitionnée par line partition en ajoutant 
-#une racine pour représenter chaque cellule qui n'est pas un singleton (les singletons 
-#étant les racines des polynomes obtenus durant la phase d'élimination)
+#NOTE : Complete the real line of level l which is split by LinePartition by adding a 
+#root to represent each cell which is not a singleton(singletons being roots of polynomials
+#obtained during the elim phase
+
 def Completing(l,T,L,PP):
     n=len(L) 
     m=len(PP)
-#Il y a n racines donc 2n+1 représentants des cellules qu'on stockera dans newL
+#There are n roots so 2n+1 representants of cells which are to be stocked in newL
     newL=Zero(2*n+1) 
-#On va précalculer tous les rootcoding des (PiPj)' où l'on a : L[i]=racine de (Pi ou Pj)
-#et L[i+1]=racine de (Pi ou Pj) et cela pour au moins deux "i" distincts : cela évite
-#par exemple le calcul de (PiPj)' puis (PjPi)' ou encore de (PiPi)'.
-#On stocke dans Mtemp les indices i,j des PiPj à précalculer et dans M les résultats des
-#calculs.
-    M=[["Vide" for i in range(m)] for j in range(m)] #pour stocker les Root-Coding
-    Mtemp=[[0 for i in range(m)] for j in range(m)] #pour compter si un précalcul est rentable
+#We will pre-calcul root-codings of (PiPj)' where L[i]=root of Pi or Pj and L[i+1]=root of
+#Pi or Pj for at least two different i. indices stocked in Mtemp and resuts in M
+    M=[["Vide" for i in range(m)] for j in range(m)] #to stock Root-codings
+    Mtemp=[[0 for i in range(m)] for j in range(m)] #to count if a pre-calculus is worth
     
     for i in range(n-1):
         e=L[i]
@@ -147,8 +145,8 @@ def Completing(l,T,L,PP):
         for i in range(m): 
             for j in range(i):
                 Mtemp[i][j]+=Mtemp[j][i]
-                if Mtemp[i][j]>1: #On a alors intéret à précalculer car le cas ci-dessus 
-                    MPar+=[(l,T,PP,i,j)] #arrive au moins deux fois
+                if Mtemp[i][j]>1: #worth to make pre-calculus
+                    MPar+=[(l,T,PP,i,j)] 
         ResPar=list(ParPreCalculCompleting(MPar))
         for k in range(len(ResPar)):
             i,j=ResPar[k][0][0][3],ResPar[k][0][0][4]
