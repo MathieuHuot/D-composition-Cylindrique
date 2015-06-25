@@ -12,7 +12,7 @@
 
 #INPUT : a   int list
 #        b   int list
-#OUTPUT: res {-1,0,1} : 1 si a<b, 0 si a=b, -1 si b>a pour l'ordre du Thom Encoding
+#OUTPUT: res {-1,0,1} : 1 if a<b, 0 if a=b, -1 if b>a wrt Thom-encoding order
 def PetitThom2(a,b):
     if a==b:
         return 0
@@ -27,13 +27,14 @@ def PetitThom2(a,b):
 #INPUT : L   (int list) list 
 #        P   Q[X1,...Xl] 
 #OUTPUT: res ((int * (int list) * Q[X1,...Xl]) list) list
-#NOTE  : Transforme une liste d'objets en une liste de singletons contenant 
-#        ces objets et ajoute le numéro de la racine de P
+#NOTE  : Transforms a list of objects into a lists of singletons containing 
+#        those objects and add the number or the root of P
+
 def Singleton(L,P):
     res=[]
     l=len(L)
     for i in range(0,l):
-        res+=[[[i+1,L[i],P]]] #on code un triplet par une liste
+        res+=[[[i+1,L[i],P]]] #we code a triplet with a list
     return res
 #COMPLEXITY : O(len(L))
 
@@ -99,7 +100,7 @@ def CompP(L1,L2):
 
 #INPUT : L1  (int * int list * Q[X1,...,Xl]) list list
 #        L2  (int * int list * Q[X1,...,Xl]) list list
-#OUTPUT: res (int * int list * Q[X1,...,Xl]) list list tri fusion optimisé de L1 et L2 
+#OUTPUT: res (int * int list * Q[X1,...,Xl]) list list optimized fusion sort of L1 and L2 
 def TriP(L1,L2):
     n=len(L1)
     m=len(L2)
@@ -126,8 +127,8 @@ def TriP(L1,L2):
 #COMPLEXITY : O(n+m)
 
 #INPUT : SL (int * int list * Q[X1,...,Xl]) list list list 
-#OUTPUT: L  (int * int list * Q[X1,...,Xl]) list list : fusion des listes de SL avec TriP en enlevant
-#           les doublons: i.e trie les racines des différents polynomes à l'aide de leur Thom-Encoding
+#OUTPUT: L  (int * int list * Q[X1,...,Xl]) list list : fusion of the lists of SL with TriP, removing
+#           repetitions, i.e sort roots of the different polynomials with the help of their Thom-Encoding
 def OrderedMerge(SL): 
     n=len(SL)
     mid=n//2
@@ -146,30 +147,30 @@ def OrderedMerge(SL):
 #INPUT : l   integer
 #        T   (int * Q[X1,...,Xl] * int) list
 #        P   Q[X1,...,Xl]
-#OUTPUT: Res Q[X1,...,Xl-1][Xl] P sans ses coeffs nuls lorsque précisé en \alpha_1,...,\alpha_l-1
+#OUTPUT: Res Q[X1,...,Xl-1][Xl] P without its nul coefficients when taken in \alpha_1,...,\alpha_l-1
 #        p   integer
 def Normalize(l,T,P):
     p=Degree(l,T,P)
     Res=0
     for j in range(0,p+1):
-        Res+=P[j]*TdV[l-1]**j #La variable principale de P est X_l
-    Res=Primitif(l,Res)    #On rend le polynome primitif
+        Res+=P[j]*TdV[l-1]**j #Main variable of P is X_l
+    Res=Primitif(l,Res)    #We make it primitive
     return Res,p
 #COMPLEXITY: O(2EXP)
 
 #INPUT : PP2    Q[X1,...,Xl] list 
 #        l      integer 
-#        T      (int * Q[X1,...,Xl] * int)  list : système triangulaire
+#        T      (int * Q[X1,...,Xl] * int)  list : triangular system
 #OUTPUT: SL     (int * int list * Q[X1,...,Xl]) list list 
-#        Normed (Q[X1,...,Xl] * int) list : polynomes de PP2 normalisés
-#NOTE  : SL représente la partition de la ligne réelle en étant une liste de codage de racines 
-#        échantillon de chaque intervalle de la partition
+#        Normed (Q[X1,...,Xl] * int) list : normalized polynomials of PP2
+#NOTE  : SL represents the real line partition by being a list of sample root codings 
+#        of every intervalle of the partition
 def LinePartition(PP2,l,T):
-    lon2=len(PP2) #PP2 a des polynomes à l variables
+    lon2=len(PP2) #PP2 contains polynomials with l variables
     
     Normed2=Zero(lon2)
     if NORM_PAR:
-        Par=[] #liste à paralleliser
+        Par=[] #list to be parallelized
         for i in range(lon2):
             Par=Par+[(l,T,PP2[i],i)]
         Output=list(NormalizePar(Par))
@@ -179,8 +180,8 @@ def LinePartition(PP2,l,T):
     else:
         Normed2=[Normalize(l,T,PP2[i]) for i in range(lon2)]
         
-    Normed=[] #les polynomes normalisés avec racines qui vont aller dans Normed  
-    RootCodePi=[] #et leur Rootcoding dans RootCodePi
+    Normed=[] #normalized polynomials with roots will go there
+    RootCodePi=[] #and their rootcoding there
     if ROOT_PAR:
 
         List=[]
@@ -189,7 +190,7 @@ def LinePartition(PP2,l,T):
             if pi>0:
                 List=List+ [(l,T,Pi,pi,Pi,pi,i)]
         lon=len(List)
-        Output=list(RootPar(List)) # Parallelisation des rootcodings
+        Output=list(RootPar(List)) # Parallelisation of rootcodings
         for i in range(lon):
             k=0
             for j in range(lon):
@@ -197,26 +198,26 @@ def LinePartition(PP2,l,T):
                     k=j
                     break
             Root=Output[k][1][0]
-            if Root!=[]: #On ne garde que les polynomes qui ont des racines
+            if Root!=[]: #we only keep polynomials that do have roots
                 Normed=Normed+[Normed2[i]]
                 RootCodePi=RootCodePi+[Root]
     else:
         for i in range(lon2):
             Pi,pi=Normed2[i]
-            if pi>0: #On ne veut pas des polynomes constants
+            if pi>0: #We dont want constant polynomials
                 Root=RootCoding(l,T,Pi,pi,Pi,pi)           
-                if Root!=[]: #On ne garde que les polynomes qui ont des racines
+                if Root!=[]: #we only keep polynomials that do have roots
                     Normed=Normed+[Normed2[i]]
                     RootCodePi=RootCodePi+[Root]
             
-    lon=len(Normed)#On place tous les RootCoding des polynomes normalisés dans une matrice
+    lon=len(Normed)#We put all the root-codings of normalized polynomials in a mtatrix
     SLL=[[0 for j in range(lon)] for i in range(lon)]
     
     if ROOT_PAR2:
-        ListArg=[] #Liste des arguments pour la parallélisation
+        ListArg=[] #List of the arguments for parallelization
         for i in range(lon):
             for j in range(lon):
-                if i==j: #On a déjà calculé et stocké le RootCoding de Pi sur ses racines
+                if i==j: #We already calculated and stocked the Root-Coding of Pi on its roots
                     SLL[i][i]=RootCodePi[i]
                 else:
                     Pi,pi=Normed[i]
@@ -234,7 +235,7 @@ def LinePartition(PP2,l,T):
     else:
         for i in range(lon):
              for j in range(lon):
-                if i==j: #On a déjà calculé et stocké le RootCoding de Pi sur ses racines
+                if i==j: #We already calculated and stocked the Root-Coding of Pi on its roots
                      SLL[i][i]=RootCodePi[i]
                 else:
                     Pi,pi=Normed[i]
@@ -247,15 +248,13 @@ def LinePartition(PP2,l,T):
         SL[i]=Singleton(SLL[i][i],Pi) 
         for j in range(i-1,-1,-1):
             SL[i]=EnlargeWithGauche(SL[i],SLL[i][j],Normed[j],SL[j],j) 
-            #On a besoin de SL[j] et j pour savoir si la racine est une racine de Q
+            #We need SL[j] and j to know whether the root is a root of Q
         for j in range(i-1,-1,-1):
             SL[j]=EnlargeWithDroite(SL[j],SLL[j][i],Normed[i],SL[i],i)
     for i in range(lon):
         for j in range(len(SL[i])):
             SL[i][j]=[i+1]+SL[i][j] 
-        #On précise devant chaque codage de racine le numéro du polynome qui l'engendre
+        #We write in the head of every coding of root the number of the polynomal that generates it
     SL=OrderedMerge(SL)
-    #for i in range(len(SL)): #On enlève l'information précédemment rajoutée
-    #    SL[i]=[SL[i][j] for j in range(1,len(SL[i]))] 
     return SL,Normed
 #COMPLEXITY : O(2EXP)
