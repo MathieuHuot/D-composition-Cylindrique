@@ -11,7 +11,7 @@
 #(***************************************************************************************)
 
 #INPUT : l integer
-#OUTPUT: a string : un blanc de longueur l
+#OUTPUT: a string : a blank of length l
 def Espace(l):
     a=" "
     for i in range(l):
@@ -45,7 +45,7 @@ def Aux(tree,level,number,max_depth):
                     Aux(tree[1][j],level+1,number+[j+1]+['.'],max_depth)
             return 0
 
-def PrintArb(Arb,prof_max=2): #prof_max à changer
+def PrintArb(Arb,prof_max=2): #prof_max to be changed
     prompt = '> '
     print(" Bonjour\n Tapez 1 pour voir un lifting niveau par niveau\n et 2 pour avoir le lifting complet")
     n = int(raw_input(prompt))
