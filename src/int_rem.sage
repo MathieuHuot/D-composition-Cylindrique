@@ -11,13 +11,13 @@
 #(***************************************************************************************)
 
 #INPUT : l   integer
-#        T   (int * Q[X_1,...X_l] * int) list : système triangulaire
+#        T   (int * Q[X_1,...X_l] * int) list : triangular system
 #        Q   Q[X_1,...X_l]
 #        q   integer
 #        P   Q[X_1,...X_l]
 #        p   integer 
-#OUTPUT: Res Q[X_1,...X_l] : polynome proportionnel au reste de la division de Q par P
-#        r   integer       : degré de res dans T
+#OUTPUT: Res Q[X_1,...X_l] : polynomial proprotionnal to the rest in the euclidean divison of Q by P 
+#        r   integer       : degree of res in T
 def IntRem(l,T,Q,q,P,p):
     if q<p:
         return Q,q
@@ -37,6 +37,6 @@ def IntRem(l,T,Q,q,P,p):
     Res=0
     for i in range(r+1):
         Res+=Aux[i]*TdV[l-1]**i
-    Res=Primitif(l,Res)#On le rend primitif
+    Res=Primitif(l,Res)#We make it primitive
     return Res,r
 #COMPLEXITY : O(2EXP)
