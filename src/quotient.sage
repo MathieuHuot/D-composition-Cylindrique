@@ -1,5 +1,3 @@
-# -*-coding:Latin-1 -*
-
 #(***************************************************************************************)
 #(*                                                                                     *)
 #(*                                                                                     *)
@@ -17,9 +15,9 @@ attach("fonctions_generales.sage")
 #INPUT : l    integer
 #        P    Q[X1,...,Xl]
 #        Q    Q[X1,...,Xl]
-#OUTPUT: P//Q Q[X1,...,Xl] : division exacte de P par Q
-#WARNING: ne fonctionne que si la divison exacte est possible selon notre ordre
-#         sur les variables, ie : X_l > X_l-1 > ... > X1
+#OUTPUT: P//Q Q[X1,...,Xl] : exact divison of P by Q
+#WARNING: works iff exact division is possible wrt usual order on variable
+#         ie : X_l > X_l-1 > ... > X1
 def Quotient(l,P,Q):
     P=A(P)
     F=A(Q)
