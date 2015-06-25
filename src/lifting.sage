@@ -23,8 +23,8 @@ if test:
     attach("tests.sage")
 
 #INPUT : P   Q[X1,...,Xl]
-#        rac integer * (int * int list * Q[X1,...,Xl]) list
-#OUTPUT: i   integer : position de P dans rac si présent et 0 sinon
+#        rac integer * (int * int list * Q[X1,...,Xl]) list : list of roots
+#OUTPUT: i   integer : position of P in rac if found and else 0
 def RechP (P,rac):
     m=len(rac)
     notfound=true
@@ -37,13 +37,13 @@ def RechP (P,rac):
     return i
 #COMPLEXITY : O(len(rac))
 
-#INPUT : L      (Q[X1,...,Xl] list) list : racines du lifting+completing
-#        T      (int * Q[X1,...,Xl-1] * int) list
-#        l      integer
-#        PPlist (Q[X1,...,Xn] list) list
-#        i      integer : indice de la racine traitée
-#OUTPUT: Teval  (Q[X1,...,Xl] * {-1,0,1}) list : évaluation de signe de PPlist[l-1] dans T
-#        Tbis   (int * Q[X1,...,Xl] * int) list : système triangulaire enrichi par L[i]
+#INPUT : L      (Q[X1,...,Xl] list) list : roots from lifting+completing
+#        T      (int * Q[X1,...,Xl-1] * int) list : triangular system level l-1
+#        l      integer : current level
+#        PPlist (Q[X1,...,Xn] list) list : Normalized polynomials
+#        i      integer : indice of the root being trated
+#OUTPUT: Teval  (Q[X1,...,Xl] * {-1,0,1}) list : sign evaluation of PPlist[l-1] in T
+#        Tbis   (int * Q[X1,...,Xl] * int) list : T enriched with L[i] : triangular system level l
 def Eval(L,T,l,PPlist,i):
     Teval=[]
     lon=len(PPlist[l-1])
