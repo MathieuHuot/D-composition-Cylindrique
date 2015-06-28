@@ -1,8 +1,8 @@
 #(***************************************************************************************)
 #(*                                                                                     *)
 #(*                                                                                     *)
-#(*                              HUOT Mathieu                                           *)
 #(*                              GARNIER Remy                                           *)
+#(*                              HUOT Mathieu                                           *)
 #(*                    Licence 3 : stage de Mathématiques                               *)
 #(*                           Version Q[X1,...Xn]                                       *)
 #(*                            Sign Realization                                         *)
@@ -10,43 +10,50 @@
 #(*                                                                                     *)
 #(***************************************************************************************)
 
+import numpy #pour le produit tensoriel
+
 #1°)Conversion des indices
 #~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#Renvoie la position d'un élement dans une liste et 0 si non trouvé
+#INPUT : elem  'a
+#        liste 'a list
+#OUTPUT: i     integer : position de elem dans liste et 0 si non trouvé
 def ConvertUplet(elem,liste):
     l=len(liste)
     for i in range(0,l):
         if liste[i] == elem :  
             return i
     return 0
-#'a * 'a list -> int
 
 #2°)Support et extraction matricielle
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#Passer d'une matrice colonne à la liste de ses coefficients:
+#INPUT : M 'a matrix
+#OUTPUT: E 'a list list : passe d'une matrice colonne a la liste de ses coefficients
 def MatriceEnListe(M):
     l=M.nrows()
     E=[]
     for i in range(0,l):
         E=E+[M[i]]
     return E
-#'a Matrix -> ('a list) list
 
-#Renvoie le support d'une matrice colonne sous forme d'une liste d'uplets. 
-def Supp (M,indices):
+#INPUT : M    'a matrix
+#        ind  'b list : liste d'uplets
+#OUTPUT: List 'b list : support de M matrice colonne en liste d'uplets
+def Supp (M,ind):
     l=M.nrows()
     List=[]
     for i in range(0,l):
         if M[i]!=0:
-            List=List+[indices[i]]
+            List=List+[ind[i]]
     return List
-#'a Matrix * 'b list -> 'b list    
 
-#Construit une sous matrice de M à partir d'un ensemble de lignes A et d'un ensemble 
-#de colonne B. La fonction prend également en paramètre deux ensembles d'indices 
-#Lignes et Colonnes contenant respectivement A et B et indiciant M.   
+#INPUT : M        'a matrix
+#        A        'b list : ensemble d'uplets
+#        B        'b list : ensemble d'uplets
+#        Lignes   'b list : indice les lignes de M par uplet
+#        Colonnes 'b list : indice les colonnes de M par uplet
+#OUTPUT: cMe      'a matrix : matrice extraite de M selon A et B
 def Extract (M,A,B,Lignes,Colonnes):
     m=len(A)
     n=len(B)
@@ -62,10 +69,16 @@ def Extract (M,A,B,Lignes,Colonnes):
             jc=jc+1
         ic=ic+1
     return matrixe(cMe)
-#'a Matrix * 'b list * 'b list * 'b list * 'b list -> 'a Matrix
 
 #Extrait une suite L d'indices de M dont les lignes sont n premieres lignes 
 #indépendantes de M
+#INPUT : M        'a matrix
+#        A        'b list : ensemble d'uplets
+#        Sigma    'b list : ensemble d'uplets
+#        n        integer
+#        Lignes   'b list        : indice les lignes de M par uplet
+#        Colonnes 'b list        : indice les colonnes de M par uplet
+#OUTPUT: L        ('a list) list : n premières lignes de M indépendantes
 def Extractlibre(M,A,Sigma,n,Lignes,Colonnes):
     L=[]
     i=0
@@ -79,28 +92,26 @@ def Extractlibre(M,A,Sigma,n,Lignes,Colonnes):
         if i==n:
             return L
     return L 
-# 'a Matrix *   -> ('a list) list
 
 #3°)Produit tensoriel:
 #~~~~~~~~~~~~~~~~~~~~~
 
-#Cet fonction réalise le produit tensoriel de 2 matrices M1 et M2, de taille respectives
-# (m1,n1) et (m2,n2)
+#INPUT : M1  'a matrix de taille m1*n1
+#        m1  integer
+#        n1  integer
+#        M1  'a matrix de taille m2*n2
+#        m2  integer
+#        n2  integer
+#OUTPUT: res 'a matrix de taille m1m2*n1n2 : produit tensoriel de M1 par M2
 def Tproduit(M1,m1,n1,M2,m2,n2):
-    gromatrix=MatrixSpace(QQ,m1*m2,n1*n2)
-    nMe=[0 for i in range(0,m1*m2*n1*n2)]
-    for i1 in range(0,m1):
-        for i2 in range(0,m2):
-            for j1 in range(0,n1):
-                for j2 in range(0,n2):
-                    nMe[(i1*m2+i2)*n1*n2+j1*n2+j2]=(M1[i1][j1])*(M2[i2][j2])
-    return gromatrix(nMe)
-#'a Matrix * int * int * 'a Matrix * int * int -> 'a Matrix
+    return (MatrixSpace(QQ,m1*m2,n1*n2))((numpy.kron(M1,M2)).tolist())
 
 #4°)Produits cartésiens 
 #~~~~~~~~~~~~~~~~~~~~~~~
 
-#Effectue en terme de liste le produit cartésien de 2 ensembles A et B
+#INPUT : A 'a list 
+#        B 'b list
+#OUTPUT: E ('a * 'b) list : produit cartésien de A par B
 def ProduitCart(A,B):
     E=[]
     i=0
@@ -108,12 +119,18 @@ def ProduitCart(A,B):
         for elb in B:
             E=E+[ela+elb]    
     return E
-#'a list * 'b list  -> ('a * 'b) list
 
 #5°) Algorithme proprement dit:
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#P est dans D[X], D=Q[X_1,...X_l-1], X=X_l
+#INPUT : l     integer 
+#        T     (int * Q[X1,...,Xl] * int) list : système triangulaire
+#        P     Q[X1,...,Xl-1][Xl]
+#        p     integer : degré de P
+#        Q     Q[X_1,...,X_l] list
+#        deg   int list
+#OUTPUT: Sigma (int list) list 
+#        nb    (int list) list
 def SignRealization(l,T,P,p,Q,deg):
 #5.1: Calculs préliminaires
 #On définit d'abord les espaces de matrices initiaux, ainsi que les matrices de départ 
@@ -197,5 +214,3 @@ def SignRealization(l,T,P,p,Q,deg):
     nb=MatriceEnListe(nb)#Eh oui, nb est une matrice, et non une liste
     Sigma=map(DecrL,Sigma)#On retourne à un codage dans {-1,0,1}
     return Sigma,nb 
-#int * (int * Q[X_1,...,X_l] * int) list *  Q[X_1,...,X_l] * int *  Q[X_1,...,X_l] list *
-#int list -> (int list) list * (int list) list

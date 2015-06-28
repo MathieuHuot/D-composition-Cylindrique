@@ -1,11 +1,11 @@
 #(***************************************************************************************)
 #(*                                                                                     *)
 #(*                                                                                     *)
-#(*                              HUOT Mathieu                                           *)
 #(*                              GARNIER Remy                                           *)
+#(*                              HUOT Mathieu                                           *)
 #(*                    Licence 3 : stage de Mathématiques                               *)
 #(*                           Version Q[X1,...Xn]                                       *)
-#(*                                Lifting                                              *)
+#(*                          On-the-fly algorithm                                       *)
 #(*                                                                                     *)
 #(*                                                                                     *)
 #(***************************************************************************************)
@@ -19,8 +19,15 @@ attach("completing.sage")
 attach("parallelize.sage")
 attach("print.sage")
 
-if test:
-    attach("tests.sage")
+#Création du dictionnaire pour le lifting
+yolo=dict()
+yolo['1.']=[0,[],[]]
+
+#INPUT : lis int list
+#OUTPUT: s   string composée des des éléments de lis séparés par des points
+def conv_lis_str(lis):
+    s= ''.join([str(_)+'.' for _ in lis])
+    return s
 
 #INPUT : P   Q[X1,...,Xl]
 #        rac integer * (int * int list * Q[X1,...,Xl]) list
@@ -37,33 +44,39 @@ def RechP (P,rac):
     return i
 #COMPLEXITY : O(len(rac))
 
-#Crée l'arbre de la phase de remontée
-#INPUT : PPtot  (Q[X1,...,Xn] list) list
-#        PPlist (Q[X1,...,Xn] list) list
-#OUTPUT: foret  (Q[X1,...,Xn] * int) tree : l'arbre de remontée contenant les polynomes et 
-#                                           leur valuation de signe
-def Lifting(PPtot,PPlist):
-    k=len(PPtot)
-    def Lift(l,T): #Construction récursive de chaque niveau
-        L,PP=LinePartition(PPtot[l-1],l,T)
-        lon=len(PPlist[l-1])
+#INPUT : PolElim Q[X1,...,Xn] list : polynômes issus de la phase d'élimination
+#        PolIni  Q[X1,...,Xn] list : polynômes initiaux
+#        l       integer  : niveau actuel
+#        k       integer  : niveau maximum
+#        a       int list : code la cellule en train d'être traitée
+#OUTPUT: None
+#Note  : fonction de lifting remplissant le dictionnaire yolo
+def Access(PolElim,PolIni,l,k,a): #Construction récursive de chaque niveau
+    Cel=yolo[conv_lis_str(a)]
+    if Cel[0]==0:
+        Tsup=Cel[1]
+        T=Cel[2]
+        L,PP=LinePartition(PolElim[l-1],l,T)
+        lon=len(PolIni[l-1])
         if L==[]: #Aucun polynome n'a de racine
-            Tbis=T+[[1,TdV[l-1],1]] #X_l devient représentant de la ligne réelle
+            Tbis=T+[[1,TdV[l-1],1]] #X_l devient représentant de la ligne rÃ©elle
             Teval=[]
             for j in range(lon):
-                P=PPlist[l-1][j]
+                P=PolIni[l-1][j]
                 p=P.degree()
                 s=Sign(l-1,T,P[p])  #Le signe d'un polynome sans racine réelle
                 Teval=Teval+[(P,s)] #est celui de son coefficient dominant
+            b=a+[0]
+            yolo[conv_lis_str(b)]=[1,Tsup+Teval,Tbis]  
             if l<k:   #Si il reste un niveau à construire, on appelle récursivement
-                arb=[Teval,Lift(l+1,Tbis)]
-            else:     #Sinon c'est qu'on est arrivé à une feuille
-                arb=[Teval,[]] 
-            return [arb]
+                Access(PolElim,PolIni,l+1,k,b)
+            return ()
         else:
             foret=[]  #La ligne réelle est scindée par des racines de polynomes
             eval=[]   #On appelle donc completing pour avoir un représentant de
             L=Completing(l,T,L,PP) #de chaque cellule
+            NewCel=[len(L),Tsup,T]
+            yolo[conv_lis_str(a)]=NewCel
             for i in range(len(L)):
                 Teval=[]
                 ind=L[i][0] #L'indice i d'un Pi tel que L[i] code une racine de Pi 
@@ -71,7 +84,7 @@ def Lifting(PPtot,PPlist):
                 r=L[i][ind][0]
                 Tbis=T+[(r,P,Degree(l,T,P))] #Qu'on ajoute au système triangulaire
                 for j in range(lon):
-                    Pol=PPlist[l-1][j]
+                    Pol=PolIni[l-1][j]
                     pos=RechP(Pol,L[i])
                     if pos>0:
                         Teval=Teval+[(L[i][pos][2],L[i][pos][1][0])]
@@ -83,8 +96,8 @@ def Lifting(PPtot,PPlist):
                             for m in range(1,len(L[i])):
                                 trouve=False
                                 Pol2=L[i][m][2]
-                                A=IntRem2(l,Pol,Pol.degree(),Pol2,Pol2.degree())
-                                if A==0:
+                                Al=IntRem2(l,Pol,Pol.degree(),Pol2,Pol2.degree())
+                                if Al==0:
                                     trouve=True
                                     if L[i][m][1][0]==0: #i.e Pol2(\alpha)=0
                                         sP=0
@@ -94,11 +107,19 @@ def Lifting(PPtot,PPlist):
                                         Pol=Quotient(l,Pol,Pol2)
                                         sP=sP*L[i][m][1][0]
                         sP=sP*Sign(l,Tbis,Pol)
+<<<<<<< HEAD:src/accessibilite.sage
+                        Teval=Teval+[(PolIni[l-1][j],sP)]
+                b=a+[i]
+                EvalP=Teval+Tsup
+                yolo[conv_lis_str(b)]=[0,EvalP,Tbis]    
+=======
                         Teval=Teval+[(PPlist[l-1][j],sP)]
+>>>>>>> master:lifting.sage
                 if l<k: #On appelle récursivement sur chaque noeud la construction du 
-                    foret=foret+[[Teval,Lift(l+1,Tbis)]] #niveau suivant
-                else: #Ou alors on est arrivé au plus bas niveau et on a des feuilles
-                    foret=foret+[[Teval,[]]]
-            return foret
-    return [[],Lift(1,[])] #Construction à partir de la racine
-#COMPLEXITY : O(2EXP)
+                    Access(PolElim,PolIni,l+1,k,b) #niveau suivant
+            return ()
+    else:
+        if l<k:
+            for i in range(Cel[0]):
+                Access(PolElim,PolIni,l+1,k,a+[i])
+        return ()

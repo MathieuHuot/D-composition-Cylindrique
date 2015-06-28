@@ -1,27 +1,26 @@
 #(***************************************************************************************)
 #(*                                                                                     *)
 #(*                                                                                     *)
-#(*                              HUOT Mathieu                                           *)
-#(*                              GARNIER Remy                                           *)
-#(*                    Licence 3 : stage de Mathématiques                               *)
-#(*                           Version Q[X1,...Xn]                                       *)
-#(*                             Sous résultants                                         *)
+#(*                            GARNIER Remy                                             *)
+#(*                            HUOT Mathieu                                             *)
+#(*                  Licence 3 : stage de Mathématiques                                 *)
+#(*                           Sub Resultants                                            *)
 #(*                                                                                     *)
 #(*                                                                                     *)
 #(***************************************************************************************)
 
 attach("quotient.sage")
 
-#Renvoie IntRem sans calculer le degré (pour la phase d'élimination)
 #INPUT : l   integer
 #        Q   Q[X_1,...X_l]
 #        q   integer
 #        P   Q[X_1,...X_l]
 #        p   integer
-#OUTPUT: Res Q[X_1,...X_l] : polynome proportionnel au reste de la division de Q par P
-#Note  : Ne calcule pas le degré de Res dans un système triangulaire, utilisé dans la
-#        phase d'élimination
+#OUTPUT: Res Q[X_1,...X_l] : polynomial proportionnal to the rest in the division of Q by P
+#Note  : Does not calculate the degree of Res in a triangular system, used in elim phase
 def IntRem2(l,Q,q,P,p):
+    if p>q:
+        return Q
     R= [Q[i] for i in range(q+1)]
     for i in range(q-p,-1,-1):
         for j in range(0,p):
@@ -33,7 +32,7 @@ def IntRem2(l,Q,q,P,p):
             R[j]= R[j]*P[p]
     for i in range(p,q+1):
         R[i]= 0
-    Res = InitPoly(l,R,q) #Res est primitif
+    Res = InitPoly(l,R,q) #Res est primitive
     return Res
 #COMPLEXITY: O(q²-p²)
 
@@ -42,11 +41,11 @@ def IntRem2(l,Q,q,P,p):
 #        p integer
 #        Q Q[X_1,...X_l]
 #        q integer
-#OUTPUT: s  Q[X_1,...X_l-1] list : sous-résultants de P et Q
+#OUTPUT: s  Q[X_1,...X_l-1] list : sub-resultants of P and Q
 def SubResultants(l,P,p,Q,q):
-    s=Zero(p+1) # valeurs dans Q[X_1,...X_l-1]
-    t=Zero(p+1) # valeurs dans Q[X_1,...X_l-1]
-    SresP=Zero(p+1) # valeurs dans  Q[X_1,...X_l-1][X_l]
+    s=Zero(p+1) # values in Q[X_1,...X_l-1]
+    t=Zero(p+1) # values in Q[X_1,...X_l-1]
+    SresP=Zero(p+1) # values in Q[X_1,...X_l-1][X_l]
     SresP[p]=P
     s[p]=1  
     t[p]=1  
@@ -70,16 +69,16 @@ def SubResultants(l,P,p,Q,q):
             s[j-1]=t[j-1]
         else :
             for li in range(k+1,j) :
-                s[li]=0               #On sait que l>=1
+                s[li]=0               #We know l>=1
             t[k]=Epsilon(j-k)*Quotient(l-1,(t[j-1])**(j-k),(s[j])**(j-k-1)) 
             s[k]=t[k]
             SresP[k]=Quotient(l,s[k]*SresP[j-1],t[j-1])
-        Pol=IntRem2(l,t[j-1]*s[k]*SresP[i-1],j,SresP[j-1],k) #Pol est dans  Q[X_1,...X_l-1][X_l]
+        Pol=IntRem2(l,t[j-1]*s[k]*SresP[i-1],j,SresP[j-1],k) #Pol is in Q[X_1,...X_l-1][X_l]
         if Pol==0:
             q=-1
         else:
             q=Pol.degree()
-        div=s[j]*t[i-1]+0*TdV[l-1] # valeurs dans  Q[X_1,...X_l-1][X_l]
+        div=s[j]*t[i-1]+0*TdV[l-1] #values in Q[X_1,...X_l-1][X_l]
         SresP[k-1]=-Quotient(l,Pol,div)
         i=j
         j=k
@@ -87,6 +86,6 @@ def SubResultants(l,P,p,Q,q):
         s[li]=0
     s[p]=P[p]
     for i in range(p+1):
-        s[i]=Primitif(l-1,s[i]) #On le rend primitif
+        s[i]=Primitif(l-1,s[i]) #We make it primitive
     return s
 #COMPLEXITY : O(p*2^l*2^p)

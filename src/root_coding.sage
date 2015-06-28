@@ -1,8 +1,8 @@
 #(***************************************************************************************)
 #(*                                                                                     *)
 #(*                                                                                     *)
-#(*                              HUOT Mathieu                                           *)
 #(*                              GARNIER Remy                                           *)
+#(*                              HUOT Mathieu                                           *)
 #(*                    Licence 3 : stage de Mathématiques                               *)
 #(*                           Version Q[X1,...Xn]                                       *)
 #(*                               Root Coding                                           *)
@@ -12,22 +12,20 @@
 
 #INPUT : a int list
 #        b int list
-#OUTPUT: Booléen : Compare a à b selon l'ordre du Thom encoding et renvoie True ssi a<b
+#OUTPUT: Booléen : Compares a to b wrt Thom-encoding order and returns True iff a<b
 def PetitThom(a,b):
     if a==b:
         return False
     k=len(a)-1
     while a[k]==b[k]:
         k-=1
-    if a[k+1]==1 and a[k]<b[k]:
-        return True
-    if a[k+1]==-1 and a[k]>b[k]:
+    if (a[k+1]==1 and a[k]<b[k]) or (a[k+1]==-1 and a[k]>b[k]):
         return True
     return False
 #COMPLEXITY : WORSE : O(len(a)) AVERAGE : O(1)
 
 #INPUT : L (int list) list
-#OUTPUT: L (int list) list : triée selon le Thom Encoding, en place
+#OUTPUT: L (int list) list : sorted wrt Thom-Encoding order
 def TriRapide(L):
     def trirap(L, g, d):
         pivot = L[(g+d)//2]
@@ -41,7 +39,7 @@ def TriRapide(L):
             if i>j:
                 break
             if i<j:
-                L[i], L[j] = L[j], L[i]
+                L[i],L[j]=L[j],L[i]
             i+=1
             j-=1
         if g<j:
@@ -58,7 +56,7 @@ def TriRapide(L):
 
 #INPUT : sigma (int list) list
 #        nb    (int list) list 
-#OUTPUT: res   (int list) list : le sigma étendu en accord avec la multiplicité donné par nb
+#OUTPUT: res   (int list) list : sigma expanded wrt multiplicity given by nb
 def SigmaEtendu(sigma,nb):
     res=[]
     for i in range(0,len(nb)):
@@ -67,12 +65,12 @@ def SigmaEtendu(sigma,nb):
 #COMPLEXITY : O(len(sigma)*max(len(nb[i][0])))
 
 #INPUT : l  integer
-#        T  (int * Q[X_1,...,X_l-1] * int) list : système triangulaire
+#        T  (int * Q[X_1,...,X_l-1] * int) list : triangular system
 #        Pl Q[X_1,...,X_l]
-#        pl integer        : degré de Pl
+#        pl integer        : degree of Pl
 #        P  Q[X_1,...,X_l]
-#        p  integer        : degré de P
-#OUTPUT: s (int list) list : le P-encoding des racines de Pl dans le système triangulaire T
+#        p  integer        : degree of P
+#OUTPUT: s (int list) list : P-encoding of Pl roots in T
 def RootCoding(l,T,Pl,pl,P,p):
     s=Zero(p+1)
     PP,deg=ListOfDerivate(l,P,p)
