@@ -19,19 +19,19 @@ attach("completing.sage")
 attach("parallelize.sage")
 attach("print.sage")
 
-#Création du dictionnaire pour le lifting
+#Creation of the dictionnary for lifting
 yolo=dict()
 yolo['1.']=[0,[],[]]
 
 #INPUT : lis int list
-#OUTPUT: s   string composée des des éléments de lis séparés par des points
+#OUTPUT: s   string   : elements of lis separated by points
 def conv_lis_str(lis):
     s= ''.join([str(_)+'.' for _ in lis])
     return s
 
 #INPUT : P   Q[X1,...,Xl]
 #        rac integer * (int * int list * Q[X1,...,Xl]) list
-#OUTPUT: i   integer : position de P dans rac si présent et 0 sinon
+#OUTPUT: i   integer : position of P in rac if present and 0 else
 def RechP (P,rac):
     m=len(rac)
     notfound=true
@@ -44,54 +44,54 @@ def RechP (P,rac):
     return i
 #COMPLEXITY : O(len(rac))
 
-#INPUT : PolElim Q[X1,...,Xn] list : polynômes issus de la phase d'élimination
-#        PolIni  Q[X1,...,Xn] list : polynômes initiaux
-#        l       integer  : niveau actuel
-#        k       integer  : niveau maximum
-#        a       int list : code la cellule en train d'être traitée
+#INPUT : PolElim Q[X1,...,Xn] list : polynomials of elim phase
+#        PolIni  Q[X1,...,Xn] list : initial polynomials 
+#        l       integer  : current level
+#        k       integer  : maximum level
+#        a       int list : codes the cell being currently treated
 #OUTPUT: None
-#Note  : fonction de lifting remplissant le dictionnaire yolo
-def Access(PolElim,PolIni,l,k,a): #Construction récursive de chaque niveau
+#Note  : function of lifting fulling yolo dictionnary
+def Access(PolElim,PolIni,l,k,a): #recursive constrcution of every level
     Cel=yolo[conv_lis_str(a)]
     if Cel[0]==0:
         Tsup=Cel[1]
         T=Cel[2]
         L,PP=LinePartition(PolElim[l-1],l,T)
         lon=len(PolIni[l-1])
-        if L==[]: #Aucun polynome n'a de racine
-            Tbis=T+[[1,TdV[l-1],1]] #X_l devient représentant de la ligne rÃ©elle
+        if L==[]: #No polynomial has a root
+            Tbis=T+[[1,TdV[l-1],1]] #X_l becomes the representant of the real line
             Teval=[]
             for j in range(lon):
                 P=PolIni[l-1][j]
                 p=P.degree()
-                s=Sign(l-1,T,P[p])  #Le signe d'un polynome sans racine réelle
-                Teval=Teval+[(P,s)] #est celui de son coefficient dominant
+                s=Sign(l-1,T,P[p])  #The sign of a polynomial with no roots
+                Teval=Teval+[(P,s)] #is the one of its leading coefficient
             b=a+[0]
             yolo[conv_lis_str(b)]=[1,Tsup+Teval,Tbis]  
-            if l<k:   #Si il reste un niveau à construire, on appelle récursivement
+            if l<k:   #if there is a level left to build, we call access recursively
                 Access(PolElim,PolIni,l+1,k,b)
             return ()
         else:
-            foret=[]  #La ligne réelle est scindée par des racines de polynomes
-            eval=[]   #On appelle donc completing pour avoir un représentant de
-            L=Completing(l,T,L,PP) #de chaque cellule
+            foret=[]  #Real line is split by roots of polynomials
+            eval=[]   #We call completing to obtain a representant of every cell
+            L=Completing(l,T,L,PP) 
             NewCel=[len(L),Tsup,T]
             yolo[conv_lis_str(a)]=NewCel
             for i in range(len(L)):
                 Teval=[]
-                ind=L[i][0] #L'indice i d'un Pi tel que L[i] code une racine de Pi 
+                ind=L[i][0] #The index j of P_j so that L[i] codes a root of Pj 
                 P=L[i][ind][2]
                 r=L[i][ind][0]
-                Tbis=T+[(r,P,Degree(l,T,P))] #Qu'on ajoute au système triangulaire
+                Tbis=T+[(r,P,Degree(l,T,P))] #We add to the triangular system
                 for j in range(lon):
                     Pol=PolIni[l-1][j]
                     pos=RechP(Pol,L[i])
                     if pos>0:
                         Teval=Teval+[(L[i][pos][2],L[i][pos][1][0])]
                     else:
-                        fini=False #tant qu'on peut simplifier
-                        trouve=True #si on a trouvé une simplification : on refait une boucle
-                        sP=1 #Sign de Pol
+                        fini=False #as long as we may simplify
+                        trouve=True #if we found a simplification : one more loop
+                        sP=1 #Sign of Pol
                         while (not fini) and trouve: 
                             for m in range(1,len(L[i])):
                                 trouve=False
@@ -107,16 +107,12 @@ def Access(PolElim,PolIni,l,k,a): #Construction récursive de chaque niveau
                                         Pol=Quotient(l,Pol,Pol2)
                                         sP=sP*L[i][m][1][0]
                         sP=sP*Sign(l,Tbis,Pol)
-<<<<<<< HEAD:src/accessibilite.sage
-                        Teval=Teval+[(PolIni[l-1][j],sP)]
+                        Teval+=[(PolIni[l-1][j],sP)]
                 b=a+[i]
                 EvalP=Teval+Tsup
                 yolo[conv_lis_str(b)]=[0,EvalP,Tbis]    
-=======
-                        Teval=Teval+[(PPlist[l-1][j],sP)]
->>>>>>> master:lifting.sage
-                if l<k: #On appelle récursivement sur chaque noeud la construction du 
-                    Access(PolElim,PolIni,l+1,k,b) #niveau suivant
+                if l<k: #We make a recursive call on every node to build next level
+                    Access(PolElim,PolIni,l+1,k,b)
             return ()
     else:
         if l<k:
