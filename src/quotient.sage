@@ -10,7 +10,6 @@
 #(*                                                                                     *)
 #(***************************************************************************************)
 
-<<<<<<< HEAD:src/quotient.sage
 attach("fonctions_generales.sage")
 
 #INPUT : l    integer
@@ -29,22 +28,3 @@ def Quotient(l,P,Q):
         P-=D*F
     return TdA[l](Q)
 #COMPLEXITY : O(p**(l+1))        
-=======
-#On tranforme tout un tas de fonctions en fonxion paralisé
-#Ui les fôtes d'orthographe c normal!!
-#JE COLLECTIONNE DES CANARD VIVANTS!!!
-
-@parallel
-def RootPar(l,T,Pl,pl,P,p,i):
-    return (RootCoding(l,T,Pl,pl,P,p),i)
-    
-@parallel
-def RootPar2(l,T,Pl,pl,P,p,i,j):
-    return (RootCoding(l,T,Pl,pl,P,p),i,j)
-
-@parallel
-def NormalizePar(l,T,P,i):
-    return (Normalize(l,T,P),i)
-
-
->>>>>>> master:parallelize.sage
