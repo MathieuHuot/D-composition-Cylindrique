@@ -107,10 +107,14 @@ def Access(PolElim,PolIni,l,k,a): #Construction récursive de chaque niveau
                                         Pol=Quotient(l,Pol,Pol2)
                                         sP=sP*L[i][m][1][0]
                         sP=sP*Sign(l,Tbis,Pol)
+<<<<<<< HEAD:src/accessibilite.sage
                         Teval=Teval+[(PolIni[l-1][j],sP)]
                 b=a+[i]
                 EvalP=Teval+Tsup
                 yolo[conv_lis_str(b)]=[0,EvalP,Tbis]    
+=======
+                        Teval=Teval+[(PPlist[l-1][j],sP)]
+>>>>>>> master:lifting.sage
                 if l<k: #On appelle récursivement sur chaque noeud la construction du 
                     Access(PolElim,PolIni,l+1,k,b) #niveau suivant
             return ()
