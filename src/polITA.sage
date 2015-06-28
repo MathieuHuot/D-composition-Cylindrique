@@ -38,7 +38,7 @@ class PolITA:
 
 #INPUT : P Q[X1,...,Xm]
 #        m integer (optionnal)
-#OUTPUT: m integer : nombre de variables effectivement dans P
+#OUTPUT: m integer : number of variables that appear in P
 def nbVariables(P,maxi=4):
     if P in QQ:
         return 0
@@ -48,12 +48,12 @@ def nbVariables(P,maxi=4):
 
 #INPUT : e1 list
 #        e2 list
-#OUTPUT: e  list : fusion de e1 et e2 en enlevant les doublons
+#OUTPUT: e  list : fusion of e1 and e2 by removing repetitions
 def Fusion(e1,e2):
     return list(set(e1+e2))
 
 #INPUT : ITA PolITA
-#OUTPUT: L   Q[X1,...,Xn] list : liste des polynômes apparaissant dans ITA
+#OUTPUT: L   Q[X1,...,Xn] list : polynomials that appear in ITA
 def listepol(ITA):
     L=[]
     Tr=ITA.transitions
@@ -73,8 +73,8 @@ def listepol(ITA):
     return L
 
 #INPUT : Con int list
-#        cel cellule
-#OUTPUT: b   boolean : test si il existe un polynome vérifiant la condition Con sur la cellule cel
+#        cel cell
+#OUTPUT: b   boolean : tests if there exists a polynomial satisfying Con condition in cel
 def Test(Con,cel):
     Cell=yolo[conv_lis_str(cel)]
     for po in Cell[1]:
@@ -82,9 +82,9 @@ def Test(Con,cel):
             return True
     return False
 
-#INPUT : etat etat
+#INPUT : etat state
 #        ITA  PolITA
-#OUTPUT: b boolean : dit si l'état etat est accessible dans le PolITA ITA
+#OUTPUT: b boolean : True iff etat is accessible in the PolITA ITA
 def accessible(etat,ITA):
     Polist=listepol(ITA)
     EPolist=Elim(Polist)
@@ -110,9 +110,9 @@ def accessible(etat,ITA):
                 break
         Pere=Frere
         i=i+1
-    acc=[Config(qo,a)]  #la configuration initiale
-    newacc=acc #Nouveaux états à parcourir
-    oldacc=[]#Etats accessibles précedemment
+    acc=[Config(qo,a)]  #initial configuration
+    newacc=acc #New states to go
+    oldacc=[]#previously accessible states
     while set(acc) != set(oldacc):
         for conf in newacc :
             if conf.etat==etat:
@@ -120,33 +120,33 @@ def accessible(etat,ITA):
         ajout=[]
         for conf in newacc:
             if not (conf in oldacc):
-                confAcc=Transition(conf,EPolist,Polist,ITA) # états accessibles en une étape
+                confAcc=Transition(conf,EPolist,Polist,ITA) #reacheable states in 1 step
                 ajout=ajout+confAcc
         oldacc=acc
         newacc=ajout
         acc=Fusion(newacc,acc)
     return False
 
-#INPUT : conf: Une configuration initiame
-#        EPolist: L'ensemble des polynomes obtenus par Elim
-#        Polist: L'ensemble des polynomes initials
-#        ITA: un polITA
-#OUTPUT: confAtteinte : liste des configurations accessibles en une étape
+#INPUT : conf: an initial configuration
+#        EPolist: output of elim phase
+#        Polist: initial polynomials
+#        ITA: a polITA
+#OUTPUT: confAtteinte : list of reachable configurations in one step
 def Transition(conf,EPolist,Polist,ITA):
     q1=conf.etat
     cel=conf.cellule
     Tr=ITA.transitions
     etats=ITA.etats
-    #On ajoute l'état suivant par passage du temps
+    #We add the next state by time elapsing
     hauteur=len(cel)
     rang=cel[hauteur-1]
     ap=[cel[i] for i in range(hauteur-1)]
     pere=yolo[conv_lis_str(ap)]
-    if rang<(pere[0]-1): #On vérifie que l'on est pas en bout de ligne
+    if rang<(pere[0]-1): #We check we are not in the end of the line
         confAtteinte=[Config(q1,ap+[rang+1])]
     else:
         confAtteinte=[]
-    #Puis les configurations obtenues après tran
+    #Then configurations obtained after tran
     for q2 in etats:
         for trans in Tr:
             if trans[2]==q1 and trans[3]==q2: 
@@ -155,17 +155,17 @@ def Transition(conf,EPolist,Polist,ITA):
                 nbc=len(conditions)
                 i=0
                 while valide and i<nbc:
-                    valide=Test(conditions[i],cel) #Teste si le polynome vérifie la condition 
+                    valide=Test(conditions[i],cel) #Tests if the polynomial satisfies the condition
                     i=i+1
                 if valide:
                     Update=trans[1]
-                    NewCel=AddCel(EPolist,Polist,cel,q1,q2,Update,ITA) #Renvoie la cellule en fin de transition
+                    NewCel=AddCel(EPolist,Polist,cel,q1,q2,Update,ITA) #Returns the cell after the transition
                     newConf=Config(q2,NewCel)
                     confAtteinte=confAtteinte+[newConf]
 
     return confAtteinte
 
-#Renvoie la cellule associée  après la transition q1->q2 en partant de cel
+#Returns the linked cell after the transition q1->q2 from cell
 #INPUT : EPolist 
 #        Polist
 #        cel
@@ -176,11 +176,11 @@ def Transition(conf,EPolist,Polist,ITA):
 #OUTPUT: b    
 def AddCel(EPolist,Polist,cel,q1,q2,P,ITA):
     if q1.clock>q2.clock:
-        #Cas où on remonte d'un cran:
+        #Case when we go a level down:
         b=[cel[i] for i in range(q2.clock())]
         return b
         
-    #Les autres cas:
+    #Other cases:
     a=[cel[i] for i in range(len(cel)-1)]
     Pere=yolo[conv_lis_str(a)]
     i=q1.clock
