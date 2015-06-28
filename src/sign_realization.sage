@@ -10,14 +10,14 @@
 #(*                                                                                     *)
 #(***************************************************************************************)
 
-import numpy #pour le produit tensoriel
+import numpy #for tensorial product
 
-#1°)Conversion des indices
-#~~~~~~~~~~~~~~~~~~~~~~~~~
+#1°)Index conversion
+#~~~~~~~~~~~~~~~~~~~
 
 #INPUT : elem  'a
 #        liste 'a list
-#OUTPUT: i     integer : position de elem dans liste et 0 si non trouvé
+#OUTPUT: i     integer : position of elem in liste and 0 if not found
 def ConvertUplet(elem,liste):
     l=len(liste)
     for i in range(0,l):
