@@ -24,7 +24,7 @@ def PasDansR(P,i):
     if i==0 or P==0:
         return false
     else:
-        P=P+0*TdV[i-1]
+        P=TdA[i](P)
         p=P.degree()
         if p > 0 :
             return true
@@ -37,15 +37,15 @@ def PasDansR(P,i):
 #        P   Q[X1,...,Xl-1][Xl]
 #OUTPUT: res Q[X1,...,Xl-1][Xl] list : polynomes of the truncature of P
 def Tru(l,P):
-    Q=0*TdV[l-1]+P
-    p=Q.degree()
+    P=TdA[l](P)
+    p=P.degree()
     res=[]
     for r in range(p,-1,-1):
-        if Q[r]!=0:
-            res=res+[Q]
+        if P[r]!=0:
+            res=res+[P]
         if not PasDansR(P[r],l-1): #ie a_r is in R*
             break
-        Q=Q-Q[r]*TdV[l-1]**r
+        P-=P[r]*TdV[l-1]**r
     return res
 #COMPLEXITY : O(deg(P)*(l+deg(P)))
 
@@ -68,8 +68,8 @@ def Simplify_1(lis,i):
     lon=len(lis)
     for j in range(lon): #If P_i divides P_j we may simplify by keeping
         for k in range(j):       #P_j//P_i and P_i
-            P1=lis[j]
-            P2=lis[k]
+            P1=TdA[i](lis[j])
+            P2=TdA[i](lis[k])
             P3=TdA[i](gcd(A(P1),A(P2)))
             p1=P1.degree()
             p2=P2.degree()
@@ -89,7 +89,7 @@ def Simplify_1(lis,i):
             if on_veut_pas:
                 break
         if not on_veut_pas: #Then we keep the polynomial
-            NewA=NewA+[TdA[i](lis[j])]
+            NewA=NewA+[lis[j]]
     return NewA
 #COMPLEXITY : O(lon**2 * 2**i * degmax(P_i) )
 
@@ -104,7 +104,7 @@ def Simplify_2(P,i):
     for j in range(lon-1):
         P1=lis[j]
         P2=lis[j+1]
-        P3=TdA[i](gcd(A(P1),A(P2)))
+        P3=gcd(A(P1),A(P2))
         if PasDansR(P3,i): #Non trivial gcd
             P3=Primitif(i,P3) #We make it primitive
             lis[j]=Quotient(i,P1,P3) #We simplify P_j and P_j+1
@@ -156,6 +156,7 @@ def Elim(Q):
         for Pol in P[i]: #We calculate Elim_(X_i+i)(P_i)
             TruPol=Tru(i+1,Pol)
             for R in TruPol:
+                R=TdA[i+1](R)
                 r=R.degree()
                 if PasDansR(R[r],i): #If leading coef is not in QQ we add it
                     P[i-1]=P[i-1]+[Primitif(i,R[r])]
@@ -167,6 +168,7 @@ def Elim(Q):
                 for Pol2 in P[i]:
                     TruPol2=Tru(i+1,Pol2)
                     for T in TruPol2:
+                        T=TdA[i+1](T)
                         t=T.degree()
                         if t<=r:
                             if t==r: #We make a call to IntRem before SubResultant
