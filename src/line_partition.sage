@@ -59,9 +59,9 @@ def EnlargeWithGauche(SLi,SLL,NormedQ,SLj,J):
             if SLL[j]==SLj[k][J][1]: #Dans ce cas c'est une racine de Q
                 r=k+1
                 break
-        res=res + [[[r,SLL[j],Q]]+SLi[j]]
+        res+=[[[r,SLL[j],Q]]+SLi[j]]
     for j in range(lon3,lon):
-        res=res+[SLi[j]]
+        res+=[SLi[j]]
     return res
 #COMPLEXITY : O(lon * lon2)    
     
