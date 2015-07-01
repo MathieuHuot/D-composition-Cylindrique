@@ -52,7 +52,7 @@ def Eval(L,T,l,PPlist,i):
     r=L[i][ind][0]
     Tbis=T+[(r,P,Degree(l,T,P))] #Qu'on ajoute au système triangulaire
     for j in range(lon):
-        Pol=PPlist[l-1][j]
+        Pol=TdA[l](PPlist[l-1][j])
         pos=RechP(Pol,L[i])
         if pos>0:
             Teval=Teval+[(L[i][pos][2],L[i][pos][1][0])]
@@ -63,7 +63,7 @@ def Eval(L,T,l,PPlist,i):
             while (not fini) and trouve: 
                 for m in range(1,len(L[i])):
                     trouve=False
-                    Pol2=L[i][m][2]
+                    Pol2=TdA[l](L[i][m][2])
                     Al=IntRem2(l,Pol,Pol.degree(),Pol2,Pol2.degree())
                     if Al==0:
                         trouve=True
@@ -88,7 +88,7 @@ def Eval2(L,Tbis,l,PPlist,i):
     Teval=[]
     lon=len(PPlist[l-1])
     for j in range(lon):
-        Pol=PPlist[l-1][j]
+        Pol=TdA[l](PPlist[l-1][j])
         pos=RechP(Pol,L[i])
         if pos>0:
             Teval=Teval+[(L[i][pos][2],L[i][pos][1][0])]
@@ -99,7 +99,7 @@ def Eval2(L,Tbis,l,PPlist,i):
             while (not fini) and trouve: 
                 for m in range(1,len(L[i])):
                     trouve=False
-                    Pol2=L[i][m][2]
+                    Pol2=TdA[l](L[i][m][2])
                     Al=IntRem2(l,Pol,Pol.degree(),Pol2,Pol2.degree())
                     if Al==0:
                         trouve=True
@@ -131,7 +131,7 @@ def Lift(PPtot,PPlist,l,T,k): #Construction récursive de chaque niveau
         Tbis=T+[(1,TdV[l-1],1)] #X_l devient représentant de la ligne réelle
         Teval=[]
         for j in range(lon):
-            P=PPlist[l-1][j]
+            P=TdA[l](PPlist[l-1][j])
             p=P.degree()
             s=Sign(l-1,T,P[p])  #Le signe d'un polynome sans racine réelle
             Teval=Teval+[(P,s)] #est celui de son coefficient dominant
@@ -178,5 +178,3 @@ def Lift(PPtot,PPlist,l,T,k): #Construction récursive de chaque niveau
                 else: #Ou alors on est arrivé au plus bas niveau et on a des feuilles
                     foret+=[[Teval,[]]]
         return foret
-
-
