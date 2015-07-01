@@ -104,11 +104,11 @@ A=PolynomialRing(QQ,'X',7)
 def ListOfDerivate(l,P,p):
     Res=[P]
     deg=[p]
-    Q=Primitif(l,P)
+    #Q=Primitif(l,P)
     for i in range(p-1,-1,-1):
-        Q=diff(Q,TdV[l-1])
+        P=diff(P,TdV[l-1])
         #Q=Primitif(l,Q)
-        Res+=[Q]
+        Res+=[P]
         deg+=[i]
     return Res,deg
 #COMPLEXITY : O(p*p)
@@ -130,6 +130,7 @@ def InitPoly (l,R,q):
 #        i   rationnal
 #OUTPUT: Res Q[X1,...,Xl] : Res=P(X+i)
 def Decale(l,P,i):
+    P=TdA[l](P)
     p=P.degree()
     Res=P[p]
     for j in range(p-1,-1,-1): #Horner like
