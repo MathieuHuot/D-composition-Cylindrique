@@ -154,7 +154,7 @@ def Normalize(l,T,P):
     Res=0
     for j in range(0,p+1):
         Res+=P[j]*TdV[l-1]**j #Main variable of P is X_l
-    Res=Primitif(l,Res)    #We make it primitive
+    #Res=Primitif(l,Res)    #We make it primitive
     return Res,p
 #COMPLEXITY: O(2EXP)
 
