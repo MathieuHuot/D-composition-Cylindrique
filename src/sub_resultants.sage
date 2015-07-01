@@ -32,8 +32,7 @@ def IntRem2(l,Q,q,P,p):
             R[j]= R[j]*P[p]
     for i in range(p,q+1):
         R[i]= 0
-    Res = InitPoly(l,R,q) #Res est primitive
-    return Res
+    return InitPoly(l,R,q)
 #COMPLEXITY: O(q²-p²)
 
 #INPUT : l integer
@@ -62,7 +61,7 @@ def SubResultants(l,P,p,Q,q):
     s[q]=t[q]
     i=p+1
     j=p
-    while q!=-1:
+    while True:
         k=q
         t[j-1]=SresP[j-1][k]
         if k==j-1:
@@ -75,10 +74,11 @@ def SubResultants(l,P,p,Q,q):
             SresP[k]=Quotient(l,s[k]*SresP[j-1],t[j-1])
         Pol=IntRem2(l,t[j-1]*s[k]*SresP[i-1],j,SresP[j-1],k) #Pol is in Q[X_1,...X_l-1][X_l]
         if Pol==0:
-            q=-1
+            break
         else:
+            Pol=TdA[l](Pol)
             q=Pol.degree()
-        div=s[j]*t[i-1]+0*TdV[l-1] #values in Q[X_1,...X_l-1][X_l]
+        div=TdA[l](s[j]*t[i-1]) #values in Q[X_1,...X_l-1][X_l]
         SresP[k-1]=-Quotient(l,Pol,div)
         i=j
         j=k
@@ -86,6 +86,6 @@ def SubResultants(l,P,p,Q,q):
         s[li]=0
     s[p]=P[p]
     #for i in range(p+1):
-    #    s[i]=Primitif(l-1,s[i]) #We make it primitive
+    #   s[i]=Primitif(l-1,s[i]) #We make it primitive
     return s
 #COMPLEXITY : O(p*2^l*2^p)
