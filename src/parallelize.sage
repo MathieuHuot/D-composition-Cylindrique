@@ -11,10 +11,11 @@
 #(***************************************************************************************)
 
 NB_CORES=8
+USED_CORES=NB_CORES
 
 #Switch parallelization mode on/off and ask for the number or cores to use
 def Parallelize_Mode():
-    print("Please enter True if you want to switch parallelization mode on and False else.")
+    print("Please enter 1 if you want to switch parallelization mode ON and 0 else.")
     prompt='>'
     a=int(raw_input(prompt))
     global ROOT_PAR
@@ -32,13 +33,13 @@ def Parallelize_Mode():
     if a:
         print("Parallelization switched on.")
         print("Please enter the number or cores you want to use for parallelization")
-        global NB_CORES
+        global USED_CORES
         b=int(raw_input(prompt))
         if b<1:
             b=1
         elif b>NB_CORES:
             b=NB_CORES
-        NB_CORES=b
+        USED_CORES=b
     else:
         print("Parallelization switched off.")
         
