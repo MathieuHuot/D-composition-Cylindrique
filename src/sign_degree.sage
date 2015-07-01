@@ -9,6 +9,7 @@
 #(*                                                                                     *)
 #(***************************************************************************************)
 
+
 #INPUT : l    integer
 #        T    (int * Q[X_1,...X_l] * int) list : triangular sytem
 #        P    Q[X_1,...X_l]
@@ -29,12 +30,12 @@ def Sign(l,T,P):
 #        P   Q[X_1,...X_l]
 #OUTPUT: res integer : degree of P(Xl) in T
 def Degree(l,T,P):
+    P=TdA[l](P) #be assured P is in Q[X_1,...X_l]
     if P in QQ:
         if P==0:
             return -1
         return 0
     i=0
-    P=0*TdV[l-1] + P #be assured P is in Q[X_1,...X_l]
     p=P.degree() 
     s=Sign(l-1,T,P[p])
     while s==0:
