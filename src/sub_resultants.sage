@@ -85,7 +85,7 @@ def SubResultants(l,P,p,Q,q):
     for li in range(0,j-1):
         s[li]=0
     s[p]=P[p]
-    for i in range(p+1):
-        s[i]=Primitif(l-1,s[i]) #We make it primitive
+    #for i in range(p+1):
+    #    s[i]=Primitif(l-1,s[i]) #We make it primitive
     return s
 #COMPLEXITY : O(p*2^l*2^p)
