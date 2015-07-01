@@ -144,13 +144,13 @@ def SignRealization(l,T,P,p,Q,deg):
     TaQ=Zero(3)
     m=len(Q)#nombre de polynomes Q
     dP=diff(P+0*TdV[l-1],TdV[l-1])#Dérivée de P
-    dP=Primitif(l,dP)#On le rend primitif
+    #dP=Primitif(l,dP)#On le rend primitif
 #5.2: Cas de Base   
     for e in [0,1,2]:
         Ro=dP*(Q[m-1])^e
         r=p-1+deg[m-1]*e
         R,r=IntRem(l,T,Ro,r,P,p)
-        R=Primitif(l,R) #On le rend primitif
+        #R=Primitif(l,R) #On le rend primitif
         TaQ[e]=PmVPol(l,T,P,p,R,r) #Calcul des premiers TaQ
     TaQM=Mcol(TaQ)
     nbM=invM1*TaQM
@@ -184,7 +184,7 @@ def SignRealization(l,T,P,p,Q,deg):
                 R=R*(Q[j])**(Uplet[j-i+1])
                 r=r+deg[j]*(Uplet[j-i+1])
             R,r=IntRem(l,T,R,r,P,p)
-            R=Primitif(l,R) #On le rend primitif
+            #R=Primitif(l,R) #On le rend primitif
             TaQi[ConvertUplet(Uplet,extA)]=PmVPol(l,T,P,p,R,r)
         TaQM=Mcoli(TaQi)
         nbM=((extM)^(-1))*TaQM
