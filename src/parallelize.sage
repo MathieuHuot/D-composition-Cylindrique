@@ -44,35 +44,35 @@ def Parallelize_Mode():
         print("Parallelization switched off.")
         
 ROOT_PAR=True
-@parallel
+@parallel(USED_CORES)
 def RootPar(l,T,Pl,pl,P,p,i):
     return (RootCoding(l,T,Pl,pl,P,p),i)
     
 ROOT_PAR2=True    
-@parallel
+@parallel(USED_CORES)
 def RootPar2(l,T,Pl,pl,P,p,i,j):
     return (RootCoding(l,T,Pl,pl,P,p),i,j)
 
 NORM_PAR=True
-@parallel
+@parallel(USED_CORES)
 def NormalizePar(l,T,P,i):
     return (Normalize(l,T,P),i)
 
 LIFT_PAR=True
-@parallel
+@parallel(USED_CORES)
 def LiftPar(PPtot,PPlist,l,T,k,i):
     return (Lift(PPtot,PPlist,l,T,k),i)
 
-@parallel
+@parallel(USED_CORES)
 def EvalPar(L,T,l,PPlist,i,j):
     return (Eval(L,T,l,PPlist,i)[0],j)
 
 PAR_PCC=True
-@parallel
+@parallel(USED_CORES)
 def ParPreCalculCompleting(l,T,PP,i,j):
     return PreCalculCompleting(l,T,PP,i,j)
     
 PAR_PCC2=True    
-@parallel
+@parallel(USED_CORES)
 def ParPreCalculCompleting2(l,T,PP,i):
     return PreCalculCompleting2(l,T,PP,i)
