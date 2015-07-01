@@ -60,7 +60,7 @@ def TriRapide(L):
 def SigmaEtendu(sigma,nb):
     res=[]
     for i in range(0,len(nb)):
-        res=res+[sigma[i] for k in range(0,nb[i][0])]
+        res+=[sigma[i] for k in range(0,nb[i][0])]
     return res
 #COMPLEXITY : O(len(sigma)*max(len(nb[i][0])))
 
