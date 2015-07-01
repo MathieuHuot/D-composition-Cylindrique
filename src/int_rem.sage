@@ -37,6 +37,6 @@ def IntRem(l,T,Q,q,P,p):
     Res=0
     for i in range(r+1):
         Res+=Aux[i]*TdV[l-1]**i
-    Res=Primitif(l,Res)#We make it primitive
+    #Res=Primitif(l,Res)#We make it primitive
     return Res,r
 #COMPLEXITY : O(2EXP)
