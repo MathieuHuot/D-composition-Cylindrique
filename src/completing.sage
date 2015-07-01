@@ -64,7 +64,7 @@ def PreCalculCompleting(l,T,PP,i,j):
     P,p=PP[i]
     Q,q=PP[j]
     pol=diff(P*Q,TdV[l-1])
-    pol=Primitif(l,pol) #Make it primitive
+    #pol=Primitif(l,pol) #Make it primitive
     pol,p=Normalize(l,T,pol)
     SLL=RootCoding(l,T,pol,p,pol,p)
     shortL=Singleton(SLL,pol) 
@@ -85,7 +85,7 @@ def PreCalculCompleting2(l,T,PP,i):
     P,p=PP[i] #polynomial Pi and its degree
     P=diff(P,TdV[l-1]) #Pi'
     p-=1 #and its degree
-    P=Primitif(l,P) #We make it primitive
+    #P=Primitif(l,P) #We make it primitive
     SLL=RootCoding(l,T,P,p,P,p)
     shortL=Singleton(SLL,P) 
     for j in range(m-1,-1,-1):
@@ -104,7 +104,7 @@ def PreCalculCompleting2(l,T,PP,i):
 def CalculCompleting(l,T,PP,oldP,P):
     m=len(PP)
     pol=diff(P*oldP,TdV[l-1])
-    pol=Primitif(l,pol) #We make it primitive
+    #pol=Primitif(l,pol) #We make it primitive
     pol,p=Normalize(l,T,pol)
     SLL=RootCoding(l,T,pol,p,pol,p)
     shortL=Singleton(SLL,pol) 
