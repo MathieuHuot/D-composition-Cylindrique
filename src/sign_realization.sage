@@ -143,7 +143,7 @@ def SignRealization(l,T,P,p,Q,deg):
     TaQM=Mcol([0,0,0]) 
     TaQ=Zero(3)
     m=len(Q)#nombre de polynomes Q
-    dP=diff(P,TdV[l-1])#Dérivée de P
+    dP=TdA[l](diff(TdA[l](P),TdV[l-1]))#Dérivée de P
     #dP=Primitif(l,dP)#On le rend primitif
 #5.2: Cas de Base   
     for e in [0,1,2]:
