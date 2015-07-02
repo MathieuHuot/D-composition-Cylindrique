@@ -9,8 +9,15 @@
 #(*                                                                                     *)
 #(***************************************************************************************)
 
-Tests=False
-if Tests:
+Test1=False
+Test2=True
+
+import time
+import random
+
+attach("lifting.sage")
+
+if Test1:
     #Sign
     T=[[2, X1^2 - 2, 2], [2, X2^2 - 7, 2], [1, 25*X3^3 - 64, 3]]
     P=P=X1*X3**2-X2
@@ -27,8 +34,8 @@ if Tests:
     print(Elim(Q))
     #Crée un élément d'un Thom-encoding fictif
     def CreeThom(n):
-    s=[random.randint(-1,1) for j in range(0,n-1)]+[1]
-    return s
+        s=[random.randint(-1,1) for j in range(0,n-1)]+[1]
+        return s
     #int -> int list
     #Crée un Thom-encoding fictif pour tester le tri
     def CreeEncoding(n,p):
@@ -42,8 +49,6 @@ if Tests:
     C=Lifting(R,Q)
     #Renvoie un polynome de degré inférieur ou égal à deg,
     #dont les coefficients sont entre mini et maxi
-    import random
-    import time
 
     def RandomPol(l,deg=4,mini=-10,maxi=10):
         if l==0:
@@ -72,3 +77,11 @@ if Tests:
     def CreationMatrice (nbx,nby,min,max) :
         import random
         return [[random.randint(min, max) for i in range(nby)] for j in range(nbx)]
+
+if Test2:
+    def Test(L):
+        C=Elim(L)
+        a=time.clock()
+        D=Lifting(C,L)
+        b=time.clock()
+        print("Ca prend : %s" %(b-a))
