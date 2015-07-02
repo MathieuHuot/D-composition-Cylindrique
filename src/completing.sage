@@ -19,7 +19,7 @@ def EnlargeWithCompleting(lis,code,Q):
     n=len(lis)
     res=[]
     for i in range(n):
-        res=res+[[[-1,code[i],Q]]+lis[i]]            
+        res+=[[[-1,code[i],Q]]+lis[i]]            
     return res
 #COMPLEXITY : O(len(lis))
 
