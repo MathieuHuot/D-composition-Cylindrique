@@ -72,7 +72,10 @@ I) Avancement du stage
 
 -tests de PolITA
 -amélioration du produit tensoriel de SignRealisation
--amélioration de la fonction Quotient 
+-amélioration de la fonction Quotient
+-Redaction du mémoire de recherche (utilisation de TikZ, Beamer et LateX)
+-Debuggage des algorithme d'accessibilité
+
 ~~~~~~~~
 II) Difficultés surmontées
 ==========================
