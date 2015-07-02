@@ -3,119 +3,221 @@
 #(*                                                                                     *)
 #(*                              GARNIER Remy                                           *)
 #(*                              HUOT Mathieu                                           *)
-#(*                    Licence 3 : stage de Mathématiques                               *)
-#(*                           Version Q[X1,...Xn]                                       *)
-#(*                          On-the-fly algorithm                                       *)
+#(*                    Licence 3 : stage de MathÃ©matiques                              *)
+#(*                            Version Q[X1,...Xn]                                      *)
+#(*                           Accessibility decision                                    *)
 #(*                                                                                     *)
 #(*                                                                                     *)
 #(***************************************************************************************)
 
-test=False
-debug=False
+attach("accessibilite.sage")
+import pdb
 
-attach("elim.sage")
-attach("line_partition.sage")
-attach("completing.sage")
-attach("parallelize.sage")
-attach("print.sage")
 
-#Creation of the dictionnary for lifting
-yolo=dict()
-yolo['1.']=[0,[],[]]
+class Etat:
+    def __init__(self,nom,clock):
+        self.nom=nom
+        self.clock= clock
 
-#INPUT : lis int list
-#OUTPUT: s   string   : elements of lis separated by points
-def conv_lis_str(lis):
-    s= ''.join([str(_)+'.' for _ in lis])
-    return s
+class Config:
+    """Une configuration d'un automate est un couple constitué:
+    -d'un etat actif
+    -d'une cellule actif"""
+    def __init__(self,etat,cellule):
+        self.cellule=cellule
+        self.etat=etat
+    
+class PolITA:
+    """ Classe définissant un automate temporisé à garde polynomiale définie par:
+    -Une liste d'états
+    -Un dictionnaire de transitions """
 
-#INPUT : P   Q[X1,...,Xl]
-#        rac integer * (int * int list * Q[X1,...,Xl]) list
-#OUTPUT: i   integer : position of P in rac if present and 0 else
-def RechP (P,rac):
-    m=len(rac)
-    notfound=true
-    i=m-1
-    while i > 0 and notfound:
-        if rac[i][2]==P:
-            notfound=false
-        else: 
-            i=i-1
-    return i
-#COMPLEXITY : O(len(rac))
+    def __init__(self,etats,initials,finals,transitions):
+        self.etats=etats
+        self.initial=initials
+        self.final=finals
+        self.transitions=transitions
 
-#INPUT : PolElim Q[X1,...,Xn] list : polynomials of elim phase
-#        PolIni  Q[X1,...,Xn] list : initial polynomials 
-#        l       integer  : current level
-#        k       integer  : maximum level
-#        a       int list : codes the cell being currently treated
-#OUTPUT: None
-#Note  : function of lifting fulling yolo dictionnary
-def Access(PolElim,PolIni,l,k,a): #recursive constrcution of every level
-    Cel=yolo[conv_lis_str(a)]
-    if Cel[0]==0:
-        Tsup=Cel[1]
-        T=Cel[2]
-        L,PP=LinePartition(PolElim[l-1],l,T)
-        lon=len(PolIni[l-1])
-        if L==[]: #No polynomial has a root
-            Tbis=T+[[1,TdV[l-1],1]] #X_l becomes the representant of the real line
-            Teval=[]
-            for j in range(lon):
-                P=PolIni[l-1][j]
-                p=P.degree()
-                s=Sign(l-1,T,P[p])  #The sign of a polynomial with no roots
-                Teval=Teval+[(P,s)] #is the one of its leading coefficient
-            b=a+[0]
-            yolo[conv_lis_str(b)]=[1,Tsup+Teval,Tbis]  
-            if l<k:   #if there is a level left to build, we call access recursively
-                Access(PolElim,PolIni,l+1,k,b)
-            return ()
-        else:
-            foret=[]  #Real line is split by roots of polynomials
-            eval=[]   #We call completing to obtain a representant of every cell
-            L=Completing(l,T,L,PP) 
-            NewCel=[len(L),Tsup,T]
-            yolo[conv_lis_str(a)]=NewCel
-            for i in range(len(L)):
-                Teval=[]
-                ind=L[i][0] #The index j of P_j so that L[i] codes a root of Pj 
-                P=L[i][ind][2]
-                r=L[i][ind][0]
-                Tbis=T+[(r,P,Degree(l,T,P))] #We add to the triangular system
-                for j in range(lon):
-                    Pol=PolIni[l-1][j]
-                    pos=RechP(Pol,L[i])
-                    if pos>0:
-                        Teval=Teval+[(L[i][pos][2],L[i][pos][1][0])]
-                    else:
-                        fini=False #as long as we may simplify
-                        trouve=True #if we found a simplification : one more loop
-                        sP=1 #Sign of Pol
-                        while (not fini) and trouve: 
-                            for m in range(1,len(L[i])):
-                                trouve=False
-                                Pol2=L[i][m][2]
-                                Al=IntRem2(l,Pol,Pol.degree(),Pol2,Pol2.degree())
-                                if Al==0:
-                                    trouve=True
-                                    if L[i][m][1][0]==0: #i.e Pol2(\alpha)=0
-                                        sP=0
-                                        fini=True
-                                        break
-                                    else:
-                                        Pol=Quotient(l,Pol,Pol2)
-                                        sP=sP*L[i][m][1][0]
-                        sP=sP*Sign(l,Tbis,Pol)
-                        Teval+=[(PolIni[l-1][j],sP)]
-                b=a+[i]
-                EvalP=Teval+Tsup
-                yolo[conv_lis_str(b)]=[0,EvalP,Tbis]    
-                if l<k: #We make a recursive call on every node to build next level
-                    Access(PolElim,PolIni,l+1,k,b)
-            return ()
+#INPUT : P Q[X1,...,Xm]
+#        m integer (optionnal)
+#OUTPUT: m integer : number of variables that appear in P
+def nbVariables(P,maxi=4):
+    if P in QQ:
+        return 0
+    while P in TdA[maxi]:
+        maxi=maxi-1
+    return maxi
+
+#INPUT : e1 list
+#        e2 list
+#OUTPUT: e  list : fusion of e1 and e2 by removing repetitions
+def Fusion(e1,e2):
+    return list(set(e1+e2))
+
+#INPUT : ITA PolITA
+#OUTPUT: L   Q[X1,...,Xn] list : polynomials that appear in ITA
+def listepol(ITA):
+    L=[]
+    Tr=ITA.transitions
+    nbV=-1
+    for i in range(len(Tr)):
+        for P in Tr[i][0]:
+            j=nbVariables(P[0])
+            for k in range(nbV+1,j+1):
+                L=L+[[TdV[k]]]
+            nbV=max(j,nbV)
+            L[j]=L[j]+[P[0]]
+
+    for i in range(len(Tr)):
+         P = Tr[i][1]
+         if P!="None":
+             j=nbVariables(P)
+             L[j]+=[P]
+    return L
+
+#INPUT : Con int list
+#        cel cell
+#OUTPUT: b   boolean : tests if there exists a polynomial satisfying Con condition in cel
+def Test(Con,cel):
+    Cell=yolo[conv_lis_str(cel)]
+    for po in Cell[1]:
+        if po==Con:
+            return True
+    return False
+
+#INPUT : etat state
+#        ITA  PolITA
+#OUTPUT: b boolean : True iff etat is accessible in the PolITA ITA
+def accessible(etat,ITA):
+    #pdb.set_trace()
+    Polist=listepol(ITA)
+    maxdeg=len(Polist)
+    EPolist=Elim(Polist)
+    acc=[]
+    qo=(ITA.initial)[0]
+    l=qo.clock
+    Access(EPolist,Polist,1,l,[1])
+    etats=ITA.etats
+    a=[1]
+    Pere=yolo[conv_lis_str(a)]
+    i=1
+    while i <=l:
+        trouve=False
+        for j in range(Pere[0]):
+            Frere=yolo[conv_lis_str(a+[j])]
+            for Co in Frere[1]:
+                if Co[0]==TdV[i-1] and Co[1]==0:
+                    a=a+[j]
+                    trouve=True
+                    Access(EPolist,Polist,i+1,i+1,a)
+                    break
+            if trouve:
+                break
+        Pere=Frere
+        i=i+1
+    acc=[Config(qo,a)]  #initial configuration
+    newacc=acc #New states to go
+    oldacc=[]#previously accessible states
+    while set(acc) != set(oldacc):
+        for conf in newacc :
+            if conf.etat==etat:
+                return True
+        ajout=[]
+        for conf in newacc:
+            if not (conf in oldacc):
+                confAcc=Transition(conf,EPolist,Polist,ITA,maxdeg) #reacheable states in 1 step
+                ajout=ajout+confAcc
+        oldacc=acc
+        newacc=ajout
+        acc=Fusion(newacc,acc)
+    return False
+
+#INPUT : conf: an initial configuration
+#        EPolist: output of elim phase
+#        Polist: initial polynomials
+#        ITA: a polITA
+#OUTPUT: confAtteinte : list of reachable configurations in one step
+def Transition(conf,EPolist,Polist,ITA,maxdeg):
+    q1=conf.etat
+    cel=conf.cellule
+    Tr=ITA.transitions
+    etats=ITA.etats
+    #We add the next state by time elapsing
+    hauteur=len(cel)
+    rang=cel[hauteur-1]
+    ap=[cel[i] for i in range(hauteur-1)]
+    pere=yolo[conv_lis_str(ap)]
+    if rang<(pere[0]-1): #We check we are not in the end of the line
+        confAtteinte=[Config(q1,ap+[rang+1])]
     else:
-        if l<k:
-            for i in range(Cel[0]):
-                Access(PolElim,PolIni,l+1,k,a+[i])
-        return ()
+        confAtteinte=[]
+    #Then configurations obtained after tran
+    for q2 in etats:
+        for trans in Tr:
+            if trans[2]==q1 and trans[3]==q2: 
+                valide=True
+                conditions=trans[0]
+                nbc=len(conditions)
+                i=0
+                while valide and i<nbc:
+                    valide=Test(conditions[i],cel) #Tests if the polynomial satisfies the condition
+                    i=i+1
+                if valide:
+                    Update=trans[1]
+                    NewCel=AddCel(EPolist,Polist,cel,q1,q2,Update,ITA,maxdeg) #Returns the cell after the transition
+                    newConf=Config(q2,NewCel)
+                    confAtteinte=confAtteinte+[newConf]
+
+    return confAtteinte
+
+#Returns the linked cell after the transition q1->q2 from cell
+#INPUT : EPolist 
+#        Polist
+#        cel
+#        q1
+#        q2
+#        P
+#        ITA
+#OUTPUT: b    
+def AddCel(EPolist,Polist,cel,q1,q2,P,ITA,maxdeg):
+        
+    #pdb.set_trace()
+    if q1.clock>q2.clock:
+        #Case when we go a level down:
+        b=[cel[i] for i in range(q2.clock())]
+        return b
+
+
+    
+    #Other cases:
+    a=[cel[i] for i in range(len(cel)-1)]
+    Pere=yolo[conv_lis_str(a)]
+    i=q1.clock
+    while i <=q2.clock: 
+        trouve=False
+        if P=="None":#No Update:
+            a=cel
+            
+            P=TdV[i]
+            if i<maxdeg:
+                Access(EPolist,Polist,i+1,i+1,a)
+            i=i+1
+            Pere=yolo[conv_lis_str(a)]
+
+        else:
+            for j in range(Pere[0]):
+                Frere=yolo[conv_lis_str(a+[j])]
+                for Co in Frere[1]:
+                    if Co[0]==P and Co[1]==0:
+                        a=a+[j]
+                        trouve=True
+                        if i<maxdeg:
+                            Access(EPolist,Polist,i+1,i+1,a)
+                        break
+                if trouve:
+                    break
+            Pere=Frere
+            P=TdV[i]
+            i=i+1
+    return a
+
