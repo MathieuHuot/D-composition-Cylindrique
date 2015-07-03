@@ -132,9 +132,8 @@ def Lift(PPtot,PPlist,l,T,k): #Construction récursive de chaque niveau
         Teval=[]
         for j in range(lon):
             P=TdA[l](PPlist[l-1][j])
-            p=P.degree()
-            s=Sign(l-1,T,P[p])  #Le signe d'un polynome sans racine réelle
-            Teval=Teval+[(P,s)] #est celui de son coefficient dominant
+            s=Sign(l,Tbis,P) 
+            Teval+=[(P,s)]
         if l<k:   #Si il reste un niveau à construire, on appelle récursivement
             arb=[Teval,Lift(PPtot,PPlist,l+1,Tbis,k)]
         else:     #Sinon c'est qu'on est arrivé à une feuille
