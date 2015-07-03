@@ -55,6 +55,7 @@ def Fusion(e1,e2):
 #INPUT : ITA PolITA
 #OUTPUT: L   Q[X1,...,Xn] list : polynomials that appear in ITA
 def listepol(ITA):
+    
     L=[]
     Tr=ITA.transitions
     nbV=-1
@@ -68,15 +69,16 @@ def listepol(ITA):
 
     for i in range(len(Tr)):
          P = Tr[i][1]
-         j=nbVariables(P)
-         L[j]+=[P]
+         if P!="None":
+             j=nbVariables(P)
+             L[j]+=[P]
     return L
 
 #INPUT : Con int list
 #        cel cell
 #OUTPUT: b   boolean : tests if there exists a polynomial satisfying Con condition in cel
-def Test(Con,cel):
-    Cell=yolo[conv_lis_str(cel)]
+def Test(Con,cel,Arb):
+    Cell=Arb[conv_lis_str(cel)]
     for po in Cell[1]:
         if po==Con:
             return True
@@ -86,25 +88,28 @@ def Test(Con,cel):
 #        ITA  PolITA
 #OUTPUT: b boolean : True iff etat is accessible in the PolITA ITA
 def accessible(etat,ITA):
+    Arb=init_dict() #Cylindrical Decomposition Tree
     Polist=listepol(ITA)
+    hmax=len(Polist)
     EPolist=Elim(Polist)
     acc=[]
     qo=(ITA.initial)[0]
     l=qo.clock
-    Access(EPolist,Polist,1,l,[1])
+    Access(EPolist,Polist,1,l,[1],Arb)
     etats=ITA.etats
     a=[1]
-    Pere=yolo[conv_lis_str(a)]
+    Pere=Arb[conv_lis_str(a)]
     i=1
     while i <=l:
         trouve=False
         for j in range(Pere[0]):
-            Frere=yolo[conv_lis_str(a+[j])]
+            Frere=Arb[conv_lis_str(a+[j])]
             for Co in Frere[1]:
                 if Co[0]==TdV[i-1] and Co[1]==0:
                     a=a+[j]
                     trouve=True
-                    Access(EPolist,Polist,i,i,a)
+                    if i<hmax:
+                        Access(EPolist,Polist,i+1,i+1,a,Arb)
                     break
             if trouve:
                 break
@@ -120,7 +125,7 @@ def accessible(etat,ITA):
         ajout=[]
         for conf in newacc:
             if not (conf in oldacc):
-                confAcc=Transition(conf,EPolist,Polist,ITA) #reacheable states in 1 step
+                confAcc=Transition(conf,EPolist,Polist,ITA,Arb,hmax) #reacheable states in 1 step
                 ajout=ajout+confAcc
         oldacc=acc
         newacc=ajout
@@ -132,7 +137,7 @@ def accessible(etat,ITA):
 #        Polist: initial polynomials
 #        ITA: a polITA
 #OUTPUT: confAtteinte : list of reachable configurations in one step
-def Transition(conf,EPolist,Polist,ITA):
+def Transition(conf,EPolist,Polist,ITA,Arb,hmax):
     q1=conf.etat
     cel=conf.cellule
     Tr=ITA.transitions
@@ -141,7 +146,7 @@ def Transition(conf,EPolist,Polist,ITA):
     hauteur=len(cel)
     rang=cel[hauteur-1]
     ap=[cel[i] for i in range(hauteur-1)]
-    pere=yolo[conv_lis_str(ap)]
+    pere=Arb[conv_lis_str(ap)]
     if rang<(pere[0]-1): #We check we are not in the end of the line
         confAtteinte=[Config(q1,ap+[rang+1])]
     else:
@@ -155,11 +160,11 @@ def Transition(conf,EPolist,Polist,ITA):
                 nbc=len(conditions)
                 i=0
                 while valide and i<nbc:
-                    valide=Test(conditions[i],cel) #Tests if the polynomial satisfies the condition
+                    valide=Test(conditions[i],cel,Arb) #Tests if the polynomial satisfies the condition
                     i=i+1
                 if valide:
                     Update=trans[1]
-                    NewCel=AddCel(EPolist,Polist,cel,q1,q2,Update,ITA) #Returns the cell after the transition
+                    NewCel=AddCel(EPolist,Polist,cel,q1,q2,Update,ITA,Arb,hmax) #Returns the cell after the transition
                     newConf=Config(q2,NewCel)
                     confAtteinte=confAtteinte+[newConf]
 
@@ -174,7 +179,7 @@ def Transition(conf,EPolist,Polist,ITA):
 #        P
 #        ITA
 #OUTPUT: b    
-def AddCel(EPolist,Polist,cel,q1,q2,P,ITA):
+def AddCel(EPolist,Polist,cel,q1,q2,P,ITA,Arb,hmax):
     if q1.clock>q2.clock:
         #Case when we go a level down:
         b=[cel[i] for i in range(q2.clock())]
@@ -182,22 +187,31 @@ def AddCel(EPolist,Polist,cel,q1,q2,P,ITA):
         
     #Other cases:
     a=[cel[i] for i in range(len(cel)-1)]
-    Pere=yolo[conv_lis_str(a)]
+    Pere=Arb[conv_lis_str(a)]
     i=q1.clock
     while i <=q2.clock: 
         trouve=False
-        for j in range(Pere[0]):
-            Frere=yolo[conv_lis_str(a+[j])]
-            for Co in Frere[1]:
-                if Co[0]==P and Co[1]==0:
-                    a=a+[j]
-                    trouve=True
-                    Access(EPolist,Polist,i,i,a)
+        if P=="None": #When there is no update
+            a=cel
+            if i <hmax:
+                Access(EPolist,Polist,i+1,i+1,a,Arb)
+            break
+            P=TdV[i]
+            i=i+1
+        else:
+            for j in range(Pere[0]):
+                Frere=Arb[conv_lis_str(a+[j])]
+                for Co in Frere[1]:
+                    if Co[0]==P and Co[1]==0:
+                        a=a+[j]
+                        trouve=True
+                        if i <hmax:
+                            Access(EPolist,Polist,i+1,i+1,a,Arb)
+                        break
+                if trouve:
                     break
-            if trouve:
-                break
-        Pere=Frere
-        P=TdV[i]
-        i=i+1
+            Pere=Frere
+            P=TdV[i]
+            i=i+1
     return a
 
