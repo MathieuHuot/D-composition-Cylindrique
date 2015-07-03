@@ -196,11 +196,13 @@ def AddCel(EPolist,Polist,cel,q1,q2,P,ITA,Arb,hmax):
     Pere=Arb[conv_lis_str(a)]
     for i in range(q1.clock,q2.clock+1): 
         trouve=False
+        print(i)
         if P=="None": #When there is no update
             a=cel
             if i<hmax:
                 Access(EPolist,Polist,i+1,i+1,a,Arb)
-            P=TdV[i+1]
+            P=TdV[i]
+            Pere=Arb[conv_lis_str(a)]
             
         else:
             for j in range(Pere[0]):
@@ -215,6 +217,7 @@ def AddCel(EPolist,Polist,cel,q1,q2,P,ITA,Arb,hmax):
                 if trouve:
                     break
             Pere=Frere
-            P=TdV[i+1]
+            P=TdV[i]
     return a
+
 
