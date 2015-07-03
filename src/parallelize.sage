@@ -73,6 +73,11 @@ def ParPreCalculCompleting(l,T,PP,i,j):
     return PreCalculCompleting(l,T,PP,i,j)
     
 PAR_PCC2=True    
-@parallel(a=USED_CORES)
+@parallel(ncpus=USED_CORES)
 def ParPreCalculCompleting2(l,T,PP,i):
     return PreCalculCompleting2(l,T,PP,i)
+
+@parallel(ncpus=USED_CORES)
+def ParCalcul(l,T,R,r,P,p,Uplet):
+    R,r=IntRem(l,T,R,r,P,p)
+    return PmvPol(l,T,P,p,R,r)
