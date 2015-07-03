@@ -200,7 +200,6 @@ def AddCel(EPolist,Polist,cel,q1,q2,P,ITA,Arb,hmax):
             a=cel
             if i<hmax:
                 Access(EPolist,Polist,i+1,i+1,a,Arb)
-            break
             P=TdV[i+1]
             
         else:
