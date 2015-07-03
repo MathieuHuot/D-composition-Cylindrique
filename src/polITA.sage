@@ -10,7 +10,9 @@
 #(*                                                                                     *)
 #(***************************************************************************************)
 
+import pdb
 attach("accessibilite.sage")
+
 
 class Etat:
     def __init__(self,nom,clock):
@@ -149,6 +151,8 @@ def Transition(conf,EPolist,Polist,ITA,Arb,hmax):
     pere=Arb[conv_lis_str(ap)]
     if rang<(pere[0]-1): #We check we are not in the end of the line
         confAtteinte=[Config(q1,ap+[rang+1])]
+        print("Nouvelle cellule= %s" %(ap+[rang+1]))
+        print(q1.nom)
     else:
         confAtteinte=[]
     #Then configurations obtained after tran
@@ -165,6 +169,8 @@ def Transition(conf,EPolist,Polist,ITA,Arb,hmax):
                 if valide:
                     Update=trans[1]
                     NewCel=AddCel(EPolist,Polist,cel,q1,q2,Update,ITA,Arb,hmax) #Returns the cell after the transition
+                    print("Nouvelle cellule= %s" %NewCel)
+                    print(q2.nom)
                     newConf=Config(q2,NewCel)
                     confAtteinte=confAtteinte+[newConf]
 
@@ -188,16 +194,15 @@ def AddCel(EPolist,Polist,cel,q1,q2,P,ITA,Arb,hmax):
     #Other cases:
     a=[cel[i] for i in range(len(cel)-1)]
     Pere=Arb[conv_lis_str(a)]
-    i=q1.clock
-    while i <=q2.clock: 
+    for i in range(q1.clock,q2.clock+1): 
         trouve=False
         if P=="None": #When there is no update
             a=cel
-            if i <hmax:
+            if i<hmax:
                 Access(EPolist,Polist,i+1,i+1,a,Arb)
             break
             P=TdV[i]
-            i=i+1
+            
         else:
             for j in range(Pere[0]):
                 Frere=Arb[conv_lis_str(a+[j])]
@@ -212,6 +217,5 @@ def AddCel(EPolist,Polist,cel,q1,q2,P,ITA,Arb,hmax):
                     break
             Pere=Frere
             P=TdV[i]
-            i=i+1
     return a
 
