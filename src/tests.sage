@@ -81,7 +81,6 @@ if Test1:
 if Test2:
     def Test(L):
         C=Elim(L)
-        a=time.clock()
+        Print("Début à : %s" %time.ctime())
         D=Lifting(C,L)
-        b=time.clock()
-        print("Ca prend : %s" %(b-a))
+        Print("Fin à : %s" %time.ctime())
