@@ -201,7 +201,7 @@ def AddCel(EPolist,Polist,cel,q1,q2,P,ITA,Arb,hmax):
             if i<hmax:
                 Access(EPolist,Polist,i+1,i+1,a,Arb)
             break
-            P=TdV[i]
+            P=TdV[i+1]
             
         else:
             for j in range(Pere[0]):
@@ -216,6 +216,6 @@ def AddCel(EPolist,Polist,cel,q1,q2,P,ITA,Arb,hmax):
                 if trouve:
                     break
             Pere=Frere
-            P=TdV[i]
+            P=TdV[i+1]
     return a
 
