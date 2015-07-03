@@ -3,7 +3,7 @@
 #(*                                                                                     *)
 #(*                              GARNIER Remy                                           *)
 #(*                              HUOT Mathieu                                           *)
-#(*                    Licence 3 : stage de Mathématiques                               *)
+#(*                    Licence 3 : stage de MathÃ©matiques                               *)
 #(*                           Version Q[X1,...Xn]                                       *)
 #(*                          On-the-fly algorithm                                       *)
 #(*                                                                                     *)
@@ -20,8 +20,10 @@ attach("parallelize.sage")
 attach("print.sage")
 
 #Creation of the dictionnary for lifting
-yolo=dict()
-yolo['1.']=[0,[],[]]
+def init_dict():
+    Arb=dict()
+    Arb['1.']=[0,[],[]]
+    return Arb
 
 #INPUT : lis int list
 #OUTPUT: s   string   : elements of lis separated by points
@@ -49,9 +51,10 @@ def RechP (P,rac):
 #        l       integer  : current level
 #        k       integer  : maximum level
 #        a       int list : codes the cell being currently treated
+#        yolo    dictionnary : tree of cylindrical decomposition 
 #OUTPUT: None
 #Note  : function of lifting fulling yolo dictionnary
-def Access(PolElim,PolIni,l,k,a): #recursive constrcution of every level
+def Access(PolElim,PolIni,l,k,a,yolo): #recursive constrcution of every level
     Cel=yolo[conv_lis_str(a)]
     if Cel[0]==0:
         Tsup=Cel[1]
@@ -69,7 +72,7 @@ def Access(PolElim,PolIni,l,k,a): #recursive constrcution of every level
             b=a+[0]
             yolo[conv_lis_str(b)]=[1,Tsup+Teval,Tbis]  
             if l<k:   #if there is a level left to build, we call access recursively
-                Access(PolElim,PolIni,l+1,k,b)
+                Access(PolElim,PolIni,l+1,k,b,yolo)
             return ()
         else:
             foret=[]  #Real line is split by roots of polynomials
@@ -112,10 +115,10 @@ def Access(PolElim,PolIni,l,k,a): #recursive constrcution of every level
                 EvalP=Teval+Tsup
                 yolo[conv_lis_str(b)]=[0,EvalP,Tbis]    
                 if l<k: #We make a recursive call on every node to build next level
-                    Access(PolElim,PolIni,l+1,k,b)
+                    Access(PolElim,PolIni,l+1,k,b,yolo)
             return ()
     else:
         if l<k:
             for i in range(Cel[0]):
-                Access(PolElim,PolIni,l+1,k,a+[i])
+                Access(PolElim,PolIni,l+1,k,a+[i],yolo)
         return ()
