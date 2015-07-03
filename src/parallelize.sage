@@ -80,4 +80,4 @@ def ParPreCalculCompleting2(l,T,PP,i):
 @parallel(ncpus=USED_CORES)
 def ParCalcul(l,T,R,r,P,p,Uplet):
     R,r=IntRem(l,T,R,r,P,p)
-    return PmvPol(l,T,P,p,R,r)
+    return PmVPol(l,T,P,p,R,r)
