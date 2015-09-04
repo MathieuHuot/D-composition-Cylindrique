@@ -1,4 +1,3 @@
-
 #(***************************************************************************************)
 #(*                                                                                     *)
 #(*                                                                                     *)
@@ -92,11 +91,15 @@ def printconfig(conf):
     print("Cellule de l'arbre = %s" %(conf[1]))
     print("Etat = %s \n" %((conf[0]).nom) )
 
+#Print the entire path followed
 def printpath(path,wait):
+    print("Chemin Suivi:")
+    li=[]
     while wait !="Initial State":
-        printconfig(wait)
+        li=[wait]+li
         wait=path[wait]
-
+    for et in li:
+        printconfig(et)
 
 
 
