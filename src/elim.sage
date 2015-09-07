@@ -98,6 +98,8 @@ def Simplify_1(lis,i):
 #OUTPUT: P Q[X1,...,Xn] list list : P[i] is maybe simplified 
 def Simplify_2(P,i):
     lis=P[i-1]
+    if lis==[]:
+        return P
     NewA=[] #We are going to reduce the degree of polynomials by dividing p_j and p_(j+1)
     #by their gcd and by adding this gcd to the list if not constant
     lon=len(lis)
