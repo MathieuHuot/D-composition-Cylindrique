@@ -177,3 +177,61 @@ def Lift(PPtot,PPlist,l,T,k): #Construction récursive de chaque niveau
                 else: #Ou alors on est arrivé au plus bas niveau et on a des feuilles
                     foret+=[[Teval,[]]]
         return foret
+
+#Renvoie la variable maximale de P
+def MaxVar(P):
+    if P==0:
+        return 0
+    res=1
+    while (str(TdV[res-1])!=P.variable_name()):
+        res+=1
+    return res
+    
+#Effectue la décomposition cylindrique de la liste de polynômes de L
+#INPUT : L Q[X1_...Xl] list
+#OUTPUT: la décomposition cylindrique associée à L
+def DecompositionCylindrique(L):
+    if L==[]:
+        print("Veuillez entrer une liste non vide en argument.")
+        return 0
+    ind_max=1
+    for P in L:
+        ind_max=max(ind_max,MaxVar(P))
+    bigL=[[] for j in range(ind_max)]
+    print(bigL)
+    for P in L:
+        if P!=0:
+            i=MaxVar(P)
+            bigL[i-1]+=[P]
+    print(bigL)
+    LL=Elim(bigL)
+    PrintArb(Lifting(bigL,L))
+    return 0
+
+#Renvoie la variable maximale de P
+def MaxVar(P):
+    if P==0:
+        return 0
+    res=1
+    while (str(TdV[res-1])!=P.variable_name()):
+        res+=1
+    return res
+    
+#Effectue la décomposition cylindrique de la liste de polynômes de L
+#INPUT : L Q[X1_...Xl] list
+#OUTPUT: la décomposition cylindrique associée à L
+def DecompositionCylindrique(L):
+    if L==[]:
+        print("Veuillez entrer une liste non vide en argument.")
+        return 0
+    ind_max=1
+    for P in L:
+        ind_max=max(ind_max,MaxVar(P))
+    bigL=[[] for j in range(ind_max)]
+    for P in L:
+        if P!=0:
+            i=MaxVar(P)
+            bigL[i-1]+=[TdA[i](P)]
+    LL=Elim(bigL)
+    Res=Lifting(LL,bigL)
+    PrintArb(Res)
