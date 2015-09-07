@@ -8,6 +8,7 @@ Context : Dans le cadre de notre stage de L3 pour la licence de mathématique à
 
 Voici dans une première partie l'avancement de notre stage.
 Dans une seconde partie les difficultés que nous avons eues avec l'implémentation.
+Dans une troisième partie nous parlons de l'installation de Sage et de Lupa : interface Python-Lua
 
 I) Avancement du stage
 ======================
@@ -89,3 +90,6 @@ II) Difficultés surmontées
 -sage est parfois trop typé
  
 ~~~~~~~~
+III) Sage et Lupa
+=================
+
