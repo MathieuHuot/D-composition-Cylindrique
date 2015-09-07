@@ -131,7 +131,6 @@ def ExtUpdate(Sigma,A,M1,M):
 
 def GrosCalcul(extA,P,dP,p,Q,deg,T,l,i,m):
     TaQi=Zero(len(extA))
-    print("la longueur de extA est : %d" %len(extA))
     global PAR_SR
     if PAR_SR and a==3:
         ListArg=[]
