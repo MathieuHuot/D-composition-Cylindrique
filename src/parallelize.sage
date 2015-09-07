@@ -77,6 +77,7 @@ PAR_PCC2=True
 def ParPreCalculCompleting2(l,T,PP,i):
     return PreCalculCompleting2(l,T,PP,i)
 
+PAR_SR=False
 @parallel(ncpus=USED_CORES)
 def ParCalcul(l,T,R,r,P,p,Uplet):
     R,r=IntRem(l,T,R,r,P,p)
